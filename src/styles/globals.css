@@ -1,27 +1,35 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-p {
-  @apply mb-4;
+@import "intellij-prism.css";
+@import "prose.css";
+
+html,
+body,
+#__next {
+  min-width: 100%;
+  min-height: 100%;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  @apply font-bold
-    mb-1;
+* {
+  /* MW touch highlight 제거 */
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-h1 {
-  @apply text-3xl;
+::selection {
+  @apply bg-neutral-400/30;
 }
 
-h2 {
-  @apply text-xl;
+.dark ::selection {
+  @apply bg-neutral-500/30;
+}
+
+.kbar-scrollbar > div::-webkit-scrollbar {
+  background: transparent;
+  width: 10px;
+  height: 10px;
+}
+.kbar-scrollbar > div::-webkit-scrollbar-thumb {
+  @apply bg-neutral-200 hover:bg-opacity-70 dark:bg-neutral-600 dark:hover:bg-opacity-70;
 }

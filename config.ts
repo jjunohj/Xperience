@@ -26,12 +26,8 @@ export const siteConfig = {
       path: "/about",
     },
     {
-      label: "Archives",
-      path: "/archives",
-    },
-    {
-      label: "Category",
-      path: "/category",
+      label: "Blog",
+      path: "/blog",
     },
   ],
 };

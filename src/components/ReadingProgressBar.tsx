@@ -25,7 +25,7 @@ export default function ReadingProgressBar() {
         .progressBar {
           position: fixed;
           z-index: 50;
-          top: 40px;
+          top: 0;
           left: 0px;
           height: 6px;
           border-radius: 0px 2px 0px 0px;

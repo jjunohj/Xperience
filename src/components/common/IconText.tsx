@@ -16,9 +16,15 @@ export default function IconText({
   className,
 }: IconTextProps) {
   return (
-    <div className={$("flex items-center", className ?? "gap-1 text-xs")}>
+    <div
+      className={$(
+        "flex items-center ",
+        className ?? "gap-1 text-xs",
+        `h-[${iconSize}px]`
+      )}
+    >
       <Icon width={iconSize} height={iconSize} />
-      <span>{text}</span>
+      <span className={$("text-center", `h-[${iconSize}px]`)}>{text}</span>
     </div>
   );
 }

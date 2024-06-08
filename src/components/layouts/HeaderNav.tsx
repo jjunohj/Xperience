@@ -9,7 +9,6 @@ import { $ } from "@/src/libs/core";
 
 import LogoIcon from "../icons/LogoIcon";
 import NavItem from "../common/NavItem";
-import KBarButton from "../KBarButton";
 import { useDelayedRender } from "@/src/libs/useDelayedRender";
 import DarkModeBtn from "../DarkModeBtn";
 
@@ -94,7 +93,6 @@ export default function HeaderNav() {
         )}
       </div>
       <div className="ml-auto flex items-center gap-2">
-        <KBarButton />
         <DarkModeBtn />
       </div>
     </nav>

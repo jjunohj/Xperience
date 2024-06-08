@@ -2,18 +2,19 @@ import "../styles/globals.css";
 import { Toaster } from "react-hot-toast";
 import Providers from "../components/layouts/Providers";
 import HeaderNav from "../components/layouts/HeaderNav";
+import { Metadata } from "next";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export const metadata: Metadata = {
+  title: "J archive",
+  description: "J archive",
+  icons: {
+    icon: "/favicon.ico",
+  },
+};
+
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html>
-      <head>
-        <title>jjunohj</title>
-        <link rel="icon" type="image/x-icon" href="/favicon.png" />
-      </head>
+    <html lang="ko">
       <body>
         <Providers>
           <div className="px-6 dark:bg-neutral-900 dark:text-neutral-100">

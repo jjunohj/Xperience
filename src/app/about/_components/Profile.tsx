@@ -2,8 +2,8 @@ import Image from "next/image";
 
 const Profile = () => {
   return (
-    <section className="w-full h-96 flex justify-between items-center px-8">
-      <div className="w-[2/3] h-full flex-col flex items-start justify-start mt-12 gap-4 ">
+    <section className="w-full h-96 flex justify-between items-center">
+      <div className="w-[2/3] h-full flex-col flex items-start justify-start mt-12 gap-4 ml-8">
         <h1 className="text-4xl font-extralight dark:text-white">
           안녕하세요,
         </h1>

@@ -4,7 +4,7 @@ import { Project } from "./type";
 const Project = (props: Project) => {
   return (
     <div className="w-full flex flex-col gap-0.5">
-      <div className="w-full flex justify-between">
+      <div className="w-full flex justify-between pr-8">
         <h1 className="text-xl font-semibold dark:text-white">{props.title}</h1>
         <span className="text-xl font-semibold dark:text-white">
           {props.period}

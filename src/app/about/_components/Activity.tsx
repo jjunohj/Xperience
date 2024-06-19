@@ -4,7 +4,7 @@ import { Activity } from "./type";
 const Activity = (props: Activity) => {
   return (
     <div className="w-full flex flex-col gap-2">
-      <div className="w-full flex justify-between">
+      <div className="w-full flex justify-between pr-8">
         <h1 className="text-xl font-semibold dark:text-white">{props.title}</h1>
         <span className="text-xl font-semibold dark:text-white">
           {props.period}

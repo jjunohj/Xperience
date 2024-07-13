@@ -13,11 +13,11 @@ export const siteConfig = {
     contacts: {
       email: "jjunohj@gmail.com",
       github: "jjunohj",
-      twitter: "",
-      velog: "",
-      linkedin: "",
-      youtube: "",
-      instagram: "",
+      // twitter: "",
+      // velog: "",
+      // linkedin: "",
+      // youtube: "",
+      // instagram: "",
     },
   },
   menus: [

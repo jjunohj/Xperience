@@ -21,7 +21,7 @@ export default function HeaderNav() {
     {
       enterDelay: 20,
       exitDelay: 300,
-    }
+    },
   );
 
   const toggleMenu = () => {
@@ -67,8 +67,8 @@ export default function HeaderNav() {
         {isMenuMounted && (
           <ul
             className={$(
-              "bg-primary absolute inset-x-0 top-[108px] -bottom-4 z-50 flex flex-col px-6 transition-all",
-              isMenuRendered ? "opacity-100" : "opacity-0"
+              "bg-primary absolute inset-x-0 -bottom-4 top-[108px] z-50 flex flex-col px-6 transition-all",
+              isMenuRendered ? "opacity-100" : "opacity-0",
             )}
           >
             {[{ label: "Home", path: "/" }, ...siteConfig.menus].map(
@@ -81,13 +81,13 @@ export default function HeaderNav() {
                     isMenuRendered
                       ? "translate-x-0 opacity-100"
                       : "-translate-x-4 opacity-0",
-                    isActiveNav(link.path) ? "text-yellow-400" : "text-primary"
+                    isActiveNav(link.path) ? "text-yellow-400" : "text-primary",
                   )}
                   style={{ transitionDelay: `${150 + i * 25}ms` }}
                 >
                   {link.label}
                 </Link>
-              )
+              ),
             )}
           </ul>
         )}

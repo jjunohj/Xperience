@@ -4,8 +4,8 @@ import PostCards from "../components/PostCards";
 
 export default function HomePage() {
   return (
-    <div className="mx-auto flex h-full max-w-6xl flex-col p-4 sm:px-8 sm:py-4 lg:px-0 lg:py-8">
-      <section className="mb-4 flex items-center justify-center gap-6 sm:mb-8 sm:gap-6 lg:gap-10">
+    <div className="mx-auto flex h-full max-w-6xl flex-col p-4 sm:p-8">
+      <section className="mb-4 flex w-full items-center justify-start gap-4 sm:mb-8 sm:gap-6 lg:gap-10">
         <Image
           src="/images/profile.png"
           alt="Profile"
@@ -37,8 +37,12 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
-
-      <PostCards />
+      <section className="flex w-full flex-col">
+        <h2 className="mb-3 mt-4 text-left text-xl font-extrabold dark:text-white sm:mb-6 sm:mt-12 sm:text-4xl">
+          Recent Posts
+        </h2>
+        <PostCards />
+      </section>
     </div>
   );
 }

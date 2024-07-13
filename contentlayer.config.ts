@@ -32,7 +32,7 @@ const Post = defineDocumentType(() => ({
       type: "list",
       of: { type: "string" },
       description: "The tags of the post",
-      required: true,
+      required: false,
     },
   },
   computedFields: {

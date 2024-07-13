@@ -4,13 +4,15 @@ import { Activity } from "./type";
 const Activity = (props: Activity) => {
   return (
     <div className="w-full flex flex-col gap-2">
-      <div className="w-full flex justify-between pr-8">
-        <h1 className="text-xl font-semibold dark:text-white">{props.title}</h1>
-        <span className="text-xl font-semibold dark:text-white">
+      <div className="w-full flex flex-col-reverse sm:flex-row justify-between items-start lg:pr-8">
+        <h1 className="text-base w-fit sm:text-lg lg:text-xl font-semibold dark:text-white">
+          {props.title}
+        </h1>
+        <span className="text-base sm:text-lg lg:text-xl w-fit font-light sm:font-semibold dark:text-white">
           {props.period}
         </span>
       </div>
-      <ul className="flex flex-wrap gap-1 w-4/5">
+      <ul className="flex flex-col text-sm sm:text-base gap-1">
         {props.contents?.map((content, index) => (
           <li key={index} className="text-black font-light dark:text-white">
             {content}

@@ -3,8 +3,8 @@ import { Activity } from "./type";
 
 const Activity = (props: Activity) => {
   return (
-    <div className="w-full flex flex-col gap-2">
-      <div className="w-full flex flex-col-reverse sm:flex-row justify-between items-start lg:pr-8">
+    <div className="w-full flex flex-col gap-1.5">
+      <div className="w-full flex flex-col-reverse sm:flex-row justify-between items-start">
         <h1 className="text-base w-fit sm:text-lg lg:text-xl font-semibold dark:text-white">
           {props.title}
         </h1>

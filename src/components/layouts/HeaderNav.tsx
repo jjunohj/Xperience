@@ -47,7 +47,7 @@ export default function HeaderNav() {
   }, []);
 
   return (
-    <nav className="text-secondary flex w-full select-none items-end pt-8 pb-12">
+    <nav className="text-secondary flex w-full select-none items-end p-4 sm:p-6 sm:py-8 md:pb-12">
       {/* PC */}
       <div className="hidden items-end sm:flex">
         <NavItem href="/" className="mr-2" aria-label="logo">

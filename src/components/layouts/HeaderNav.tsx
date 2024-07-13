@@ -67,7 +67,7 @@ export default function HeaderNav() {
         {isMenuMounted && (
           <ul
             className={$(
-              "bg-primary absolute inset-x-0 -bottom-4 top-[108px] z-50 flex flex-col px-6 transition-all",
+              "bg-primary absolute inset-x-0 -bottom-4 top-16 z-50 flex flex-col px-6 transition-all",
               isMenuRendered ? "opacity-100" : "opacity-0",
             )}
           >
@@ -84,6 +84,7 @@ export default function HeaderNav() {
                     isActiveNav(link.path) ? "text-yellow-400" : "text-primary",
                   )}
                   style={{ transitionDelay: `${150 + i * 25}ms` }}
+                  onClick={toggleMenu}
                 >
                   {link.label}
                 </Link>

@@ -16,15 +16,11 @@ const PostCards = () => {
       variants={staggerHalf}
       initial="initial"
       animate="animate"
-      className="flex w-full flex-col items-center gap-3 p-8 sm:w-fit"
+      className="flex w-full flex-col items-center gap-3 sm:w-fit"
     >
-      <h2 className="mt-6 w-full text-left text-2xl font-extrabold dark:text-white sm:mb-6 sm:mt-12 sm:text-4xl">
-        Recent Posts
-      </h2>
-
       <motion.div
         variants={staggerHalf}
-        className="flex gap-6 sm:grid sm:grid-cols-3 md:grid-cols-4"
+        className="flex w-full flex-col sm:grid sm:grid-cols-3 sm:gap-6 md:grid-cols-4"
       >
         {posts.map((post, idx) => (
           <PostCard key={idx} {...post} />

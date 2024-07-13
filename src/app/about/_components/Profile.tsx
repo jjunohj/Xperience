@@ -2,20 +2,20 @@ import Image from "next/image";
 
 const Profile = () => {
   return (
-    <section className="w-full h-fit flex flex-col-reverse lg:flex-row justify-between items-center p-4">
-      <div className="w-full lg:w-2/3 flex flex-col items-start justify-start gap-6">
-        <div className="space-y-1 lg:space-y-2 mt-4 sm:mt-8 lg:mt-0">
-          <h1 className="text-xl sm:text-4xl lg:text-5xl font-extralight dark:text-white">
+    <section className="flex h-fit w-full flex-col-reverse items-center justify-between p-4 sm:p-8 lg:flex-row">
+      <div className="flex w-full flex-col items-start justify-start gap-6 lg:w-2/3">
+        <div className="mt-4 space-y-1 sm:mt-8 lg:mt-0 lg:space-y-2">
+          <h1 className="text-xl font-extralight dark:text-white sm:text-4xl lg:text-5xl">
             안녕하세요,
           </h1>
-          <h1 className="text-xl sm:text-4xl lg:text-5xl font-normal text-primary dark:text-white">
+          <h1 className="text-primary text-xl font-normal dark:text-white sm:text-4xl lg:text-5xl">
             사용자 중심 프론트엔드 개발자,
           </h1>
-          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extralight dark:text-white">
+          <h1 className="text-2xl font-extralight dark:text-white sm:text-4xl lg:text-5xl">
             <b className="font-semibold text-point">정준호</b>입니다.
           </h1>
         </div>
-        <div className="w-full h-0.5 bg-point"></div>
+        <div className="h-0.5 w-full bg-point"></div>
         <div className="flex flex-col gap-2 text-sm sm:text-base lg:text-base">
           <span>
             조금이라도 더 <b className="font-semibold">상식적인 UI/UX</b>를
@@ -46,7 +46,7 @@ const Profile = () => {
           width={360}
           height={360}
           priority
-          className="rounded-full w-[160px] h-[160px] sm:w-[280px] sm:h-[280px] lg:w-[320px] lg:h-[320px] object-cover shadow-2xl shadow-transparent "
+          className="h-[160px] w-[160px] rounded-full object-cover shadow-2xl shadow-transparent sm:h-[280px] sm:w-[280px] lg:h-[320px] lg:w-[320px] "
         />
       </div>
     </section>

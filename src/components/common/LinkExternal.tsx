@@ -8,7 +8,10 @@ export default function LinkExternal({
   return (
     <a
       {...props}
-      className={$("text-primary transition hover:text-secondary", className)}
+      className={$(
+        " text-gray-600 transition hover:text-secondary dark:text-gray-400",
+        className,
+      )}
       target="_blank"
       rel="noopener noreferrer"
     >

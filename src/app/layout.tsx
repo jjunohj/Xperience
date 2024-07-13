@@ -17,8 +17,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <html lang="ko">
       <body>
         <Providers>
-          <div className="px-6 dark:bg-neutral-900 dark:text-neutral-100">
-            <div className="mx-auto max-w-4xl px-6 lg:max-w-6xl lg:px-8">
+          <div className=" dark:bg-neutral-900 dark:text-neutral-100">
+            <div className="sm:mx-auto max-w-4xl  lg:max-w-6xl lg:px-8">
               <HeaderNav />
               <main className="relative pb-16">{children}</main>
               <footer className="pb-8 text-sm text-neutral-800 dark:text-neutral-400"></footer>

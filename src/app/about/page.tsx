@@ -13,9 +13,9 @@ import Project from "./_components/Project";
 import Activity from "./_components/Activity";
 import PrintButton from "./_components/PrintButton";
 
-const AboutPage = () => {
+export default function AboutPage() {
   return (
-    <div className="w-full h-full">
+    <div className="flex h-full w-full justify-center">
       <div id="resume">
         <Profile />
         <InfoSection title={"기술"}>
@@ -56,6 +56,4 @@ const AboutPage = () => {
       <PrintButton />
     </div>
   );
-};
-
-export default AboutPage;
+}

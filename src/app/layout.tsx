@@ -1,8 +1,10 @@
 import "../styles/globals.css";
-import { Toaster } from "react-hot-toast";
 import Providers from "../components/layouts/Providers";
 import HeaderNav from "../components/layouts/HeaderNav";
 import { Metadata } from "next";
+import Hr from "../components/common/Hr";
+import AuthorContacts from "../components/common/AuthorContacts";
+import LinkExternal from "../components/common/LinkExternal";
 
 export const metadata: Metadata = {
   title: "J archive",
@@ -17,18 +19,31 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <html lang="ko">
       <body>
         <Providers>
-          <div className=" dark:bg-neutral-900 dark:text-neutral-100">
-            <div className="sm:mx-auto max-w-4xl  lg:max-w-6xl lg:px-8">
+          <div className="dark:bg-neutral-900 dark:text-neutral-100">
+            <div className="max-w-screen flex flex-col">
               <HeaderNav />
-              <main className="relative pb-16">{children}</main>
-              <footer className="pb-8 text-sm text-neutral-800 dark:text-neutral-400"></footer>
+              <main className="relative pb-20">{children}</main>
+              <footer className="pb-8 text-sm text-neutral-800 dark:text-neutral-400">
+                <div className="flex flex-col items-center space-y-1">
+                  <AuthorContacts />
+                  <p>
+                    <span className="text-gray-600 dark:text-gray-400">
+                      © 2024{" "}
+                    </span>
+                    <LinkExternal href="https://github.com/jjunohj">
+                      jjunohj
+                    </LinkExternal>
+                    <span className="text-gray-600 dark:text-gray-400">
+                      {" "}
+                      Powered by{" "}
+                    </span>
+                    <LinkExternal href="https://nextjs.org/">
+                      Next 14
+                    </LinkExternal>
+                  </p>
+                </div>
+              </footer>
             </div>
-            <Toaster
-              toastOptions={{
-                className: "text-primary bg-secondary",
-                position: "top-center",
-              }}
-            />
           </div>
         </Providers>
       </body>

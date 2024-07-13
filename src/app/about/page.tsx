@@ -15,7 +15,7 @@ import PrintButton from "./_components/PrintButton";
 
 export default function AboutPage() {
   return (
-    <div className="flex h-full w-full justify-center">
+    <div className="mx-auto flex h-full w-full max-w-6xl">
       <div id="resume">
         <Profile />
         <InfoSection title={"기술"}>

@@ -11,7 +11,7 @@ export default function BlogPage() {
   //   );
 
   return (
-    <div className="flex flex-col px-8">
+    <div className="flex flex-col p-4">
       <div className="flex flex-col gap-2">
         <h1 className="text-4xl font-extrabold lg:text-5xl">Blog</h1>
         <span className="text-sm font-light text-gray-600 dark:text-gray-400">

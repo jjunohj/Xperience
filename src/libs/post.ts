@@ -1,4 +1,5 @@
-import { Post, ReducedPost } from "./types";
+import { Post } from "contentlayer/generated";
+import { ReducedPost } from "./types";
 
 export const contentToDescription = (content: string) => {
   const parsedContent = content

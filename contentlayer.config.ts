@@ -1,44 +1,44 @@
-import { defineDocumentType, makeSource } from "contentlayer/source-files";
+import {
+  FieldDefs,
+  defineDocumentType,
+  makeSource,
+} from "contentlayer/source-files";
+import readingTime from "reading-time";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeExternalLinks from "rehype-external-links";
+import rehypePrism from "rehype-prism-plus";
+import rehypeSlug from "rehype-slug";
+import remarkBreaks from "remark-breaks";
+import remarkGfm from "remark-gfm";
+
+import rehypeCodeWrap from "./src/libs/rehypeCodeWrap";
+
+const fields: FieldDefs = {
+  title: { type: "string", required: true },
+  description: { type: "string", required: true },
+  thumbnail: { type: "string", required: false },
+  date: { type: "date", required: true },
+  category: { type: "string", required: true },
+  tags: { type: "list", of: { type: "string" }, required: false },
+};
 
 const Post = defineDocumentType(() => ({
   name: "Post",
   filePathPattern: `**/*.mdx`,
   contentType: "mdx",
-  fields: {
-    title: {
-      type: "string",
-      description: "The title of the post",
-      required: true,
-    },
-    description: {
-      type: "string",
-      required: true,
-    },
-    thumbnail: {
-      type: "string",
-      required: false,
-    },
-    date: {
-      type: "date",
-      description: "The date of the post",
-      required: true,
-    },
-    category: {
-      type: "string",
-      description: "The category of the post",
-      required: true,
-    },
-    tags: {
-      type: "list",
-      of: { type: "string" },
-      description: "The tags of the post",
-      required: false,
-    },
-  },
+  fields,
   computedFields: {
-    url: {
+    slug: {
       type: "string",
-      resolve: (doc) => `/posts/${doc._raw.flattenedPath}`,
+      resolve: (post) => `/${post._raw.flattenedPath}`,
+    },
+    readingMinutes: {
+      type: "string",
+      resolve: (post) => Math.ceil(readingTime(post.body.raw).minutes),
+    },
+    wordCount: {
+      type: "number",
+      resolve: (post) => post.body.raw.split(/\s+/gu).length,
     },
   },
 }));
@@ -46,4 +46,28 @@ const Post = defineDocumentType(() => ({
 export default makeSource({
   contentDirPath: "posts",
   documentTypes: [Post],
+  mdx: {
+    remarkPlugins: [remarkGfm, remarkBreaks],
+    rehypePlugins: [
+      rehypeSlug,
+      rehypeCodeWrap,
+      rehypePrism,
+      [
+        rehypeAutolinkHeadings,
+        {
+          properties: {
+            className: ["anchor"],
+            ariaLabel: "anchor",
+          },
+        },
+      ],
+      [
+        rehypeExternalLinks,
+        {
+          target: "_blank",
+          rel: ["noopener noreferrer"],
+        },
+      ],
+    ],
+  },
 });

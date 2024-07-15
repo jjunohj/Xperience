@@ -1,6 +1,5 @@
 import dayjs from "dayjs";
 import { useMDXComponent } from "next-contentlayer/hooks";
-import { Post } from "@/src/libs/types";
 
 import Title from "@/src/components/common/Title";
 import IconText from "@/src/components/common/IconText";
@@ -9,6 +8,7 @@ import CodeBlock from "../mdx/CodeBlock";
 import ZoomImage from "../mdx/ZoomImage";
 import ReadingProgressBar from "../ReadingProgressBar";
 import Image from "next/image";
+import { Post } from "contentlayer/generated";
 
 export type PostLayoutProps = {
   post: Post;
@@ -52,7 +52,6 @@ export default function PostLayout({ post }: PostLayoutProps) {
             <MDXContent components={mdxComponents} />
           </div>
         </div>
-        <div className="mt-12 animate-fadeInHalf space-y-8 lg:mt-24"></div>
       </article>
     </>
   );

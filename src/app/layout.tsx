@@ -2,7 +2,6 @@ import "../styles/globals.css";
 import Providers from "../components/layouts/Providers";
 import HeaderNav from "../components/layouts/HeaderNav";
 import { Metadata } from "next";
-import Hr from "../components/common/Hr";
 import AuthorContacts from "../components/common/AuthorContacts";
 import LinkExternal from "../components/common/LinkExternal";
 
@@ -20,7 +19,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <Providers>
           <div className="dark:bg-neutral-900 dark:text-neutral-100">
-            <div className="max-w-screen flex flex-col">
+            <div className="max-w-screen flex h-screen flex-col">
               <HeaderNav />
               <main className="relative pb-20">{children}</main>
               <footer className="pb-8 text-sm text-neutral-800 dark:text-neutral-400">

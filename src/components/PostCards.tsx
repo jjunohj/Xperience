@@ -1,16 +1,11 @@
 "use client";
 
-import { compareDesc } from "date-fns";
-import { allPosts } from "contentlayer/generated";
 import PostCard from "../components/PostCard";
 import { motion } from "framer-motion";
 import { staggerHalf } from "../constants/animations";
+import { allBlogPosts } from "../constants/dataset";
 
 const PostCards = () => {
-  const posts = allPosts.sort((a, b) =>
-    compareDesc(new Date(a.date), new Date(b.date)),
-  );
-
   return (
     <motion.section
       variants={staggerHalf}
@@ -20,9 +15,9 @@ const PostCards = () => {
     >
       <motion.div
         variants={staggerHalf}
-        className="flex w-full flex-col sm:grid sm:grid-cols-3 sm:gap-6 md:grid-cols-4"
+        className="flex w-full flex-col sm:grid sm:grid-flow-dense sm:grid-cols-3 sm:gap-6 lg:grid-cols-4"
       >
-        {posts.map((post, idx) => (
+        {allBlogPosts.map((post, idx) => (
           <PostCard key={idx} {...post} />
         ))}
       </motion.div>

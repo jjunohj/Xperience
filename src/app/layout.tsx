@@ -18,8 +18,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <html lang="ko">
       <body>
         <Providers>
-          <div className="dark:bg-neutral-900 dark:text-neutral-100">
-            <div className="max-w-screen flex h-screen flex-col">
+          <div className="max-w-screen h-full dark:bg-neutral-900 dark:text-neutral-100">
+            <div className="flex flex-col">
               <HeaderNav />
               <main className="relative pb-20">{children}</main>
               <footer className="pb-8 text-sm text-neutral-800 dark:text-neutral-400">

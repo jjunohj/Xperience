@@ -9,6 +9,7 @@ import ZoomImage from "../mdx/ZoomImage";
 import ReadingProgressBar from "../ReadingProgressBar";
 import Image from "next/image";
 import { Post } from "contentlayer/generated";
+import Tag from "../common/Tag";
 
 export type PostLayoutProps = {
   post: Post;
@@ -37,12 +38,17 @@ export default function PostLayout({ post }: PostLayoutProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-transparent to-white opacity-60 dark:to-black" />
           <figcaption className="absolute bottom-0 left-0 right-0 mb-16">
             <Title className="mx-4">{post.title || "Untitled Post"}</Title>
-            <div className="mt-2 flex w-full flex-col justify-between md:flex-row md:items-center">
+            <div className="flex w-full flex-col justify-between gap-2">
               <div className="mx-auto flex gap-2 text-neutral-600 dark:text-neutral-400">
                 <IconText
                   Icon={CalenderIcon}
                   text={dayjs(post.date).format("YYYY.MM.DD")}
                 />
+              </div>
+              <div className="mx-auto mt-2 flex gap-2 text-sm opacity-90">
+                {post.tags.map((tag) => (
+                  <Tag key={tag} tag={tag} />
+                ))}
               </div>
             </div>
           </figcaption>

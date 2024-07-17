@@ -2,11 +2,7 @@
 
 import useSearch from "@/src/libs/useSearch";
 import SearchInput from "./_components/SearchInput";
-import {
-  allBlogPosts,
-  allCategories,
-  allCategoriesName,
-} from "@/src/constants/dataset";
+import { allBlogPosts, allCategories } from "@/src/constants/dataset";
 import Categories from "./_components/Categories";
 import PostListItem from "@/src/components/PostListItem";
 
@@ -36,10 +32,9 @@ export default function BlogPage() {
         <h3 className="mt-8 text-2xl font-extrabold sm:text-3xl">Categories</h3>
         <Categories categories={filteredCategories} />
         <h2 className="mt-8 text-2xl font-extrabold sm:text-3xl">Posts</h2>
-        {allBlogPosts.map((post) => (
+        {filteredBlogPosts.map((post) => (
           <PostListItem key={post.slug} post={post} />
         ))}
-        <h2 className="mt-8 text-2xl font-extrabold sm:text-3xl">Tags</h2>
       </div>
     </div>
   );

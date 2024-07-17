@@ -4,7 +4,7 @@ import Pill from "./Pill";
 
 export default function Tag({ tag }: { tag: string }) {
   return (
-    <Link href={`/archives/tags/${tag}`}>
+    <Link href={`/blog/tags/${tag}`}>
       <Pill>{title(tag)}</Pill>
     </Link>
   );

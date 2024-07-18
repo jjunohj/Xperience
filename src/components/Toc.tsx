@@ -10,7 +10,7 @@ export default function Toc() {
 
   useEffect(() => {
     const observer = getIntersectionObserver(setCurrentId);
-    const headings = Array.from(document.querySelectorAll("h2, h3"));
+    const headings = Array.from(document.querySelectorAll("h2, h3, h4"));
 
     setHeadings(headings);
 
@@ -29,7 +29,11 @@ export default function Toc() {
               className={$(
                 "block text-xs font-light text-neutral-400 transition-all hover:scale-105",
                 currentId === heading.id ? "text-primary font-semibold" : "",
-                heading.tagName === "H3" ? "ml-2" : "",
+                heading.tagName === "H3"
+                  ? "ml-2"
+                  : heading.tagName === "H4"
+                    ? "ml-4"
+                    : "",
               )}
             >
               {heading.textContent}

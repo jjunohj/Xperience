@@ -8,7 +8,7 @@ import Link from "next/link";
 export default function Categories({ categories }) {
   return (
     <motion.div
-      className="-mx-8 -my-12 flex w-full items-center space-x-6 overflow-scroll px-8 py-12 no-scrollbar"
+      className="-mx-8 -my-12 flex w-full items-center space-x-4 overflow-scroll px-8 py-12 no-scrollbar lg:space-x-6"
       variants={staggerOne}
     >
       <AnimatePresence mode="wait">

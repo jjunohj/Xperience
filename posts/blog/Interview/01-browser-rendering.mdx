@@ -1,0 +1,192 @@
+---
+title: "브라우저 렌더링 원리"
+description: "브라우저 주소창에서 URL을 입력하고 엔터를 누르면 일어나는 일들"
+category: Interview
+thumbnail: "/images/interview-01-thumbnail.png"
+tags:
+  - Browser
+  - HTML
+  - CSS
+  - DOM
+  - JavaScript
+date: 2024-07-18
+---
+
+## 브라우저
+
+브라우저는 사용자가 웹 페이지를 보기 위해 사용하는 소프트웨어로, 사용자가 선택한 자원을 서버에 요청하고 브라우저에 표시하는 기능을 한다.
+자원은 보통 HTML 문서지만, PDF나 이미지 등 다른 유형일 수도 있다.
+
+### 브라우저의 기본 구조
+
+브라우저의 구성 요소는 다음과 같다.
+
+<div style={{ textAlign: "center", margin: "2rem" }}>
+  <img
+    src="https://d2.naver.com/content/images/2015/06/helloworld-59361-1.png"
+    width="500"
+  />
+  <span style={{ color: "gray", fontSize: "0.8rem" }}>
+    그림 1 브라우저의 주요 구성 요소
+  </span>
+</div>
+
+1. **사용자 인터페이스(User Interface)**: 주소 표시줄, 이전/다음 버튼, 북마크 메뉴 등 요청한 페이지를 보여주는 창을 제외한 나머지 모든 부분
+2. **브라우저 엔진(Browser Engine)**: 사용자 인터페이스와 렌더링 엔진 사이의 동작을 제어
+3. **렌더링 엔진(Rendering Engine)**: 요청한 콘텐츠를 표시하는 역할(HTML, XML 문서를 파싱하여 화면에 표시)
+4. **통신(Networking)**: HTTP 요청과 같은 네트워크 호출에 사용
+5. **자바스크립트 해석기(JavaScript Interpreter)**: 자바스크립트 코드를 해석하고 실행
+6. **자료 저장소(Data Storage)**: 쿠키와 같은 자료를 저장하는 계층
+
+크롬 브라우저의 경우, 다른 브라우저와 달리 각 탭마다 별도의 렌더링 엔진을 가지고 있어 **프로세스 간 격리**을 통해 안정성과 보안을 높인다.
+
+## 주소창에 URL을 입력하면
+
+1. 사용자가 User Interface의 주소창을 통해 URL을 입력하면, 브라우저는 해당 URL 주소 중 도메인 네임을 *DNS 서버*에 요청하여 해당 도메인 네임에 해당하는 IP 주소를 받아온다.
+2. 브라우저는 해당 IP 주소로 HTTP Request을 보내고, 서버는 요청을 받아 해당 요청에 대한 Response를 보낸다.
+3. 브라우저는 서버로부터 받은 **Response를 해석하여 화면에 표시**한다.
+
+Response에는 <u>HTML, CSS, JavaScript 등의 개발자가 작성한 문서</u>들이 포함되어 있으며, 이러한 문서들을 해석하여 브라우저가 화면에 그려주는 동작을 **브라우저 렌더링**이라고 한다.
+
+## 렌더링 엔진
+
+문서를 해석하여 브라우저 화면에 표시하는 역할을 하는 렌더링 엔진은 **브라우저마다 종류가 다르다.**
+그렇기 때문에 같은 소스코드라도 브라우저마다 렌더링이 다르게 되는 *크로스 브라우징 이슈*가 발생한다.
+대표적인 브라우저의 렌더링 엔진은 다음과 같다.
+
+- **Chrome**: Webkit, Blink (Webkit기반, 버전 28 이후)
+- **Safari**: WebKit
+- **Firefox**: Gecko
+- **Edge**: EdgeHTML
+- **IE**: Trident
+
+## 렌더링 엔진 동작 과정
+
+<div style={{ textAlign: "center", margin: "1rem" }}>
+  <img
+    src="https://d2.naver.com/content/images/2015/06/helloworld-59361-2.png"
+    width="500"
+  />
+  <span style={{ color: "gray", fontSize: "0.8rem" }}>
+    그림 2 렌더링 엔진의 동작 과정
+  </span>
+</div>
+
+렌더링 엔진은 HTML 문서를 최상단에서부터 한 줄씩 순차적으로 파싱하여 <b style={{color: "orange"}}>DOM(Document Object Model)</b> 트리를 생성하는데, 중간에 CSS를 로드하는 `link`나 `style`태그를 만나면 DOM 생성을 일시중단하고 CSS를 파싱하여 <b style={{color: "skyblue"}}>CSSOM(CSS Object Model)</b>트리를 생성한다. 이후 CSS 파싱이 완료되면 HTML 파싱이 중단된 시점으로 돌아가 다시 HTML을 파싱한다. DOM과 CSSOM이 생성되면 이 둘은 렌더링을 위해 결합되어 <b style={{color: "green"}}>렌더 트리(Render Tree)</b>를 생성한다. 이때, 렌더 트리는 브라우저 화면에 보여지지 않는 것들은 포함하지 않는다. (HTML `<head>` 태그, CSS의 `display: none` 등)
+
+렌더 트리의 구축이 끝나면, 렌더 트리의 각 노드들을 화면의 정확한 위치에 **배치(Layout/Reflow)** 하고, 마지막으로 UI 백엔드에서 렌더 트리의 각 노드를 가로지르며 화면에 그리는 과정(**페인팅**)을 거친다.
+
+여기서 중요한 것은 이러한 과정들이 점진적으로 진행된다는 것이다. 렌더링 엔진은 좀 더 나은 사용자 경험을 위해 **모든 HTML을 파싱할 때까지 기다리지 않고 배치와 그리기 과정을 시작한다.**
+즉, 네트워크로부터 나머지 리소스를 기다리는 동시에 받은 내용의 일부를 먼저 화면에 표시하는 것이다.
+
+### 렌더링 엔진 동작 과정 예
+
+Webkit과 Gecko의 동작 과정 그래프를 통해 시각적으로 이해해보자.
+
+<div style={{ textAlign: "center", margin: "1rem" }}>
+  <img
+    src="https://d2.naver.com/content/images/2015/06/helloworld-59361-3.png"
+    width="500"
+  />
+  <span style={{ color: "gray", fontSize: "0.8rem" }}>
+    그림 3 Webkit 동작 과정
+  </span>
+</div>
+
+<div style={{ textAlign: "center", margin: "1rem" }}>
+  <img
+    src="https://d2.naver.com/content/images/2015/06/helloworld-59361-4.png"
+    width="500"
+  />
+  <span style={{ color: "gray", fontSize: "0.8rem" }}>
+    그림 4 Gecko 동작 과정
+  </span>
+</div>
+
+웹킷과 게코는 기본적으로 동작 과정은 비슷하지만, 용어를 약간 다르게 사용한다.
+게코는 시각적으로 처리되는 렌더 트리를 **형상 트리(Frame Tree)** 라고 부르고 각 렌더 트리 요소를 **형상(Frame)** 이라고 하는데, 웹킷은 **렌더 트리(Render Tree)** 라고 부르며 각 렌더 트리 요소를 **렌더 객체(Render Object)** 라고 한다. 또한 웹킷은 요소를 배치하는데 **레이아웃(Layout)** 이라는 용어를 사용하고, 게코는 **리플로우(Reflow)** 라는 용어를 사용한다. **어태치먼트(Attatchment)** 는 웹킷이 렌더 트리를 생성하기 위해 DOM 노드와 CSS 규칙을 연결하는 과정을 의미한다.
+
+## 리렌더링
+
+브라우저의 렌더링은 단 한 번만 실행되는 것이 아니다.
+
+다음 경우에 의해 **레이아웃 계산(Layout/Reflow)과 페인팅(Painting)** 이 다시 일어나는데, 이를 **리렌더링**이라고 한다.
+
+1. 자바스크립트에 의해 노드가 추가/삭제될 때
+2. 브라우저의 창 리사이징에 의한 뷰포트(현재 화면에 보이는 영역)의 크기가 변경될 때
+3. HTML 요소의 레이아웃에 영향을 주는 CSS 속성이 변경될 때 (ex. width, height, padding, margin 등)
+
+잦은 리렌더링은 성능에 악영향을 미치므로, 최대한 리렌더링을 줄이는 것이 좋다.
+
+## 자바스크립트 파싱과 실행
+
+DOM은 HTML의 구조 및 정보 뿐 아니라 HTML 요소들을 제어할 수 있는 **DOM API** 를 제공한다. DOM API는 각 HTML 노드에 접근하고 조작할 수 있는 메서드를 제공한다. 이러한 DOM API를 사용하여 DOM을 조작하는 것이 가능하다.
+
+<div style={{ textAlign: "center", margin: "1rem" }}>
+  <img
+    src="https://github.com/user-attachments/assets/e394521a-f51e-4cb8-a901-b81b92d8ef57"
+    width="500"
+  />
+  <span style={{ color: "gray", fontSize: "0.8rem" }}>
+    그림 5 자바스크립트 파싱 및 실행 (출처: Olivia Kim의 블로그)
+  </span>
+</div>
+
+만약 렌더링 엔진이 HTML 문서를 파싱하는 도중에 `<script>` 태그를 만날 경우 렌더링 엔진은 자바스크립트 엔진에게 제어권을 넘긴다. (이를 Blocking이 일어났다고 한다.) 이후 자바스크립트 코드의 파싱과 실행이 종료되면 다시 렌더링 엔진으로 제어권이 넘어가 HTML 파싱이 중단된 시점부터 다시 시작하여 DOM 생성을 재개한다.
+따라서 자바스크립트 코드가 실행되는 시점에 조작하고자 하는 DOM이 완성되지 않은 상태라면, `document.write()`와 같은 메서드를 사용하여 DOM을 조작할 수 없다.
+만약 자바스크립트 코드에 DOM이나 CSSOM을 조작하는 DOM API가 사용된 경우, 변경된 DOM과 CSSOM은 다시 렌더 트리로 결합되어 리렌더링이 발생하는데, 이를 리플로우(레이아웃 재계산)와 리페인트(다시 페인팅)라고 한다.
+
+### 자바스크립트 엔진 동작 과정
+
+자바스크립트 엔진이 처리하는 자바스크립트 코드의 파싱과 실행을 간단하게 설명하면 다음과 같다.
+
+_"자바스크립트 코드는 **파싱**되어 **AST(Abstract Syntax Tree)** 로 변환된다. 이후 AST는 **바이트코드(Bytecode)**로 변환되어 **인터프리터**에 의해 실행된다. 이때, 인터프리터는 바이트코드를 한 줄씩 읽어 실행하며, 실행 결과를 **메모리 힙**에 저장한다."_
+
+<div style={{ textAlign: "center", margin: "1rem" }}>
+  <img
+    src="https://gyujincho.github.io/assets/2018-06-19-AST/03.png"
+    width="400"
+  />
+  <span style={{ color: "gray", fontSize: "0.8rem" }}>ㅁ...뭐요?</span>
+</div>
+
+AST는 **추상 구문 트리(Abstract Syntax Tree)** 의 약자로, **프로그래밍 언어의 소스 코드를 분석하여 구문 트리를 만든 것** 이다. 이를 통해 소스 코드의 구조를 파악하고 분석하는데 사용된다.
+일단 여기까지만 이해하고 나중에 JS 컴파일러, Babel 등에 대해 더 공부해보자 !
+
+## 정리
+
+브라우저는 다음과 같은 순서로 웹 페이지를 렌더링한다.
+
+<details>
+<summary> **안보고 말할 수 있어야 한다 !** </summary>
+
+1. 브라우저의 **사용자 인터페이스**를 통해 URL을 입력하면, **브라우저 엔진**이 해당 URL을 **네트워크 계층**으로 전달한다.
+2. **네트워크 계층**은 해당 URL의 IP 주소를 찾기 위해 **DNS 서버**에 요청하고, IP 주소를 받아온다.
+3. **네트워크 계층**은 해당 IP 주소로 **HTTP Request**를 보내고, **서버**는 요청을 받아 **Response**를 보낸다.
+4. **브라우저 엔진**은 **렌더링 엔진**에게 Response를 해석하여 **렌더링**을 요청한다.
+5. **렌더링 엔진**은 HTML 문서를 **파싱**하여 **DOM 트리**를 생성하고, CSS를 파싱하여 **CSSOM 트리**를 생성한다.
+6. **DOM 트리**와 **CSSOM 트리**를 결합하여 **렌더 트리**를 생성한다.
+7. **렌더 트리**를 **배치**하고 **페인팅**하여 화면에 표시한다.
+8. 만약 DOM API를 통해 DOM 노드가 추가/삭제되거나, 레이아웃에 영향을 주는 CSS 속성이 변경되면 **리렌더링(리플로우 & 리페인팅)** 이 발생한다.
+
+<div style={{ textAlign: "center", margin: "1rem" }}>
+  <img
+    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhNFT-r6WErY5w8MlWT_HRieKv4tB2gC5Igw&s"
+    width="300"
+  />
+  <span style={{ color: "gray", fontSize: "0.8rem" }}>
+    완벽히 이해한 당신, 칭찬해.
+  </span>
+</div>
+
+</details>
+
+## 참고 자료
+
+- https://web.dev/articles/howbrowserswork?hl=ko
+
+- https://d2.naver.com/helloworld/59361
+
+- https://oliviakim.tistory.com/80
+
+- https://gyujincho.github.io/2018-06-19/AST-for-JS-devlopers

@@ -1,0 +1,324 @@
+---
+title: "인터페이스"
+description: "또 다른 타입 별칭"
+category: TypeScript
+tags:
+  - TypeScript
+date: 2024-01-18
+thumbnail: "/images/category-typescript.png"
+---
+
+## 인터페이스 (Interface)
+
+인터페이스란 타입 별칭과 동일하게 타입에 이름을 지어주는 또 다른 문법이다.
+
+예를 들어 간단한 Person 객체의 타입을 정의한다면 다음과 같이 정의할 수 있다.
+
+```ts
+interface Person {
+  name: string;
+  age: number;
+}
+```
+
+이렇게 정의한 인터페이스는 타입 주석과 함께 사용해 변수의 타입을 정의할 수 있다.
+
+```ts
+const person: Person = {
+  name: "정주노",
+  age: 27,
+};
+```
+
+이렇듯 인터페이스는 타입 별칭과 문법만 조금 다를 뿐 기본적인 기능은 거의 비슷하다.
+
+### 선택적 프로퍼티
+
+```ts
+interface Person {
+  name: string;
+  age?: number;
+}
+
+const person: Person = {
+  name: "정주노",
+  // age: 27,
+};
+```
+
+### 읽기 전용 프로퍼티
+
+```ts
+interface Person {
+  readonly name: string;
+  age?: number;
+}
+
+const person: Person = {
+  name: "정주노",
+  // age: 27,
+};
+
+person.name = "홍길동"; // ❌
+```
+
+### 메소드 타입 정의
+
+인터페이스 내 메소드의 타입을 정의하는 것 또한 가능하다. 메소드의 타입은 함수 타입 표현식과 호출 시그니처를 이용해 정의할 수 있다.
+
+```ts
+// 함수타입 표현식
+interface Person {
+  readonly name: string;
+  age?: number;
+  sayHi: () => void;
+}
+```
+
+```ts
+// 호출 시그니처
+interface Person {
+  readonly name: string;
+  age?: number;
+  sayHi(): void;
+}
+```
+
+하지만 함수 타입 표현식으로 메소드의 타입을 정의할 경우 다음과 같이 메소드의 오버로딩 구현이 불가능하다.
+
+```ts
+interface Person {
+  readonly name: string;
+  age?: number;
+  sayHi: () => void;
+  sayHi: (a: number, b: number) => void; // ❌
+}
+```
+
+따라서 만약 오버로딩 구현이 필요할 경우 호출 시그니처를 이용해야 한다.
+
+```ts
+interface Person {
+  readonly name: string;
+  age?: number;
+  sayHi(): void;
+  sayHi(a: number): void;
+  sayHi(a: number, b: number): void;
+}
+```
+
+### 하이브리드 타입
+
+인터페이스 또한 마찬가지로 함수임과 동시에 객체인 하이브리드 타입을 정의할 수 있다.
+
+```ts
+interface Func2 {
+  (a: number): string;
+  b: boolean;
+}
+
+const func: Func2 = (a) => "hello";
+func.b = true;
+```
+
+### 타입 별칭과의 차이점
+
+타입 별칭에서는 유니온과 인터섹션을 이용해 타입을 정의할 수 있었다. 하지만 인터페이스는 불가능하다.
+
+```ts
+type Type1 = number | string;
+type Type2 = number & string;
+
+interface Person {
+  name: string;
+  age: number;
+} | number // ❌
+```
+
+따라서 인터페이스로 만든 타입을 유니온 혹은 인터섹션으로 이용하고 싶다면 다음과 같이 타입 별칭과 함께 사용하거나, 타입 주석에서 직접 사용해야 한다.
+
+```ts
+type Type1 = number | string | Person;
+type Type2 = number & string & Person;
+
+const person: Person & string = {
+  name: "정주노",
+  age: 27,
+};
+```
+
+<hr />
+
+## 인터페이스 확장
+
+인터페이스의 확장이란 하나의 인터페이스를 다른 인터페이스가 <u>상속받아</u> 중복된 프로퍼티를 정의하지 않도록 도와주는 문법이다.
+
+아래의 예제에 4개의 타입이 정의되어 있다.
+
+```ts
+interface Animal {
+  name: string;
+  age: number;
+}
+
+interface Dog {
+  name: string;
+  age: number;
+  isBark: boolean;
+}
+
+interface Cat {
+  name: string;
+  age: number;
+  isScratch: boolean;
+}
+
+interface Chicken {
+  name: string;
+  age: number;
+  isFly: boolean;
+}
+```
+
+각 타입을 자세히 살펴보면 Animal 타입을 기반으로 각각 Dog, Cat, Chicken이 추가적인 프로퍼티를 갖고있는 형태임을 알 수 있다. 또한 Animal타입의 `name`과 `age` 프로퍼티가 모든 타입에 중복해서 나타나는 것도 확인할 수 있다.
+
+이렇게 특정 인터페이스를 기반으로 여러 개의 인터페이스가 파생되는 경우 중복 코드가 발생할 수 있는데, 이럴 때는 다음과 같이 인터페이스의 확장 기능을 사용하면 편리하다.
+
+```ts
+interface Animal {
+  name: string;
+  color: string;
+}
+
+interface Dog extends Animal {
+  breed: string;
+}
+
+interface Cat extends Animal {
+  isScratch: boolean;
+}
+
+interface Chicken extends Animal {
+  isFly: boolean;
+}
+```
+
+`interface T1 extends T2` 형식으로 extends 뒤에 확장할 타입의 이름을 넣으면 해당 타입에 정의된 모든 프로퍼티들을 다 가지고 오게 된다.
+
+참고로, 인터페이스는 인터페이스 뿐만 아니라 다음과 같이 타입 별칭으로 정의된 객체도 확장할 수 있다.
+
+```ts
+type Animal = {
+  name: string;
+  color: string;
+};
+
+interface Dog extends Animal {
+  breed: string;
+}
+```
+
+또한 여러 개의 인터페이스를 확장하는 것 또한 가능하다.
+
+```ts
+interface DogCat extends Dog, Cat {}
+
+const dogCat: DogCat = {
+  name: "",
+  color: "",
+  breed: "",
+  isScratch: true,
+};
+```
+
+### 프로퍼티 재정의
+
+다음과 같이 인터페이스를 확장함과 동시에 기존에 있었던 프로퍼티의 타입을 재정의하는 것 또한 가능하다.
+
+```ts
+interface Animal {
+  name: string;
+  color: string;
+}
+
+interface Dog extends Animal {
+  name: "strli"; // 타입 재 정의
+  breed: string;
+}
+```
+
+위 코드에서 Dog 타입은 Animal 타입을 확장함과 동시에 기존 Animal의 `name` 프로퍼티의 타입을 string에서 string literal 타입으로 재정의했다.
+
+이때 주의해야 할 것은 프로퍼티를 재정의할 때 반드시 기존 타입의 서브타입으로 재정의해야 한다는 점이다. 따라서 다음과 같이 Animal의 `name`의 타입이 string인 상황에서 number 타입으로 재정의하는 것은 불가능하다.
+
+## 인터페이스 선언 합침 (머징)
+
+타입 별칭은 동일한 스코프 내에 중복된 이름으로 여러 번 선언할 수 없는 반면 인터페이스는 가능하다.
+
+```ts
+type Person = {
+  name: string;
+};
+
+type Person = { ❌
+  age: number;
+};
+```
+
+```ts
+interface Person {
+  name: string;
+}
+
+interface Person {
+  // ✅
+  age: number;
+}
+```
+
+이렇게 되는 이유는 <b>중복된 이름의 인터페이스 선언은 결국 모두 하나로 합쳐지기 때문이다.</b> 따라서 위 코드에 선언한 Person 인터페이스들은 하나로 합쳐져 다음과 같은 인터페이스가 된다.
+
+```ts
+interface Person {
+  name: string;
+  age: number;
+}
+```
+
+이렇게 동일한 이름의 인터페이스들이 합쳐지는 것을 <b>선언 합침(Declaration Merging)</b>이라고 부른다. 이를 활용해 점진적으로 프로퍼티를 추가하여 사용할 수 있다.
+
+```ts
+interface Person {
+  name: string;
+}
+
+interface Person {
+  age: number;
+}
+
+const person: Person = {
+  name: "정주노",
+  age: 27,
+};
+```
+
+단, 이렇게 인터페이스를 중복 선언할 때 동일한 이름의 프로퍼티를 서로 다른 타입으로 선언할 경우 오류가 발생한다.
+
+```ts
+interface Person {
+  name: string;
+}
+
+interface Person {
+  name: number; // Error
+  age: number;
+}
+```
+
+위 코드를 살펴보면 첫 번째 Person 에서는 `name` 프로퍼티의 타입을 string으로 지정했지만 두 번째 선언할 때에는 number로 정의한 것을 확인할 수 있다. 이렇게 동일한 프로퍼티의 타입을 다르게 정의한 상황을 '충돌'이라고 표현하며 선언 합침에서 이러한 충돌은 허용되지 않는다.
+
+<hr />
+
+## 출처
+
+위 포스트는 이정환 님의 [인프런: 한 입 크기로 잘라먹는 타입스크립트(TypeScript)](https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8/dashboard)를 수강한 뒤 복습 차원에서 저의 생각을 정리 및 추가하여 업로드했음을 알립니다.

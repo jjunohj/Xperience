@@ -10,6 +10,7 @@ import ReadingProgressBar from "../ReadingProgressBar";
 import Image from "next/image";
 import { Post } from "contentlayer/generated";
 import Tag from "../common/Tag";
+import Toc from "../Toc";
 
 export type PostLayoutProps = {
   post: Post;
@@ -59,6 +60,7 @@ export default function PostLayout({ post }: PostLayoutProps) {
           </div>
         </div>
       </article>
+      <Toc />
     </>
   );
 }

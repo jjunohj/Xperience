@@ -15,7 +15,7 @@ const PostCards = () => {
     >
       <motion.div
         variants={staggerHalf}
-        className="flex w-full grid-cols-4 flex-col gap-4 overflow-clip sm:grid sm:grid-flow-dense sm:gap-6"
+        className="flex w-full grid-cols-4 flex-col gap-4 overflow-y-visible sm:grid sm:grid-flow-dense sm:gap-6"
       >
         {allBlogPosts.slice(0, 4).map((post, idx) => (
           <PostCard key={idx} {...post} />

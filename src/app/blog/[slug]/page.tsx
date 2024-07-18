@@ -2,21 +2,15 @@
 
 import PostListItem from "@/src/components/PostListItem";
 import IconText from "@/src/components/common/IconText";
+import Tag from "@/src/components/common/Tag";
 import Title from "@/src/components/common/Title";
-import { allBlogPosts, allCategories } from "@/src/constants/dataset";
-import { allPosts } from "contentlayer/generated";
+import { allCategories } from "@/src/constants/dataset";
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import CalenderIcon from "~/components/icons/CalenderIcon";
 import ListIcon from "~/components/icons/ListIcon";
-import {
-  fadeIn,
-  fadeInSlideToLeft,
-  fadeInUp,
-  staggerOne,
-  staggerTwo,
-} from "~/constants/animations";
+import { fadeInUp, staggerOne } from "~/constants/animations";
 
 export default function CategoryPage({ params }: { params: { slug: string } }) {
   const category = allCategories.find((p) => p.category === params.slug);
@@ -40,14 +34,22 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
           <Title className="mx-4">
             {category.title || "Untitled category"}
           </Title>
-          <div className="mt-4">
+          <div className="mt-4 flex flex-col items-center gap-1">
             <p className="text-primary font-light">{category.description}</p>
-            <div className="text-primary mt-1 flex justify-center gap-2">
+            <div className="text-primary flex justify-center gap-2">
               <IconText
                 Icon={CalenderIcon}
                 text={dayjs(category.date).format("YY.MM.DD")}
               />
-              <IconText Icon={ListIcon} text={`${category.posts.length}편`} />
+              <IconText
+                Icon={ListIcon}
+                text={`${category.posts.length} 게시글`}
+              />
+            </div>
+            <div className="mx-auto mt-1 flex gap-2 text-sm opacity-90">
+              {category.tags.map((tag) => (
+                <Tag key={tag} tag={tag} />
+              ))}
             </div>
           </div>
         </figcaption>

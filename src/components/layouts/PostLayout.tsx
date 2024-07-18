@@ -40,16 +40,16 @@ export default function PostLayout({ post }: PostLayoutProps) {
           <figcaption className="absolute bottom-0 left-0 right-0 mb-16">
             <Title className="mx-4">{post.title || "Untitled Post"}</Title>
             <div className="flex w-full flex-col justify-between gap-2">
-              <div className="mx-auto flex gap-2 text-neutral-600 dark:text-neutral-400">
+              <div className="mx-auto flex gap-2 text-sm opacity-90">
+                {post.tags.map((tag) => (
+                  <Tag key={tag} tag={tag} />
+                ))}
+              </div>
+              <div className="mx-auto mt-2 flex gap-2 text-neutral-800 dark:text-neutral-200">
                 <IconText
                   Icon={CalenderIcon}
                   text={dayjs(post.date).format("YYYY.MM.DD")}
                 />
-              </div>
-              <div className="mx-auto mt-2 flex gap-2 text-sm opacity-90">
-                {post.tags.map((tag) => (
-                  <Tag key={tag} tag={tag} />
-                ))}
               </div>
             </div>
           </figcaption>

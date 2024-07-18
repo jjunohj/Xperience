@@ -55,8 +55,10 @@ export default function PostLayout({ post }: PostLayoutProps) {
           </figcaption>
         </div>
         <div className="relative flex animate-fadeInHalf justify-center gap-8">
-          <div className="prose prose-neutral mx-4 w-full max-w-xl font-spoqa dark:prose-dark sm:mx-0 sm:max-w-2xl lg:max-w-3xl">
-            <MDXContent components={mdxComponents} />
+          <div className="prose prose-neutral w-full max-w-xl font-spoqa dark:prose-dark sm:max-w-2xl lg:max-w-3xl">
+            <div className="mx-4 sm:mx-0">
+              <MDXContent components={mdxComponents} />
+            </div>
           </div>
         </div>
       </article>

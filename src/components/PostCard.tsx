@@ -16,14 +16,14 @@ const PostCard = (post: Post) => {
       whileHover={{ scale: 1.05, transformOrigin: "center" }}
       whileTap={{ scale: 0.95 }}
     >
-      <div className="relative h-20 w-full rounded-2xl sm:h-60 sm:w-40 md:h-72 md:w-56">
+      <div className="relative h-20 w-full rounded-2xl sm:h-60 sm:w-40 md:h-72 md:w-56 lg:h-80 lg:w-64">
         <Image
           src={post.thumbnail}
           alt={post.title}
           width={224}
           height={288}
           draggable={false}
-          className="h-24 w-1/4 object-cover dark:brightness-75 dark:contrast-125 dark:grayscale sm:h-60 sm:w-40 md:h-72 md:w-56"
+          className="h-24 w-1/4 object-cover dark:brightness-75 dark:contrast-125 dark:grayscale sm:h-full sm:w-full"
         />
         <div className="absolute inset-0 w-1/4 bg-gradient-to-r from-transparent to-white opacity-50 dark:to-black sm:hidden" />
         <div className="absolute inset-0 dark:bg-black dark:bg-opacity-20" />

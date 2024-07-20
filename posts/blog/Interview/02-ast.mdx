@@ -1,0 +1,149 @@
+---
+title: "AST(추상 구문트리)가 그래서 뭔데"
+description: "기계도 자바스크립트 이해하게 해주세요!"
+category: Interview
+thumbnail: "/images/interview-02-ast.png"
+tags:
+  - JavaScript
+  - AST
+  - Compile
+date: 2024-07-19
+---
+
+[지난 게시글 (브라우저 렌더링 원리)](/blog/Interview/01-browser-rendering)에서 브라우저 렌더링 동작 도중, 렌더링 엔진이 `<script>`를 발견하면 DOM 트리 생성을 일시 중단하고 자바스크립트 엔진에게 권한을 위임한다고 했다.
+또 자바스크립트 엔진은 자바스크립트 코드를 실행하기 위해 먼저 자바스크립트 코드를 파싱하고, 이를 AST(추상 구문트리)로 변환한다고 했다.
+이번 글에서는 이 **AST(추상 구문트리)** 가 무엇인지, 왜 필요한지에 대해 알아보도록 하자.
+
+AST는 앞으로 소개할 여러 개념에 자주 등장하기 때문에 컨셉을 잘 알고 넘어가는 것이 중요하다!
+
+## AST가 왜 필요한가?
+
+여러분은 모두 자바스크립트 코드를 작성할 때, 코드를 아래처럼 텍스트로 작성할 것이다.
+
+```javascript
+const name = "홍길동";
+```
+
+하지만 기계는 당연하게도 이 코드를 이해할 수 없다.
+따라서 **컴파일러** 라는 녀석이 등장해서 기계가 이해할 수 있도록 텍스트 코드를 변환해야 한다.
+바로 이 변환 과정에서 AST가 사용되는 것인데, 자바스크립트 코드 변환과정을 살펴보면서 이해해보도록 하자.
+
+<div style={{ textAlign: "center", margin: "2rem" }}>
+  <img
+    src="https://gyujincho.github.io/assets/2018-06-19-AST/05.png"
+    width="600"
+  />
+</div>
+
+위 그림은 컴파일러가 HLL(High Level Language)코드를 0과 1로 만드는 과정을 나타낸 것이다.
+다행히도, 우리는 이 과정 중에서 **어휘 분석기(Scanner)** 와 **구문 분석기(Parser)** 에 대해서만 살펴볼 예정이다.
+
+## 자바스크립트 코드 변환 과정
+
+### 어휘 분석기 (Scanner)
+
+자바스크립트 코드를 변환하기 위한 첫 번째 단계이다.
+먼저 **Scanner** 라는 녀석이 텍스트로 작성된 코드를 하나하나씩 읽고 정의된 규칙을 사용해 모든 코드를 단어 단위로 끊어 토큰화한다.
+(비유하자면 마치 영어 문장에서 명사와 동사 등으로 나누는 것과 비슷하다!)
+이때, 코드의 공백이나 주석, 탭, 줄바꿈 등 코드 <u>실행에 관계없는 요소들은 모두 무시</u>한다.
+
+위에 작성된 예시 코드를 토큰화하면 다음과 같이 나눌 수 있다.
+
+```javascript
+[
+  { value: "const", type: "keyword" },
+  { value: "name", type: "identifier" },
+  { value: "홍길동", type: "Literal" },
+];
+```
+
+이렇게 생성된 토큰들만을 가지고 컴퓨터가 우리의 코드를 이해할 수 있을까? **당연히 아니다.**
+왜냐하면 컴퓨터는 생성된 토큰들만으로는 코드의 구조를 이해할 수 없기 때문이다.
+따라서 추가적으로 <u>코드의 구조를 해석하기 위한</u> **구문 분석** 과정을 거쳐야 한다.
+
+### 구문 분석기 (Parser)
+
+Scanner를 거쳐 토큰들이 생성되면 **Parser** 라는 녀석이 이를 가져다가 코드의 구조를 나타내는 트리를 만들게 되는데, 이 트리를 바로 **AST(추상 구문트리)** 라고 한다.
+이렇게 만들어진 AST를 기반으로 인터프리터는 바이트코드를 생성하게 되는 것이다.
+
+위 텍스트코드를 토큰화와 구문 분석 단계를 거쳐 AST로 만든 결과물은 다음과 같다.
+
+```javascript
+{
+  "type": "Program",
+  "start": 0,
+  "end": 19,
+  "body": [
+    {
+      "type": "VariableDeclaration",
+      "start": 0,
+      "end": 19,
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "start": 6,
+          "end": 18,
+          "id": {
+            "type": "Identifier",
+            "start": 6,
+            "end": 10,
+            "name": "name"
+          },
+          "init": {
+            "type": "Literal",
+            "start": 13,
+            "end": 18,
+            "value": "홍길동",
+            "raw": "\"홍길동\""
+          }
+        }
+      ],
+      "kind": "const"
+    }
+  ],
+  "sourceType": "module"
+}
+```
+
+## AST를 그래서 어떻게 사용하는가?
+
+이렇게 생성된 AST를 가지고 인터프리터는 <u>바이트코드를 생성하고 실행할 수도 있고, 코드를 분석하거나 변환하는 등</u> 다양한 용도로 사용할 수 있다.
+
+우리가 자주 사용하는 도구들로 예를 들면, ESLint와 Prettier는 AST를 이용해서 저마다의 규칙을 정의하고 알고리즘을 적용한다.
+
+TypeScript의 동작 원리도 AST와 관계가 있다. 타입스크립트로 작성된 코드는 생성된 AST를 보고 코드 상에 타입 오류가 없는지 검사하는 타입 검사를 수행한다. 만약 코드에 타입 오류가 있다면 타입 검사가 실패하고 컴파일이 중단된다. 타입 오류가 없는 정상적인 코드라면 타입스크립트의 경우 AST를 **바이트 코드가 아닌 자바스크립트 코드**로 변환한다.
+
+즉, 타입스크립트 코드의 컴파일 과정에 AST에 기반한 타입 검사가 포함되어 있기 때문에 타입스크립트 코드를 컴파일해서 생성한 자바스크립트 코드는 <u>타입 검사를 통과한 <b>타입 오류가 발생할 가능성이 낮은 안전한 자바스크립트 코드</b></u>임을 보장할 수 있는 것이다.
+
+마지막으로, Babel이라는 JS 컴파일러도 AST를 사용한다. Babel은 ES6+ 코드를 ES5 코드로 변환하는데, 이때 AST를 사용해서 ES6+ 코드를 ES5 코드로 변환한다. (이건 나중에 더 자세히 다루도록 하자!)
+
+## 정리
+
+AST가 무엇인지, 왜 필요한지, 어떻게 생성되는 지, 어떻게 사용되는지에 대해 설명해보자.
+
+<details>
+<summary> **안보고 말할 수 있어야 한다 !** </summary>
+
+자바스크립트로 작성한 코드는 토큰화와 구문 분석을 거쳐 AST(추상 구문 트리)로 변환된다. AST는 코드의 구조를 나타내는 트리로, 이를 기반으로 인터프리터는 바이트코드를 생성한 후 실행하거나, 코드를 분석하거나 변환하는 등 다양한 용도로 사용할 수 있다.
+
+<div style={{ textAlign: "center", margin: "1rem" }}>
+  <img
+    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLyZFGyiHwbGKVAoajtQDZkXnAMudI_lrY0Q&s"
+    width="300"
+  />
+  <span style={{ color: "gray", fontSize: "0.8rem" }}>
+    크으으으 AST를 설명할 줄 아는 당신, 대단해!
+  </span>
+</div>
+
+</details>
+
+## 참고 자료
+
+- https://deemmun.tistory.com/86
+
+- https://astexplorer.net/
+
+- https://gyujincho.github.io/2018-06-19/AST-for-JS-devlopers
+
+- https://toss.tech/article/improving-code-quality-via-eslint-and-ast

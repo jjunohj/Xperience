@@ -47,14 +47,22 @@ export default function HeaderNav() {
   }, []);
 
   return (
-    <nav className="text-secondary flex w-full select-none items-end p-4 sm:p-6 sm:py-8 md:pb-12">
+    <nav className="text-secondary absolute top-0 z-10 flex w-full select-none items-end p-4">
       {/* PC */}
       <div className="hidden items-end sm:flex">
-        <NavItem href="/" className="mr-2" aria-label="logo">
-          <LogoIcon width={40} />
+        <NavItem
+          href="/"
+          className="font-arizonia mr-2 px-3 py-1.5 text-4xl font-light"
+          aria-label="logo"
+        >
+          Jarchive
         </NavItem>
         {siteConfig.menus.map((link) => (
-          <NavItem key={link.label} href={link.path} className="px-3 py-1.5">
+          <NavItem
+            key={link.label}
+            href={link.path}
+            className="font-arizonia px-3 py-1.5 text-2xl"
+          >
             {link.label}
           </NavItem>
         ))}
@@ -93,7 +101,7 @@ export default function HeaderNav() {
           </ul>
         )}
       </div>
-      <div className="ml-auto flex items-center gap-2">
+      <div className="my-auto ml-auto mr-2">
         <DarkModeBtn />
       </div>
     </nav>

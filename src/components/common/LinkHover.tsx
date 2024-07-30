@@ -14,8 +14,8 @@ export default function LinkHover({
       {...props}
       href={href ?? "/"}
       className={$(
-        "flex items-center rounded-lg transition-all hover:bg-secondary",
-        className
+        "flex items-center transition-all hover:scale-95",
+        className,
       )}
     >
       {children}

@@ -20,8 +20,8 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
   }
 
   return (
-    <div>
-      <div className="border-b-1 relative mb-8 h-72 w-full animate-fadeInHalf overflow-hidden text-center shadow-2xl shadow-gray-50 drop-shadow-sm dark:shadow-neutral-800">
+    <div className="flex w-full flex-col">
+      <div className="border-b-1 relative mb-8 h-80 w-full animate-fadeInHalf overflow-hidden text-center shadow-2xl shadow-gray-50 drop-shadow-sm dark:shadow-neutral-800">
         <Image
           src={category.thumbnail}
           alt={category.title}
@@ -30,7 +30,7 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
           className="absolute inset-0 blur-sm drop-shadow-sm filter dark:brightness-75 dark:contrast-125 dark:grayscale"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-transparent to-white opacity-60 dark:to-black" />
-        <figcaption className="absolute bottom-0 left-0 right-0 mb-16">
+        <figcaption className="absolute bottom-0 left-0 right-0 mb-20">
           <Title className="mx-4">
             {category.title || "Untitled category"}
           </Title>

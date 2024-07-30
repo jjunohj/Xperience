@@ -1,9 +1,17 @@
+import { Arizonia } from "next/font/google";
 import "../styles/globals.css";
 import Providers from "../components/layouts/Providers";
 import HeaderNav from "../components/layouts/HeaderNav";
 import { Metadata } from "next";
 import AuthorContacts from "../components/common/AuthorContacts";
 import LinkExternal from "../components/common/LinkExternal";
+
+const arizonia = Arizonia({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-arizonia",
+});
 
 export const metadata: Metadata = {
   title: "J archive",
@@ -15,7 +23,7 @@ export const metadata: Metadata = {
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko">
+    <html lang="ko" className={`${arizonia.variable}`}>
       <body>
         <Providers>
           <div className="max-w-screen h-full dark:bg-neutral-900 dark:text-neutral-100">

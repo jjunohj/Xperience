@@ -29,7 +29,7 @@ export default function ReadingProgressBar() {
           left: 0px;
           height: 6px;
           border-radius: 0px 2px 0px 0px;
-          background: linear-gradient(90deg, #ffdd00, #fbb034);
+          background: linear-gradient(90deg, #7dc7d6, #e8c8bc);
         }
       `}</style>
       <style global jsx>{`

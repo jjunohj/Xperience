@@ -7,7 +7,7 @@
 
 @layer base {
   html {
-    font-family: "AppleSDGothicNeo", "Noto Sans KR", sans-serif;
+    font-family: "Helvetica", "AppleSDGothicNeo", "Noto Sans KR", sans-serif;
     font-weight: 400;
   }
 }

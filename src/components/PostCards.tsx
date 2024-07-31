@@ -11,12 +11,12 @@ const PostCards = () => {
       variants={staggerHalf}
       initial="initial"
       animate="animate"
-      className="flex w-full flex-col items-center gap-3 sm:w-fit"
+      className="mt-8 flex w-full flex-col items-center gap-3 sm:mt-16 sm:w-fit"
     >
-      <motion.div
-        variants={staggerHalf}
-        className="flex w-full grid-cols-4 flex-col gap-4 overflow-y-visible sm:grid sm:grid-flow-dense sm:gap-6"
-      >
+      <h2 className="text-base font-semibold sm:mb-4 sm:text-2xl sm:tracking-tight">
+        RECENT POSTS
+      </h2>
+      <motion.div variants={staggerHalf} className="flex w-full flex-col gap-4">
         {allBlogPosts.slice(0, 4).map((post, idx) => (
           <PostCard key={idx} {...post} />
         ))}

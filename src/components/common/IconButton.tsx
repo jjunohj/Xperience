@@ -11,9 +11,9 @@ export default function IconButton({
       {...props}
       type={type}
       className={$(
-        "flex h-9 w-9 items-center justify-center rounded-lg transition-all",
-        "text-secondary hover:bg-secondary",
-        className
+        "flex items-center justify-center transition-all",
+        "text-secondary hover:scale-95",
+        className,
       )}
     />
   );

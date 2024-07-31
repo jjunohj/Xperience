@@ -19,7 +19,7 @@ export default function NavItem({
       href={href}
       className={$(
         isActive ? "text-primary font-semibold" : "text-secondary font-normal",
-        className
+        className,
       )}
     >
       {children}

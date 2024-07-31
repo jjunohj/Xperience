@@ -16,7 +16,13 @@ export default function DarkModeBtn(props: React.ComponentProps<"button">) {
       aria-label="Toggle Dark Mode"
       onClick={toggleTheme}
     >
-      {!mounted ? <></> : isThemeDark ? <span>Dark</span> : <span>Day</span>}
+      {!mounted ? (
+        <></>
+      ) : isThemeDark ? (
+        <span className="pt-2 text-2xl sm:pt-4 sm:text-3xl">🌙</span>
+      ) : (
+        <span className="pt-2 text-2xl sm:pt-4 sm:text-3xl">☀️</span>
+      )}
     </IconButton>
   );
 }

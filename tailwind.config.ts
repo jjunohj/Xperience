@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        point: "#e9752c",
+        point: "#ed907b",
         neutral: {
           50: "#fafafa",
           100: "#f5f5f5",
@@ -28,8 +28,8 @@ module.exports = {
         },
       },
       dropShadow: {
-        base: "0px 0px 10px rgba(234, 179, 8, 0.3)",
-        "base-bold": "0px 0px 7px rgba(234, 179, 8, 0.7)",
+        base: "0px 0px 10px rgba(204, 183, 174, 0.4)",
+        "base-bold": "0px 0px 7px rgba(192, 180, 174, 0.8)",
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],

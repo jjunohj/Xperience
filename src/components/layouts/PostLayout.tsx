@@ -11,6 +11,7 @@ import Image from "next/image";
 import { Post } from "contentlayer/generated";
 import Tag from "../common/Tag";
 import Toc from "../Toc";
+import AdjacentPostNav from "../AdjacentPostNav";
 
 export type PostLayoutProps = {
   post: Post;
@@ -60,6 +61,9 @@ export default function PostLayout({ post }: PostLayoutProps) {
               <MDXContent components={mdxComponents} />
             </div>
           </div>
+        </div>
+        <div className="relative mt-8 flex animate-fadeInHalf justify-center gap-8">
+          <AdjacentPostNav post={post} />
         </div>
       </article>
       <Toc />

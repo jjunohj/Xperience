@@ -12,6 +12,7 @@ import { Post } from "contentlayer/generated";
 import Tag from "../common/Tag";
 import Toc from "../Toc";
 import AdjacentPostNav from "../AdjacentPostNav";
+import Comments from "../Comments";
 
 export type PostLayoutProps = {
   post: Post;
@@ -65,6 +66,7 @@ export default function PostLayout({ post }: PostLayoutProps) {
         <div className="relative mt-8 flex animate-fadeInHalf justify-center gap-8">
           <AdjacentPostNav post={post} />
         </div>
+        <Comments />
       </article>
       <Toc />
     </>

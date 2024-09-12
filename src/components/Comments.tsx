@@ -19,7 +19,7 @@ const Comments = () => {
     }
   }, []);
 
-  return <div ref={ref} className="mt-8"></div>;
+  return <div ref={ref}></div>;
 };
 
 export default Comments;

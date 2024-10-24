@@ -3,11 +3,14 @@ import { allPosts } from "contentlayer/generated";
 import { Metadata } from "next";
 
 interface PostPageProps {
-  params: { slug: string[] };
+  params: Promise<{ slug: string[] }>;
 }
 
-export async function generateMetadata({ params }: PostPageProps) {
-  const slug = `blog/${params.slug.join("/")}`;
+export async function generateMetadata({
+  params,
+}: PostPageProps): Promise<Metadata> {
+  const resolvedParams = await params;
+  const slug = `blog/${resolvedParams.slug.join("/")}`;
   const post = allPosts.find((post) => post._raw.flattenedPath === slug);
 
   return {
@@ -37,8 +40,9 @@ export async function generateMetadata({ params }: PostPageProps) {
   };
 }
 
-export default function PostPage({ params }: PostPageProps) {
-  const slug = `blog/${params.slug.join("/")}`;
+export default async function PostPage({ params }: PostPageProps) {
+  const resolvedParams = await params;
+  const slug = `blog/${resolvedParams.slug.join("/")}`;
   const post = allPosts.find((post) => post._raw.flattenedPath === slug);
 
   if (!post) {

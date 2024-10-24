@@ -6,9 +6,7 @@ interface PostPageProps {
   params: { slug: string[] };
 }
 
-export async function generateMetadata({
-  params,
-}: PostPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: PostPageProps) {
   const slug = `blog/${params.slug.join("/")}`;
   const post = allPosts.find((post) => post._raw.flattenedPath === slug);
 

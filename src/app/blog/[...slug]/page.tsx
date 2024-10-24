@@ -39,7 +39,7 @@ export async function generateMetadata({
   };
 }
 
-export default function PostPage({ params }: { params: { slug: string[] } }) {
+export default function PostPage({ params }: PostPageProps) {
   const slug = `blog/${params.slug.join("/")}`;
   const post = allPosts.find((post) => post._raw.flattenedPath === slug);
 

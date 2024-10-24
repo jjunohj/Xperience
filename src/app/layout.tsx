@@ -4,6 +4,7 @@ import HeaderNav from "../components/layouts/HeaderNav";
 import { Metadata } from "next";
 import AuthorContacts from "../components/common/AuthorContacts";
 import LinkExternal from "../components/common/LinkExternal";
+import { Analytics } from "@vercel/analytics/react";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://blog.xuuno.me"),
@@ -67,6 +68,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );

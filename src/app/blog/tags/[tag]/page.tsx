@@ -7,7 +7,7 @@ export default function TagPage({ params }: { params: { tag: string } }) {
   });
 
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-col gap-2">
+    <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 p-4">
       <h1 className="text-2xl font-extrabold sm:text-3xl lg:text-4xl">
         Tags: {params.tag} ({filteredPosts.length})
       </h1>

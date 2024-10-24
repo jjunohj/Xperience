@@ -35,7 +35,6 @@ module.exports = {
         sans: ["var(--font-sans)", ...fontFamily.sans],
         spoqa: ["var(--font-spoqa)", ...fontFamily.sans],
         mono: ["var(--font-mono)", ...fontFamily.mono],
-        arizonia: ["var(--font-arizonia)"],
       },
       typography: (theme) => ({
         DEFAULT: {

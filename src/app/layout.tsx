@@ -6,6 +6,7 @@ import AuthorContacts from "../components/common/AuthorContacts";
 import LinkExternal from "../components/common/LinkExternal";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://blog.xuuno.me"),
   title: "perience",
   description: "프론트엔드 개발자의 실전 경험과 인사이트를 공유하는 공간",
   icons: {

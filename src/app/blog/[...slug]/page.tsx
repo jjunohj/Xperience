@@ -1,17 +1,19 @@
 import PostLayout from "@/src/components/layouts/PostLayout";
 import { allPosts } from "contentlayer/generated";
-import { Metadata } from "next";
+import { Metadata, ResolvingMetadata } from "next";
 
-interface PostPageProps {
-  params: Promise<{ slug: string[] }>;
-}
+type PostPageProps = {
+  params: { slug: string[] };
+};
 
-export async function generateMetadata({
-  params,
-}: PostPageProps): Promise<Metadata> {
-  const resolvedParams = await params;
-  const slug = `blog/${resolvedParams.slug.join("/")}`;
+export async function generateMetadata(
+  { params }: PostPageProps,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const slug = `blog/${params.slug.join("/")}`;
   const post = allPosts.find((post) => post._raw.flattenedPath === slug);
+
+  const previousImages = (await parent).openGraph?.images || [];
 
   return {
     title: `${post?.title} | Xperiences`,
@@ -19,14 +21,7 @@ export async function generateMetadata({
     openGraph: {
       title: post?.title,
       description: post?.description,
-      images: [
-        {
-          url: post?.thumbnail || "/og-image.png",
-          width: 1200,
-          height: 630,
-          alt: post?.title,
-        },
-      ],
+      images: [post?.thumbnail || "/og-image.png", ...previousImages],
       type: "article",
       authors: ["@xuuno"],
       publishedTime: post?.date,

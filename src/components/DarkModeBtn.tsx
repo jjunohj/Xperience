@@ -10,18 +10,13 @@ export default function DarkModeBtn(props: React.ComponentProps<"button">) {
   useEffect(() => setMounted(true), []);
 
   return (
-    <IconButton
-      className="font-arizonia text-2xl"
-      {...props}
-      aria-label="Toggle Dark Mode"
-      onClick={toggleTheme}
-    >
+    <IconButton {...props} aria-label="Toggle Dark Mode" onClick={toggleTheme}>
       {!mounted ? (
         <></>
       ) : isThemeDark ? (
-        <span className="pt-2 text-2xl sm:pt-4 sm:text-3xl">🌙</span>
+        <span className="pt-2 text-xl sm:pt-4 sm:text-2xl">🌙</span>
       ) : (
-        <span className="pt-2 text-2xl sm:pt-4 sm:text-3xl">☀️</span>
+        <span className="pt-2 text-xl sm:pt-4 sm:text-2xl">☀️</span>
       )}
     </IconButton>
   );

@@ -4,8 +4,8 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
-      allow: "/",
-      disallow: "/about",
+      allow: ["/"],
+      disallow: "/api",
     },
     sitemap: "https://blog.xuuno.me/sitemap.xml",
   };

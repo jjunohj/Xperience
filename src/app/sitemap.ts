@@ -5,7 +5,7 @@ export default function Sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://blog.xuuno.me";
 
   const urls: MetadataRoute.Sitemap = allBlogPosts.map((post) => ({
-    url: `${baseUrl}/${post.slug}`,
+    url: `${baseUrl}${post.slug}`,
     lastModified: new Date(post.date),
     changeFrequency: "daily",
     priority: 1,

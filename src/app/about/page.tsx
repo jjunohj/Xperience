@@ -8,10 +8,11 @@ import {
   awards,
   educations,
   certifications,
+  career,
 } from "./_components/data";
 import Project from "./_components/Project";
 import Activity from "./_components/Activity";
-import PrintButton from "./_components/PrintButton";
+import Career from "./_components/Career";
 
 export default function AboutPage() {
   return (
@@ -25,6 +26,11 @@ export default function AboutPage() {
               title={stack.title}
               elements={stack.elements}
             />
+          ))}
+        </InfoSection>
+        <InfoSection title={"경력"}>
+          {career.map((career, index) => (
+            <Career key={index} {...career} />
           ))}
         </InfoSection>
         <InfoSection title={"프로젝트"}>
@@ -53,7 +59,6 @@ export default function AboutPage() {
           ))}
         </InfoSection>
       </div>
-      <PrintButton />
     </div>
   );
 }

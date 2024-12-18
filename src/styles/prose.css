@@ -41,7 +41,7 @@
 }
 
 .prose code:not(:where(pre *)) {
-  @apply text-primary rounded-lg px-1.5 py-0.5 content-none;
+  @apply text-primary rounded-md px-1.5 py-0.5 font-medium content-none;
   @apply bg-neutral-200 dark:bg-[var(--prism-background)];
 }
 

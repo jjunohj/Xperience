@@ -1,3 +1,13 @@
+export type Career = {
+  logo: string;
+  company: string;
+  team: string;
+  role: string;
+  period: string;
+  stacks: string[];
+  info?: string[];
+};
+
 export type Project = {
   title: string;
   description: string;

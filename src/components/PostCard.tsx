@@ -26,27 +26,32 @@ const PostCard = (post: Post) => {
           className="h-full w-full object-cover group-hover:drop-shadow-base-bold dark:brightness-90"
         />
 
-        <div className="absolute bottom-0 left-0 right-0 flex h-[116px] w-full flex-col items-start justify-start gap-2 overflow-hidden bg-white bg-opacity-60 p-3 dark:bg-black dark:bg-opacity-30 sm:h-[128px] sm:p-4">
-          <h2 className="flex-wrap overflow-x-hidden text-clip whitespace-normal break-words text-sm font-semibold group-hover:drop-shadow-base-bold sm:overflow-x-auto sm:text-xl">
-            {post.title}
-          </h2>
-          <IconText
-            className="gap-1 text-xs font-light group-hover:drop-shadow-base-bold sm:text-sm"
-            Icon={CalenderIcon}
-            text={format(parseISO(post.date), "yyyy년 MM월 dd일")}
-          />
-        </div>
+        <div className="absolute bottom-0 left-0 right-0 flex h-[116px] w-full flex-col justify-between bg-white bg-opacity-60 p-3 dark:bg-black dark:bg-opacity-30 sm:h-[128px] sm:p-4">
+          <div className="flex flex-col items-start space-y-2">
+            <h2 className="text-sm font-semibold group-hover:drop-shadow-base-bold sm:text-xl">
+              {post.title}
+            </h2>
+            <span className="text-xs font-light group-hover:drop-shadow-base-bold sm:text-sm">
+              {post.description}
+            </span>
+            <div className="flex flex-wrap gap-2">
+              {post.tags.map((tag) => (
+                <Pill
+                  key={tag}
+                  className="bg-neutral-50 px-1.5 py-0.5 text-xs font-light dark:bg-neutral-900"
+                >
+                  {tag}
+                </Pill>
+              ))}
+            </div>
+          </div>
 
-        <div className="absolute bottom-3 left-3 block w-full sm:bottom-4 sm:left-4">
-          <div className="flex flex-wrap gap-2 text-sm opacity-90">
-            {post.tags.map((tag) => (
-              <Pill
-                key={tag}
-                className="bg-neutral-50 px-1.5 py-0.5 text-xs font-light dark:bg-neutral-900"
-              >
-                {tag}
-              </Pill>
-            ))}
+          <div className="flex justify-end">
+            <IconText
+              className="gap-1 text-xs font-light group-hover:drop-shadow-base-bold sm:text-sm"
+              Icon={CalenderIcon}
+              text={format(parseISO(post.date), "yyyy년 MM월 dd일")}
+            />
           </div>
         </div>
       </div>

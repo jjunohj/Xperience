@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import AuthorContacts from "../components/common/AuthorContacts";
 import LinkExternal from "../components/common/LinkExternal";
 import { Analytics } from "@vercel/analytics/react";
+import { GoogleTagManager } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://blog.xuuno.me"),
@@ -39,7 +40,16 @@ export const metadata: Metadata = {
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
+      <GoogleTagManager gtmId="GTM-KJ94CWP4" />
       <body>
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-KJ94CWP4"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          ></iframe>
+        </noscript>
         <Providers>
           <div className="max-w-screen h-full dark:bg-neutral-900 dark:text-neutral-100">
             <div className="flex flex-col">

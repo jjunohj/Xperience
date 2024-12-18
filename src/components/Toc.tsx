@@ -20,7 +20,7 @@ export default function Toc() {
   }, []);
 
   return (
-    <aside className="absolute right-8 top-96 hidden h-full lg:block xl:right-20 2xl:right-32">
+    <aside className="absolute right-8 top-[30rem] hidden h-full lg:block xl:right-20 xl:top-[36rem] 2xl:right-32">
       <ul className="sticky top-52 z-10 w-40 rounded-lg border border-neutral-100 bg-white p-4 shadow-lg dark:border-neutral-800 dark:bg-neutral-900 dark:shadow-neutral-800 xl:w-48">
         {headings.map((heading) => (
           <li key={heading.id} className="mb-2">

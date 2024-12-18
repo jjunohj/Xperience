@@ -1,9 +1,7 @@
 export default function MailIcon({
   className,
-  width = 16,
-  height = 16,
   ...props
-}: React.ComponentProps<'svg'>) {
+}: React.ComponentProps<"svg">) {
   return (
     <svg
       role="img"
@@ -11,8 +9,6 @@ export default function MailIcon({
       viewBox="0 0 24 24"
       fill="currentColor"
       className={className}
-      width={width}
-      height={height}
       {...props}
     >
       <title>Gmail</title>

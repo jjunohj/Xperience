@@ -1,19 +1,29 @@
 import React from "react";
-import { Project } from "./type";
+import { Career } from "./type";
+import Image from "next/image";
 
-const Project = (props: Project) => {
+const Career = (props: Career) => {
   return (
     <div className="flex w-full flex-col gap-1.5">
       <div className="flex w-full flex-col-reverse items-start justify-between sm:flex-row">
-        <h1 className="text-base font-semibold dark:text-white sm:text-lg lg:text-xl">
-          {props.title}
-        </h1>
+        <div className="flex items-center gap-2">
+          <Image
+            src={props.logo}
+            alt={props.company}
+            width={24}
+            height={24}
+            className="rounded-md"
+          />
+          <h1 className="text-base font-semibold dark:text-white sm:text-lg lg:text-xl">
+            {props.company}
+          </h1>
+        </div>
         <span className="w-fit text-base font-light dark:text-white sm:text-lg sm:font-normal lg:text-xl">
           {props.period}
         </span>
       </div>
       <span className="text-sm text-black dark:text-white sm:text-base">
-        {props.description}
+        {props.team}
       </span>
       <span className="text-sm text-black dark:text-white sm:text-base">
         {props.role}
@@ -40,4 +50,4 @@ const Project = (props: Project) => {
   );
 };
 
-export default Project;
+export default Career;

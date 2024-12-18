@@ -1,8 +1,11 @@
+import LinkButton from "@/src/components/LinkButton";
+import GithubIcon from "@/src/components/icons/GithubIcon";
+import MailIcon from "@/src/components/icons/MailIcon";
 import Image from "next/image";
 
 const Profile = () => {
   return (
-    <section className="flex h-fit w-full flex-col-reverse items-center justify-between p-4 sm:p-8 lg:flex-row">
+    <section className="flex h-fit w-full flex-col-reverse items-center justify-between p-4 sm:p-8 sm:pb-0 lg:flex-row">
       <div className="flex w-full flex-col items-start justify-start gap-6 lg:w-2/3">
         <div className="mt-4 space-y-1 sm:mt-8 lg:mt-0 lg:space-y-2">
           <h1 className="text-xl font-extralight dark:text-white sm:text-4xl lg:text-5xl">
@@ -37,6 +40,20 @@ const Profile = () => {
             지식은 <b className="font-semibold">공유될 때 가치가 있다</b>고
             생각하며, 팀과 함께 성장합니다.
           </span>
+          <div className="flex items-center gap-2">
+            <LinkButton
+              href="https://github.com/jjunohj"
+              className="h-10 w-10 p-2"
+            >
+              <GithubIcon className="w-full text-black dark:text-white" />
+            </LinkButton>
+            <LinkButton
+              href="mailto:jjunohj@gmail.com"
+              className="h-10 w-10 p-2"
+            >
+              <MailIcon className="w-full text-red-500" />
+            </LinkButton>
+          </div>
         </div>
       </div>
       <div>

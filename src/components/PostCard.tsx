@@ -26,7 +26,7 @@ const PostCard = (post: Post) => {
           className="h-full w-full object-cover group-hover:drop-shadow-base-bold dark:brightness-90"
         />
 
-        <div className="absolute bottom-0 left-0 right-0 flex h-28 w-full flex-col justify-between bg-white bg-opacity-60 p-3 dark:bg-black dark:bg-opacity-30 sm:h-[128px] sm:p-4">
+        <div className="absolute bottom-0 left-0 right-0 flex h-32 w-full flex-col justify-between bg-white bg-opacity-60 p-3 dark:bg-black dark:bg-opacity-30 sm:h-[128px] sm:p-4">
           <div className="flex flex-col items-start space-y-2">
             <h2 className="text-sm font-semibold group-hover:drop-shadow-base-bold sm:text-xl">
               {post.title}

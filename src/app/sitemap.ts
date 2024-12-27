@@ -13,16 +13,22 @@ export default function Sitemap(): MetadataRoute.Sitemap {
 
   return [
     {
-      url: "https://blog.xuuno.me",
+      url: baseUrl,
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 1,
     },
     {
-      url: "https://blog.xuuno.me/blog",
+      url: `${baseUrl}/blog`,
       lastModified: new Date(),
       changeFrequency: "daily",
-      priority: 0.7,
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/tags`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.6,
     },
     ...urls,
   ];

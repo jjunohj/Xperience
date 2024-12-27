@@ -5,11 +5,11 @@ import { Metadata } from "next";
 import AuthorContacts from "../components/common/AuthorContacts";
 import LinkExternal from "../components/common/LinkExternal";
 import { Analytics } from "@vercel/analytics/react";
-import { GoogleTagManager } from "@next/third-parties/google";
+import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://blog.xuuno.me"),
-  title: "perience",
+  title: "Xperiences",
   description: "프론트엔드 개발자의 실전 경험과 인사이트를 공유하는 공간",
   icons: {
     icon: "/favicon.ico",
@@ -35,12 +35,19 @@ export const metadata: Metadata = {
     description: "내 경험을 공유하는 공간",
     images: ["/og-image.png"],
   },
+  authors: [
+    {
+      name: "jjunohj",
+      url: "https://github.com/jjunohj",
+    },
+  ],
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
       <GoogleTagManager gtmId="GTM-KJ94CWP4" />
+      <GoogleAnalytics gaId="G-TDVKJ04GVC" />
       <body>
         <noscript>
           <iframe

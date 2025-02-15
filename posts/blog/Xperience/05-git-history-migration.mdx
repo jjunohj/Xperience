@@ -1,0 +1,113 @@
+---
+title: "모노레포 마이그레이션 시 깃 히스토리 보존하기"
+description: "모노레포 마이그레이션 시 깃 히스토리 보존하기"
+category: Xperience
+thumbnail: "/images/xperience-05-git-history-migration.png"
+tags:
+  - Git
+  - Monorepo
+date: 2025-02-10
+---
+
+## 깃 히스토리, 꼭 챙겨와야 해요?
+
+기존의 서비스들을 모노레포 레포지토리로 새롭게 이동할 때 가장 중요하게 고려해야할 것은 아무래도 **깃 히스토리**일 것입니다.
+
+우리는 엄마 뱃속에서 처음 세상에 나와 울음을 터뜨린 순간부터, 걸음마를 떼고, 학교를 다니고, 졸업을 하는 등 수많은 순간들을 겪습니다. 그리고 이런 순간들을 글이나 사진으로 기록해 나중에 돌이켜 볼 수 있죠.
+
+우리가 만든 코드도 마찬가지로, CRA의 순간부터, 컴포넌트를 만들고, 첫 커밋을 하고, 인증/인가를 붙이고, 테스팅을 하고, 버그를 잡고, 배포하고, 리팩토링을 하는 등 수 많은 변화를 겪고 이는 모두 커밋이라는 이름으로 깃 히스토리 안에 기록됩니다.
+
+우리가 이사를 할 때 졸업 앨범을 챙겨가듯, 코드를 이동할 때도 우린 Git History를 챙겨가야 합니다.
+
+(...) 감성적으로 말했지만 사실 깃 히스토리를 옮겨와야 하는 가장 중요한 이유들이 있습니다.
+
+### 깃 히스토리의 중요성
+
+1. **코드 변경 이력 추적**
+
+   - 기존 코드의 변경 이력과 그 이유를 파악할 수 있습니다.
+   - **버그가 발생했을 때 해당 코드가 언제, 왜 도입되었는지 확인할 수 있습니다.**
+   - 특정 기능이 도입된 시점과 배경을 이해할 수 있습니다.
+
+2. **책임 소재 파악**
+
+   - **코드에 대한 문의나 리뷰가 필요할 때 관련 개발자를 쉽게 찾을 수 있습니다.**
+   - 각 코드 변경의 담당자를 추적할 수 있습니다.
+
+3. **롤백 가능성 확보**
+   - **특정 시점의 코드 상태를 정확히 복원할 수 있습니다.**
+   - 문제 발생 시 이전 버전으로 안전하게 되돌릴 수 있습니다.
+
+이러한 이유로, 단순히 코드만 모노레포로 옮기는 것이 아니라, 반드시 기존의 깃 히스토리를 보존하면서 마이그레이션을 진행해야 합니다.
+
+## 깃 히스토리 마이그레이션
+
+깃 히스토리를 이동하기 위한 방법에는 여러가지가 있는데, 이번 모노레포 마이그레이션 과정에서는 `git mv` 와 `git merge --allow-unrelated-histories` 명령어를 사용한 방법을 알아보겠습니다.
+
+우선 모노레포 서비스와 멀티레포 서비스가 모두 같은 작업 공간(`~`)에 위치한다고 가정합니다.
+
+먼저 `ls` 명령어를 통해 모노레포 서비스와 멀티레포 서비스가 모두 같은 작업 공간(`~`)에 위치하는지 확인합니다.
+
+```bash
+> ls ~
+monorepo
+serviceA
+serviceB
+```
+
+우리는 `serviceA`와 `serviceB`를 모노레포(`monorepo`)의 `apps` 디렉토리 내로 이동할 것입니다.
+
+먼저 아래 명령어를 통해 각 서비스 프로젝트의 루트에 새로운 디렉토리 `apps`를 생성 후 기존 서비스 레포 안의 모든 파일과 숨김파일을 옮깁니다.
+
+```bash
+> cd ~/serviceA
+> mkdir -p apps/serviceA
+> git mv -k * apps/serviceA
+> git mv -k .* apps/serviceA
+> git commit -m "your commit message"
+```
+
+그리고 `serviceB`에 대해서도 동일한 작업을 진행합니다.
+
+그럼 각 서비스 프로젝트의 루트에 `apps` 디렉토리가 생성되고, 기존 파일들이 옮겨진 것을 확인할 수 있습니다.
+
+이제 모노레포 루트로 이동합니다. (모노레포 안에는 `apps`와 `packages` 디렉토리가 이미 존재하고, git init 되어 있다고 가정합니다.)
+
+```bash
+> cd ~/monorepo
+```
+
+이후 각 프로젝트 레포지토리를 리모트로 추가한 뒤, 머지합니다. (여기선 main 브랜치를 머지합니다.)
+
+```bash
+> git remote add -f serviceA ../serviceA
+> git remote add -f serviceB ../serviceB
+> git merge serviceA/main --allow-unrelated-histories
+> git merge serviceB/main --allow-unrelated-histories
+```
+
+끝입니다 ! 이제 리모트를 삭제하고, 커밋 히스토리를 확인해 봅니다.
+
+```bash
+> git remote remove serviceA
+> git remote remove serviceB
+> git log
+```
+
+<div style={{ textAlign: "center", margin: "1rem" }}>
+  <img
+    width="300"
+    alt="마이그레이션 완료된 사내 소규모 프로젝트"
+    src="https://github.com/user-attachments/assets/1bfd7479-66ae-4043-99a0-bc6b1f0bc0ad"
+    style={{ borderRadius: "1rem" }}
+  />
+  <span style={{ color: "gray", fontSize: "0.8rem" }}>
+    모노레포로 마이그레이션된 소규모 작업(?) 프로젝트들
+  </span>
+</div>
+
+이걸로 기존 서비스의 모든 커밋들을 모두 보존한 채로 모노레포로 마이그레이션 진행을 완료했습니다!
+
+## 출처
+
+[From many to one: Moving our JavaScript code into a monorepo](https://www.aha.io/engineering/articles/monorepo)

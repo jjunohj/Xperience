@@ -9,8 +9,12 @@ import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://blog.xuuno.me"),
-  title: "Xperiences",
+  title: {
+    default: "Xperiences",
+    template: "%s | Xperiences",
+  },
   description: "프론트엔드 개발자의 실전 경험과 인사이트를 공유하는 공간",
+  keywords: ["프론트엔드", "개발", "기술블로그", "React", "Next.js", "웹개발"],
   icons: {
     icon: "/favicon.ico",
   },
@@ -34,6 +38,7 @@ export const metadata: Metadata = {
     title: "Xperience",
     description: "내 경험을 공유하는 공간",
     images: ["/og-image.png"],
+    creator: "@xuuno",
   },
   authors: [
     {
@@ -41,6 +46,11 @@ export const metadata: Metadata = {
       url: "https://github.com/jjunohj",
     },
   ],
+  creator: "jjunohj",
+  publisher: "Xperiences",
+  alternates: {
+    canonical: "https://blog.xuuno.me",
+  },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

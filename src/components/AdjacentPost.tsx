@@ -13,7 +13,7 @@ const AdjacentPost = ({ post, direction, className }: AdjacentPostProps) => {
     <Link href={post.slug} className="w-full min-w-0 sm:flex-1">
       <button
         className={$(
-          "flex w-full items-center justify-between p-2 py-4 transition-colors duration-200 hover:bg-gray-100 sm:p-4 sm:py-6",
+          "flex w-full items-center justify-between p-2 py-4 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-neutral-800 sm:p-4 sm:py-6",
           direction === "next" ? "sm:flex-row-reverse" : "sm:flex-row",
           className,
         )}

@@ -14,23 +14,62 @@ export async function generateMetadata(
   const post = allPosts.find((post) => post._raw.flattenedPath === slug);
 
   const previousImages = (await parent).openGraph?.images || [];
+  const postContent = await post?.body.raw
+    .replace(/[>[\]()"`#]/g, "")
+    .slice(0, 200);
 
   return {
     title: `${post?.title} | Xperiences`,
     description: post?.description,
     openGraph: {
       title: post?.title,
-      description: post?.description,
+      description: `${post?.description} ${postContent}`,
       images: [post?.thumbnail || "/og-image.png", ...previousImages],
       type: "article",
       authors: ["@xuuno"],
       publishedTime: post?.date,
+      locale: "ko_KR",
+      siteName: "Xperiences",
+      modifiedTime: post?.date,
     },
     twitter: {
       card: "summary_large_image",
       title: post?.title,
       description: post?.description,
       images: [post?.thumbnail || "/og-image.png"],
+      creator: "@xuuno",
+    },
+    authors: [{ name: "xuuno", url: "https://blog.xuuno.me" }],
+    creator: "xuuno",
+    publisher: "Xperiences",
+    formatDetection: {
+      email: false,
+      address: false,
+      telephone: false,
+    },
+    other: {
+      "application/ld+json": JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        headline: post?.title,
+        description: post?.description,
+        image: post?.thumbnail || "/og-image.png",
+        datePublished: post?.date,
+        dateModified: post?.date,
+        author: {
+          "@type": "Person",
+          name: "xuuno",
+          url: "https://blog.xuuno.me",
+        },
+        publisher: {
+          "@type": "Organization",
+          name: "Xperiences",
+        },
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": `https://blog.xuuno.me/blog/${slug}`,
+        },
+      }),
     },
   };
 }

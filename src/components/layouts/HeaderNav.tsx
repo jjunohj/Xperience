@@ -76,6 +76,7 @@ export default function HeaderNav() {
                 key={link.label}
                 href={link.path}
                 className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-neutral-800"
+                onClick={toggleMenu}
               >
                 {link.label}
               </NavItem>

@@ -20,10 +20,10 @@ export async function generateMetadata(
 
   return {
     title: `${post?.title} | Xperiences`,
-    description: `${post?.description} — ${post?.openGraph ? post?.openGraph : postContent}`,
+    description: `${post?.description} — ${post?.summary ? post?.summary : postContent}`,
     openGraph: {
       title: post?.title,
-      description: `${post?.description} — ${post?.openGraph ? post?.openGraph : postContent}`,
+      description: `${post?.description} — ${post?.summary ? post?.summary : postContent}`,
       images: [post?.thumbnail || "/og-image.png", ...previousImages],
       type: "article",
       authors: ["@xuuno"],
@@ -35,7 +35,7 @@ export async function generateMetadata(
     twitter: {
       card: "summary_large_image",
       title: post?.title,
-      description: `${post?.description} — ${post?.openGraph ? post?.openGraph : postContent}`,
+      description: `${post?.description} — ${post?.summary ? post?.summary : postContent}`,
       images: [post?.thumbnail || "/og-image.png"],
       creator: "@xuuno",
     },
@@ -52,7 +52,7 @@ export async function generateMetadata(
         "@context": "https://schema.org",
         "@type": "BlogPosting",
         headline: post?.title,
-        description: `${post?.description} — ${post?.openGraph ? post?.openGraph : postContent}`,
+        description: `${post?.description} — ${post?.summary ? post?.summary : postContent}`,
         image: post?.thumbnail || "/og-image.png",
         datePublished: post?.date,
         dateModified: post?.date,

@@ -20,7 +20,7 @@ const fields: FieldDefs = {
   date: { type: "date", required: true },
   category: { type: "string", required: true },
   tags: { type: "list", of: { type: "string" }, required: false },
-  openGraph: { type: "string", required: false },
+  summary: { type: "string", required: false },
 };
 
 const Post = defineDocumentType(() => ({

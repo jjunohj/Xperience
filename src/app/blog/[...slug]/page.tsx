@@ -14,16 +14,13 @@ export async function generateMetadata(
   const post = allPosts.find((post) => post._raw.flattenedPath === slug);
 
   const previousImages = (await parent).openGraph?.images || [];
-  const postContent = await post?.body.raw
-    .replace(/[>[\]()"`#]/g, "")
-    .slice(0, 200);
 
   return {
     title: `${post?.title} | Xperiences`,
-    description: `${post?.description} — ${post?.summary ? post?.summary : postContent}`,
+    description: `${post?.description} ${post?.summary ? `- ${post?.summary}` : ""}`,
     openGraph: {
       title: post?.title,
-      description: `${post?.description} — ${post?.summary ? post?.summary : postContent}`,
+      description: `${post?.description} ${post?.summary ? `- ${post?.summary}` : ""}`,
       images: [post?.thumbnail || "/og-image.png", ...previousImages],
       type: "article",
       authors: ["@xuuno"],
@@ -35,7 +32,7 @@ export async function generateMetadata(
     twitter: {
       card: "summary_large_image",
       title: post?.title,
-      description: `${post?.description} — ${post?.summary ? post?.summary : postContent}`,
+      description: `${post?.description} ${post?.summary ? `- ${post?.summary}` : ""}`,
       images: [post?.thumbnail || "/og-image.png"],
       creator: "@xuuno",
     },
@@ -52,7 +49,7 @@ export async function generateMetadata(
         "@context": "https://schema.org",
         "@type": "BlogPosting",
         headline: post?.title,
-        description: `${post?.description} — ${post?.summary ? post?.summary : postContent}`,
+        description: `${post?.description} ${post?.summary ? `- ${post?.summary}` : ""}`,
         image: post?.thumbnail || "/og-image.png",
         datePublished: post?.date,
         dateModified: post?.date,

@@ -64,8 +64,10 @@ export async function generateMetadata(
         },
         mainEntityOfPage: {
           "@type": "WebPage",
-          "@id": `https://blog.xuuno.me/blog/${slug}`,
+          "@id": `https://blog.xuuno.me${post?.slug}`,
         },
+        url: `https://blog.xuuno.me${post?.slug}`,
+        keywords: post?.tags?.join(", "),
       }),
     },
   };

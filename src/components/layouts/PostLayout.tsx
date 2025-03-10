@@ -24,36 +24,11 @@ const mdxComponents = {
   pre: CodeBlock,
 };
 
-function generateJsonLd(post: Post) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: post.title,
-    description: post.description,
-    author: {
-      "@type": "Person",
-      name: "jjunohj",
-      url: "https://github.com/jjunohj",
-    },
-    datePublished: post.date,
-    dateModified: post.date,
-    image: post.thumbnail,
-    url: `https://blog.xuuno.me${post.slug}`,
-    keywords: post.tags.join(", "),
-  };
-}
-
 export default function PostLayout({ post }: PostLayoutProps) {
   const MDXContent = useMDXComponent(post.body.code);
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(generateJsonLd(post)),
-        }}
-      />
       <ReadingProgressBar />
       <article className="animate-fadeInHalf">
         <div className="border-b-1 relative mb-8 h-72 w-full animate-fadeInHalf overflow-hidden text-center shadow-2xl shadow-gray-50 drop-shadow-sm dark:shadow-neutral-800 md:h-96 xl:h-[32rem]">

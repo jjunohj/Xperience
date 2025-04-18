@@ -13,30 +13,34 @@ export const metadata: Metadata = {
     default: "Xperiences",
     template: "%s | Xperiences",
   },
-  description: "프론트엔드 개발자의 실전 경험과 인사이트를 공유하는 공간",
+  description:
+    "프론트엔드 개발자의 실전 경험과 인사이트를 공유하는 기술 블로그",
   keywords: ["프론트엔드", "개발", "기술블로그", "React", "Next.js", "웹개발"],
   icons: {
     icon: "/favicon.ico",
   },
   openGraph: {
-    title: "Xperiences",
-    description: "프론트엔드 개발자의 실전 경험과 인사이트를 공유하는 공간",
+    type: "website",
+    locale: "ko_KR",
     url: "https://blog.xuuno.me",
     siteName: "Xperiences",
+    title: "Xperiences",
+    description:
+      "프론트엔드 개발자의 실전 경험과 인사이트를 공유하는 기술 블로그",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
+        alt: "Xperiences 블로그",
       },
     ],
-    locale: "ko_KR",
-    type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Xperience",
-    description: "내 경험을 공유하는 공간",
+    title: "Xperiences",
+    description:
+      "프론트엔드 개발자의 실전 경험과 인사이트를 공유하는 기술 블로그",
     images: ["/og-image.png"],
     creator: "@xuuno",
   },
@@ -51,6 +55,17 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://blog.xuuno.me",
   },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -59,6 +74,24 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <GoogleTagManager gtmId="GTM-KJ94CWP4" />
       <GoogleAnalytics gaId="G-TDVKJ04GVC" />
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "Xperiences",
+              url: "https://blog.xuuno.me",
+              description:
+                "프론트엔드 개발자의 실전 경험과 인사이트를 공유하는 기술 블로그",
+              author: {
+                "@type": "Person",
+                name: "jjunohj",
+                url: "https://github.com/jjunohj",
+              },
+            }),
+          }}
+        />
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-KJ94CWP4"

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { allBlogPosts } from "../constants/dataset";
 
-export default function Sitemap(): MetadataRoute.Sitemap {
+export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://blog.xuuno.me";
 
   const urls: MetadataRoute.Sitemap = allBlogPosts.map((post) => ({

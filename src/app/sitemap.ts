@@ -3,32 +3,33 @@ import { allBlogPosts } from "../constants/dataset";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://blog.xuuno.me";
+  const currentDate = new Date().toISOString();
 
   const urls: MetadataRoute.Sitemap = allBlogPosts.map((post) => ({
     url: `${baseUrl}${post.slug}`,
     lastModified: new Date(post.date).toISOString(),
-    changeFrequency: "weekly",
-    priority: 0.8,
+    changeFrequency: "weekly" as const,
+    priority: 0.9,
   }));
 
   return [
     {
       url: baseUrl,
-      lastModified: new Date().toISOString(),
-      changeFrequency: "daily",
-      priority: 1,
+      lastModified: currentDate,
+      changeFrequency: "daily" as const,
+      priority: 1.0,
     },
     {
       url: `${baseUrl}/blog`,
-      lastModified: new Date().toISOString(),
-      changeFrequency: "daily",
+      lastModified: currentDate,
+      changeFrequency: "daily" as const,
       priority: 0.9,
     },
     {
       url: `${baseUrl}/about`,
-      lastModified: new Date().toISOString(),
-      changeFrequency: "monthly",
-      priority: 0.7,
+      lastModified: currentDate,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
     },
     ...urls,
   ];

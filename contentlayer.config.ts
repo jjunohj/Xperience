@@ -2,7 +2,7 @@ import {
   FieldDefs,
   defineDocumentType,
   makeSource,
-} from "contentlayer/source-files";
+} from "contentlayer2/source-files";
 import readingTime from "reading-time";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeExternalLinks from "rehype-external-links";
@@ -48,7 +48,7 @@ export default makeSource({
   contentDirPath: "posts",
   documentTypes: [Post],
   mdx: {
-    remarkPlugins: [remarkGfm, remarkBreaks],
+    remarkPlugins: [remarkGfm, remarkBreaks] as any,
     rehypePlugins: [
       rehypeSlug,
       rehypeCodeWrap,
@@ -69,6 +69,6 @@ export default makeSource({
           rel: ["noopener noreferrer"],
         },
       ],
-    ],
+    ] as any,
   },
 });

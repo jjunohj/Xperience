@@ -1,9 +1,9 @@
+@import "intellij-prism.css";
+@import "prose.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import "intellij-prism.css";
-@import "prose.css";
 
 @layer base {
   html {

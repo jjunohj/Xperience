@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
-    nocache: true,
+    // nocache: true,
     googleBot: {
       index: true,
       follow: true,
@@ -122,7 +122,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                       Powered by{" "}
                     </span>
                     <LinkExternal href="https://nextjs.org/">
-                      Next 14
+                      Next 15
                     </LinkExternal>
                   </p>
                 </div>

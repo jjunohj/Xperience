@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { useMDXComponent } from "next-contentlayer/hooks";
+import { useMDXComponent } from "next-contentlayer2/hooks";
 
 import Title from "@/src/components/common/Title";
 import IconText from "@/src/components/common/IconText";

@@ -20,11 +20,11 @@ export default function ZoomImage({
       return;
 
     setZoom(mediumZoom(ref.current, { background }));
-  }, []);
+  }, [background]);
 
   useEffect(() => {
     zoom?.update({ background });
-  }, [background]);
+  }, [background, zoom]);
 
   return <img ref={ref} src={src} alt={alt} {...props} />;
 }

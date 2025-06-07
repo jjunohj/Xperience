@@ -1,4 +1,5 @@
-"use client";
+"use client";;
+import { use } from "react";
 
 import PostListItem from "@/src/components/PostListItem";
 import IconText from "@/src/components/common/IconText";
@@ -12,7 +13,8 @@ import CalenderIcon from "~/components/icons/CalenderIcon";
 import ListIcon from "~/components/icons/ListIcon";
 import { fadeInUp, staggerOne } from "~/constants/animations";
 
-export default function CategoryPage({ params }: { params: { slug: string } }) {
+export default function CategoryPage(props: { params: Promise<{ slug: string }> }) {
+  const params = use(props.params);
   const category = allCategories.find((p) => p.category === params.slug);
 
   if (!category) {

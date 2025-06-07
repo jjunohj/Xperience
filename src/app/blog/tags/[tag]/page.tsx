@@ -1,7 +1,8 @@
 import PostListItem from "@/src/components/PostListItem";
 import { allBlogPosts } from "@/src/constants/dataset";
 
-export default function TagPage({ params }: { params: { tag: string } }) {
+export default async function TagPage(props: { params: Promise<{ tag: string }> }) {
+  const params = await props.params;
   const filteredPosts = allBlogPosts.filter((post) => {
     return post.tags.includes(params.tag);
   });

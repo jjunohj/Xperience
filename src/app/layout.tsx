@@ -72,7 +72,7 @@ export const metadata: Metadata = {
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko">
+    <html suppressHydrationWarning>
       <GoogleTagManager gtmId="GTM-KJ94CWP4" />
       <GoogleAnalytics gaId="G-TDVKJ04GVC" />
       <body>

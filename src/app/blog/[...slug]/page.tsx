@@ -3,13 +3,11 @@ import { allPosts } from "contentlayer/generated";
 import { Metadata, ResolvingMetadata } from "next";
 
 type PostPageProps = {
-  params: { slug: string[] };
+  params: Promise<{ slug: string[] }>;
 };
 
-export async function generateMetadata(
-  { params }: PostPageProps,
-  parent: ResolvingMetadata,
-): Promise<Metadata> {
+export async function generateMetadata(props: PostPageProps, parent: ResolvingMetadata): Promise<Metadata> {
+  const params = await props.params;
   const slug = `blog/${params.slug.join("/")}`;
   const post = allPosts.find((post) => post._raw.flattenedPath === slug);
 

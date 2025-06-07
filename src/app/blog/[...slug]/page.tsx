@@ -6,7 +6,10 @@ type PostPageProps = {
   params: Promise<{ slug: string[] }>;
 };
 
-export async function generateMetadata(props: PostPageProps, parent: ResolvingMetadata): Promise<Metadata> {
+export async function generateMetadata(
+  props: PostPageProps,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
   const params = await props.params;
   const slug = `blog/${params.slug.join("/")}`;
   const post = allPosts.find((post) => post._raw.flattenedPath === slug);
@@ -19,7 +22,15 @@ export async function generateMetadata(props: PostPageProps, parent: ResolvingMe
     openGraph: {
       title: post?.title,
       description: `${post?.description} ${post?.summary ? `- ${post?.summary}` : ""}`,
-      images: [post?.thumbnail || "/og-image.png", ...previousImages],
+      images: [
+        {
+          url: post?.thumbnail || "/og-image.png",
+          width: 1200,
+          height: 630,
+          alt: post?.title || "Xperiences",
+        },
+        ...previousImages,
+      ],
       type: "article",
       authors: ["@xuuno"],
       publishedTime: post?.date,
@@ -41,6 +52,9 @@ export async function generateMetadata(props: PostPageProps, parent: ResolvingMe
       email: false,
       address: false,
       telephone: false,
+    },
+    alternates: {
+      canonical: `https://blog.xuuno.me${post?.slug}`,
     },
     other: {
       "application/ld+json": JSON.stringify({

@@ -15,7 +15,7 @@ export default function useSearch(
       callback?.(value);
       setSearchValue(value);
     }, wait),
-    [],
+    [callback, wait],
   );
 
   return { searchValue, searchHandler };

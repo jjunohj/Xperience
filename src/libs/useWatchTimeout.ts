@@ -3,7 +3,7 @@ import { useEffect } from "react";
 export default function useWatchTimeout(
   watch: unknown,
   ms: number,
-  callback: () => void
+  callback: () => void,
 ) {
   useEffect(() => {
     let timeOut: NodeJS.Timeout;
@@ -15,5 +15,5 @@ export default function useWatchTimeout(
     return () => {
       timeOut && clearInterval(timeOut);
     };
-  }, [watch]);
+  }, [watch, callback, ms]);
 }

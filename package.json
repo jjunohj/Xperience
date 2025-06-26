@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
+    "dev": "node scripts/dev.js",
+    "dev:simple": "contentlayer2 build && next dev --turbopack",
+    "dev:watch": "contentlayer2 dev & next dev --turbopack",
+    "build": "contentlayer2 build && next build",
     "start": "next start",
     "lint": "next lint",
     "build:content": "contentlayer2 build"
@@ -23,6 +25,7 @@
     "framer-motion": "^12.16.0",
     "html-to-image": "^1.11.11",
     "lodash.debounce": "^4.0.8",
+    "mdx-bundler": "^10.1.1",
     "medium-zoom": "^1.1.0",
     "next": "15.3.3",
     "next-contentlayer2": "^0.5.8",

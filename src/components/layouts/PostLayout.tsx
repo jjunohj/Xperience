@@ -35,8 +35,8 @@ export default function PostLayout({ post }: PostLayoutProps) {
           <Image
             src={post.thumbnail}
             alt={`${post.title}의 대표 이미지`}
-            layout="fill"
-            objectFit="cover"
+            fill
+            style={{ objectFit: "cover" }}
             priority={true}
             className="absolute inset-0 blur-sm drop-shadow-sm filter dark:brightness-75 dark:contrast-125 dark:grayscale"
           />

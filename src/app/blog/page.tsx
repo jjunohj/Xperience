@@ -1,5 +1,7 @@
 import { Metadata } from "next";
 import { allBlogPosts, allCategories } from "@/src/constants/dataset";
+import BlogClient from "./_components/BlogClient";
+
 export const metadata: Metadata = {
   title: "Blog",
   description: "프론트엔드 개발 경험과 인사이트를 공유하는 기술 블로그의 글 목록입니다.",
@@ -83,23 +85,7 @@ export default function BlogPage() {
       <span className="text-sm font-light text-gray-600 dark:text-gray-400">
         다시 보고 싶은 기술들을 저만의 언어로 공유합니다.
       </span>
-      <SearchInput
-        className="relative mt-4 w-full"
-        placeholder="카테고리, 게시글 검색"
-        onChange={searchHandler}
-      />
-      <h3 className="mt-4 text-2xl font-extrabold sm:mt-8 sm:text-3xl">
-        Categories
-      </h3>
-      <Categories categories={filteredCategories} />
-      <h2 className="mt-4 text-2xl font-extrabold sm:mt-8 sm:text-3xl">
-        Posts
-      </h2>
-      <div className="mt-2 flex flex-col gap-2 sm:grid sm:grid-cols-2 sm:gap-12">
-        {filteredBlogPosts.map((post) => (
-          <PostListItem key={post.slug} post={post} />
-        ))}
-      </div>
+      <BlogClient allBlogPosts={allBlogPosts} allCategories={allCategories} />
     </div>
   );
 }

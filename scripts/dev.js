@@ -27,7 +27,7 @@ contentlayerBuild.on("close", (code) => {
       cwd: process.cwd(),
     });
 
-    const nextDev = spawn("npx", ["next", "dev", "--turbopack"], {
+    const nextDev = spawn("npx", ["next", "dev"], {
       stdio: "inherit",
       shell: true,
       cwd: process.cwd(),

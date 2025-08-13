@@ -2,6 +2,8 @@ const { withContentlayer } = require("next-contentlayer2");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  trailingSlash: false,
+
   // 외부 이미지 도메인 허용
   images: {
     unoptimized: true, // GitHub assets에 대해 최적화 비활성화
@@ -36,7 +38,6 @@ const nextConfig = {
     ],
   },
 
-  // GitHub assets 로딩을 위한 헤더 설정
   async headers() {
     return [
       {
@@ -46,26 +47,113 @@ const nextConfig = {
             key: "Referrer-Policy",
             value: "no-referrer-when-downgrade",
           },
+          {
+            key: "X-DNS-Prefetch-Control",
+            value: "on",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+          {
+            key: "X-Frame-Options",
+            value: "SAMEORIGIN",
+          },
+        ],
+      },
+      {
+        source: "/images/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/fonts/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      // HTML 페이지에 대한 캐싱 설정
+      {
+        source: "/",
+        headers: [
+          {
+            key: "Cache-Control",
+            value:
+              "public, max-age=0, s-maxage=3600, stale-while-revalidate=59",
+          },
+        ],
+      },
+      {
+        source: "/blog",
+        headers: [
+          {
+            key: "Cache-Control",
+            value:
+              "public, max-age=0, s-maxage=3600, stale-while-revalidate=59",
+          },
+        ],
+      },
+      {
+        source: "/blog/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value:
+              "public, max-age=0, s-maxage=86400, stale-while-revalidate=59",
+          },
+        ],
+      },
+      {
+        source: "/about",
+        headers: [
+          {
+            key: "Cache-Control",
+            value:
+              "public, max-age=0, s-maxage=86400, stale-while-revalidate=59",
+          },
         ],
       },
     ];
   },
 
-  // MDX HMR을 위한 설정
-  experimental: {
-    // Contentlayer가 변경사항을 빠르게 감지하도록 설정
-    serverComponentsExternalPackages: ["contentlayer2"],
-  },
+  // Contentlayer가 변경사항을 빠르게 감지하도록 설정
+  serverExternalPackages: ["contentlayer2"],
   // 개발 모드에서 빠른 새로고침 활성화
   reactStrictMode: true,
-  // 파일 시스템 변경을 더 빠르게 감지
-  webpack: (config, { dev, isServer }) => {
-    if (dev && !isServer) {
-      // MDX 파일 변경을 더 빠르게 감지하도록 설정
-      config.watchOptions = {
-        ...config.watchOptions,
-        poll: 1000, // 1초마다 폴링
-        aggregateTimeout: 300, // 300ms 디바운스
+
+  // 개발 모드 청킹 최적화
+  experimental: {
+    optimizePackageImports: ["@vercel/analytics", "@next/third-parties"],
+  },
+
+  // webpack 설정 (개발 모드 안정성 향상)
+  webpack: (config, { dev }) => {
+    if (dev) {
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: {
+          ...config.optimization.splitChunks,
+          cacheGroups: {
+            ...config.optimization.splitChunks?.cacheGroups,
+            default: false,
+            vendors: false,
+            // 청크 크기 최적화
+            framework: {
+              chunks: "all",
+              name: "framework",
+              test: /(?<!node_modules.*)[\\/]node_modules[\\/](react|react-dom|scheduler|prop-types|use-sync-external-store)[\\/]/,
+              priority: 40,
+              enforce: true,
+            },
+          },
+        },
       };
     }
     return config;

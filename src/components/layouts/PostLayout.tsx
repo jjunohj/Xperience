@@ -27,8 +27,94 @@ const mdxComponents = {
 export default function PostLayout({ post }: PostLayoutProps) {
   const MDXContent = useMDXComponent(post.body.code);
 
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      headline: post.title,
+      description: post.description,
+      image: {
+        "@type": "ImageObject",
+        url: post.thumbnail ? `https://blog.xuuno.me${post.thumbnail}` : "https://blog.xuuno.me/og-image.png",
+        width: 1200,
+        height: 630
+      },
+      datePublished: post.date,
+      dateModified: post.date,
+      author: {
+        "@type": "Person",
+        name: "jjunohj",
+        url: "https://github.com/jjunohj",
+        sameAs: [
+          "https://github.com/jjunohj",
+          "https://blog.xuuno.me/about"
+        ]
+      },
+      publisher: {
+        "@type": "Organization",
+        name: "Xperiences",
+        url: "https://blog.xuuno.me",
+        logo: {
+          "@type": "ImageObject",
+          url: "https://blog.xuuno.me/og-image.png",
+          width: 1200,
+          height: 630
+        }
+      },
+      mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": `https://blog.xuuno.me${post.slug}`,
+      },
+      url: `https://blog.xuuno.me${post.slug}`,
+      keywords: post.tags.join(", "),
+      wordCount: post.wordCount,
+      timeRequired: `PT${post.readingMinutes}M`,
+      articleSection: post.category,
+      inLanguage: "ko-KR",
+      isPartOf: {
+        "@type": "Blog",
+        "@id": "https://blog.xuuno.me/blog",
+        name: "Xperiences"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https://blog.xuuno.me"
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Blog",
+          item: "https://blog.xuuno.me/blog"
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: post.category,
+          item: `https://blog.xuuno.me/blog/${post.category}`
+        },
+        {
+          "@type": "ListItem",
+          position: 4,
+          name: post.title,
+          item: `https://blog.xuuno.me${post.slug}`
+        }
+      ]
+    }
+  ];
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <ReadingProgressBar />
       <article className="animate-fadeInHalf">
         <div className="border-b-1 relative mb-8 h-72 w-full animate-fadeInHalf overflow-hidden text-center shadow-2xl shadow-gray-50 drop-shadow-sm dark:shadow-neutral-800 md:h-96 xl:h-[32rem]">

@@ -6,6 +6,49 @@ import Pill from "../components/common/Pill";
 export default function HomePage() {
   return (
     <div className="flex h-full flex-col items-center">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: "Xperiences",
+            url: "https://blog.xuuno.me",
+            description: "프론트엔드 개발자의 실전 경험과 인사이트를 공유하는 기술 블로그",
+            author: {
+              "@type": "Person",
+              name: "정준호",
+              alternateName: "jjunohj",
+              url: "https://github.com/jjunohj",
+              jobTitle: "Frontend Developer",
+              sameAs: [
+                "https://github.com/jjunohj",
+                "https://blog.xuuno.me/about",
+              ],
+            },
+            publisher: {
+              "@type": "Organization",
+              name: "Xperiences",
+              url: "https://blog.xuuno.me",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://blog.xuuno.me/og-image.png",
+                width: 1200,
+                height: 630,
+              },
+            },
+            potentialAction: {
+              "@type": "SearchAction",
+              target: {
+                "@type": "EntryPoint",
+                urlTemplate: "https://blog.xuuno.me/blog?search={search_term_string}",
+              },
+              "query-input": "required name=search_term_string",
+            },
+            inLanguage: "ko-KR",
+          }),
+        }}
+      />
       <section className="relative mb-4 hidden h-72 w-full items-center justify-center gap-4 p-4 sm:mb-8 sm:flex sm:h-[32rem] sm:gap-6 lg:gap-10">
         <Image
           src="/images/profile.png"

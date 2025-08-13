@@ -6,12 +6,17 @@ import AuthorContacts from "../components/common/AuthorContacts";
 import LinkExternal from "../components/common/LinkExternal";
 import { Analytics } from "@vercel/analytics/react";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://blog.xuuno.me"),
   title: {
     default: "Xperiences",
     template: "%s | Xperiences",
+  },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
   },
   description:
     "프론트엔드 개발자의 실전 경험과 인사이트를 공유하는 기술 블로그",
@@ -72,10 +77,10 @@ export const metadata: Metadata = {
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html suppressHydrationWarning>
+    <html lang="ko" suppressHydrationWarning>
       <GoogleTagManager gtmId="GTM-KJ94CWP4" />
       <GoogleAnalytics gaId="G-TDVKJ04GVC" />
-      <body>
+      <body suppressHydrationWarning>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -90,7 +95,32 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 "@type": "Person",
                 name: "jjunohj",
                 url: "https://github.com/jjunohj",
+                sameAs: [
+                  "https://github.com/jjunohj",
+                  "https://blog.xuuno.me/about",
+                ],
               },
+              publisher: {
+                "@type": "Organization",
+                name: "Xperiences",
+                url: "https://blog.xuuno.me",
+                logo: {
+                  "@type": "ImageObject",
+                  url: "https://blog.xuuno.me/og-image.png",
+                  width: 1200,
+                  height: 630,
+                },
+              },
+              potentialAction: {
+                "@type": "SearchAction",
+                target: {
+                  "@type": "EntryPoint",
+                  urlTemplate:
+                    "https://blog.xuuno.me/blog?search={search_term_string}",
+                },
+                "query-input": "required name=search_term_string",
+              },
+              sameAs: ["https://github.com/jjunohj"],
             }),
           }}
         />
@@ -131,6 +161,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </div>
         </Providers>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

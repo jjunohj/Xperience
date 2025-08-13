@@ -6,6 +6,14 @@ type PostPageProps = {
   params: Promise<{ slug: string[] }>;
 };
 
+export async function generateStaticParams() {
+  return allPosts
+    .filter((post) => post._raw.flattenedPath.startsWith("blog/"))
+    .map((post) => ({
+      slug: post._raw.flattenedPath.replace("blog/", "").split("/"),
+    }));
+}
+
 export async function generateMetadata(
   props: PostPageProps,
   parent: ResolvingMetadata,
@@ -55,32 +63,6 @@ export async function generateMetadata(
     },
     alternates: {
       canonical: `https://blog.xuuno.me${post?.slug}`,
-    },
-    other: {
-      "application/ld+json": JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        headline: post?.title,
-        description: `${post?.description} ${post?.summary ? `- ${post?.summary}` : ""}`,
-        image: post?.thumbnail || "/og-image.png",
-        datePublished: post?.date,
-        dateModified: post?.date,
-        author: {
-          "@type": "Person",
-          name: "xuuno",
-          url: "https://blog.xuuno.me",
-        },
-        publisher: {
-          "@type": "Organization",
-          name: "Xperiences",
-        },
-        mainEntityOfPage: {
-          "@type": "WebPage",
-          "@id": `https://blog.xuuno.me${post?.slug}`,
-        },
-        url: `https://blog.xuuno.me${post?.slug}`,
-        keywords: post?.tags?.join(", "),
-      }),
     },
   };
 }

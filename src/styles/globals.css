@@ -19,6 +19,20 @@ body,
   min-height: 100%;
 }
 
+html {
+  color-scheme: light dark;
+}
+
+body {
+  background-color: white;
+  color: black;
+}
+
+body.dark {
+  background-color: rgb(23, 23, 23);
+  color: white;
+}
+
 * {
   /* MW touch highlight 제거 */
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);

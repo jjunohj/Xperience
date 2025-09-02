@@ -1,5 +1,3 @@
-const { withContentlayer } = require("next-contentlayer2");
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   trailingSlash: false,
@@ -123,8 +121,6 @@ const nextConfig = {
     ];
   },
 
-  // Contentlayer가 변경사항을 빠르게 감지하도록 설정
-  serverExternalPackages: ["contentlayer2"],
   // 개발 모드에서 빠른 새로고침 활성화
   reactStrictMode: true,
 
@@ -160,4 +156,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withContentlayer(nextConfig);
+module.exports = nextConfig;

@@ -1,4 +1,4 @@
-import { $ } from "@/src/libs/core";
+import { cn } from "@/src/libs/core";
 
 export default function Hr({
   className,
@@ -7,7 +7,7 @@ export default function Hr({
   return (
     <hr
       {...props}
-      className={$(
+      className={cn(
         "border-1 w-full border-neutral-300 transition-all dark:border-neutral-700",
         className
       )}

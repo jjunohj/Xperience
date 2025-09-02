@@ -1,14 +1,14 @@
-import { $ } from "~/libs/core";
+import { cn } from "~/libs/core";
 
 export default function SearchInput({
   className,
   ...props
 }: React.ComponentProps<"input">) {
   return (
-    <div className={$("relative mb-4 w-full", className)}>
+    <div className={cn("relative mb-4 w-full", className)}>
       <input
         type="text"
-        className={$(
+        className={cn(
           "block w-full rounded-full border px-4 py-2 font-light",
           "border-neutral-200 bg-white dark:border-neutral-900 dark:bg-neutral-800",
           "focus:outline-none focus:ring-1 focus:ring-neutral-200 dark:focus:ring-neutral-500",

@@ -1,6 +1,6 @@
 "use client";
 
-import { $ } from "@/src/libs/core";
+import { cn } from "@/src/libs/core";
 
 interface LinkButtonProps extends React.ComponentProps<"button"> {
   href: string;
@@ -19,7 +19,7 @@ const LinkButton = ({
   return (
     <button
       onClick={handleClick}
-      className={$("flex items-center justify-center", className)}
+      className={cn("flex items-center justify-center", className)}
       {...props}
     >
       {children}

@@ -3,7 +3,7 @@
 import React, { useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 
-import { $ } from "@/src/libs/core";
+import { cn } from "@/src/libs/core";
 import useWatchTimeout from "@/src/libs/useWatchTimeout";
 
 import CheckIcon from "@/src/components/icons/CheckIcon";
@@ -47,7 +47,7 @@ export default function CodeBlock({
         {children}
       </pre>
       <button
-        className={$(
+        className={cn(
           "absolute right-2 bottom-2 flex h-8 w-8 items-center justify-center rounded-lg",
           "bg-neutral-700 text-xs text-neutral-400 hover:text-neutral-300",
           "opacity-0 transition-all group-hover:opacity-100"

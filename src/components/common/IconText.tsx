@@ -1,6 +1,6 @@
 import React, { type JSX } from "react";
 
-import { $ } from "@/src/libs/core";
+import { cn } from "@/src/libs/core";
 
 export interface IconTextProps {
   Icon: (props: React.ComponentProps<"svg">) => JSX.Element;
@@ -17,14 +17,14 @@ export default function IconText({
 }: IconTextProps) {
   return (
     <div
-      className={$(
+      className={cn(
         "flex items-center ",
         className ?? "gap-1 text-xs",
-        `h-[${iconSize}px]`
+        `h-[${iconSize}px]`,
       )}
     >
       <Icon width={iconSize} height={iconSize} />
-      <span className={$("text-center", `h-[${iconSize}px]`)}>{text}</span>
+      <span className={cn("text-center", `h-[${iconSize}px]`)}>{text}</span>
     </div>
   );
 }

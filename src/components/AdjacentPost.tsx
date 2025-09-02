@@ -1,6 +1,6 @@
 import { Post } from "contentlayer/generated";
 import Link from "next/link";
-import { $ } from "../libs/core";
+import { cn } from "../libs/core";
 import ArrowIcon from "./icons/ArrowIcon";
 
 interface AdjacentPostProps extends React.ComponentProps<"button"> {
@@ -12,7 +12,7 @@ const AdjacentPost = ({ post, direction, className }: AdjacentPostProps) => {
   return (
     <Link href={post.slug} className="w-full min-w-0 sm:flex-1">
       <button
-        className={$(
+        className={cn(
           "flex w-full items-center justify-between p-2 py-4 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-neutral-800 sm:p-4 sm:py-6",
           direction === "next" ? "sm:flex-row-reverse" : "sm:flex-row",
           className,
@@ -23,7 +23,7 @@ const AdjacentPost = ({ post, direction, className }: AdjacentPostProps) => {
           className="h-8 w-8 flex-shrink-0"
         />
         <div
-          className={$(
+          className={cn(
             "flex min-w-0 flex-1 flex-col gap-1 px-4",
             "text-left sm:text-left",
             direction === "next" ? "sm:text-right" : "sm:text-left",

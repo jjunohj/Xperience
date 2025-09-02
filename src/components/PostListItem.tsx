@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import Link from "next/link";
 
-import { $ } from "~/libs/core";
+import { cn } from "~/libs/core";
 import { ReducedPost } from "~/libs/types";
 
 import CalenderIcon from "./icons/CalenderIcon";
@@ -14,7 +14,7 @@ export default function PostListItem({ post }: { post: ReducedPost }) {
   const href = `/blog/[...slug]`;
 
   return (
-    <div className={$("text-ye group w-full py-2 hover:drop-shadow-base")}>
+    <div className={cn("text-ye group w-full py-2 hover:drop-shadow-base")}>
       <Link as={post.slug} href={href} className="hover:drop-shadow-base">
         <p className="text-base font-bold sm:text-xl">{post.title}</p>
         <p className="text-tertiary mt-1 text-sm sm:text-base">

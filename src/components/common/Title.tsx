@@ -1,4 +1,4 @@
-import { $ } from "@/src/libs/core";
+import { cn } from "@/src/libs/core";
 
 export default function Title({
   className,
@@ -7,7 +7,7 @@ export default function Title({
   return (
     <h1
       {...props}
-      className={$(
+      className={cn(
         "break-keep text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl",
         className,
       )}

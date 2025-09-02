@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { $ } from "@/src/libs/core";
+import { cn } from "@/src/libs/core";
 
 export default function LinkHover({
   ref: _,
@@ -13,7 +13,7 @@ export default function LinkHover({
     <Link
       {...props}
       href={href ?? "/"}
-      className={$(
+      className={cn(
         "flex items-center transition-all hover:scale-95",
         className,
       )}

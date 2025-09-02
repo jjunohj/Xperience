@@ -16,7 +16,6 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "contentlayer/generated": ["./.contentlayer/generated"],
       "@/*": ["./*"],
       "~/*": ["src/*"]
     },
@@ -27,7 +26,6 @@
     "global.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".contentlayer/generated",
     ".next/types/**/*.ts"
   ],
   "exclude": ["node_modules"]

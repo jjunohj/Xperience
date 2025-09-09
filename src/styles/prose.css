@@ -21,7 +21,28 @@
 
 .prose img {
   @apply mx-auto my-0;
+
+  max-width: 100%;
+  height: auto;
+  max-height: 600px;
+  object-fit: contain;
 }
+
+.prose .small-image {
+  max-width: 300px;
+  max-height: 200px;
+}
+
+.prose .medium-image {
+  max-width: 500px;
+  max-height: 400px;
+}
+
+.prose .large-image {
+  max-width: 800px;
+  max-height: 600px;
+}
+
 .prose img + span {
   display: block;
   margin-top: 0.5rem;

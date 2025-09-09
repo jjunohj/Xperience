@@ -1,7 +1,7 @@
 import React from "react";
 import { Activity } from "./type";
 
-const Activity = (props: Activity) => {
+export default function Activity(props: Activity) {
   return (
     <div className="flex w-full flex-col gap-1.5">
       <div className="flex w-full flex-col-reverse items-start justify-between sm:flex-row">
@@ -21,6 +21,4 @@ const Activity = (props: Activity) => {
       </ul>
     </div>
   );
-};
-
-export default Activity;
+}

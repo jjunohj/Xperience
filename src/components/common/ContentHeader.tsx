@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 
-const ContentHeader = ({ title }) => {
+export default function ContentHeader({ title }) {
   return (
     <div className="flex flex-col w-full h-fit">
       <motion.h1
@@ -16,6 +16,4 @@ const ContentHeader = ({ title }) => {
       <hr className="mb-4" />
     </div>
   );
-};
-
-export default ContentHeader;
+}

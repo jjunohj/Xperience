@@ -6,12 +6,12 @@ interface LinkButtonProps extends React.ComponentProps<"button"> {
   href: string;
 }
 
-const LinkButton = ({
+export default function LinkButton({
   className,
   href,
   children,
   ...props
-}: LinkButtonProps) => {
+}: LinkButtonProps) {
   const handleClick = () => {
     window.open(href, "_blank", "noopener,noreferrer");
   };
@@ -25,6 +25,4 @@ const LinkButton = ({
       {children}
     </button>
   );
-};
-
-export default LinkButton;
+}

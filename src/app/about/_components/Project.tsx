@@ -1,7 +1,7 @@
 import React from "react";
 import { Project } from "./type";
 
-const Project = (props: Project) => {
+export default function Project(props: Project) {
   return (
     <div className="flex w-full flex-col gap-1.5">
       <div className="flex w-full flex-col-reverse items-start justify-between sm:flex-row">
@@ -38,6 +38,4 @@ const Project = (props: Project) => {
       </ul>
     </div>
   );
-};
-
-export default Project;
+}

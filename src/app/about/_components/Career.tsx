@@ -2,7 +2,7 @@ import React from "react";
 import { Career } from "./type";
 import Image from "next/image";
 
-const Career = (props: Career) => {
+export default function Career(props: Career) {
   return (
     <div className="flex w-full flex-col gap-1.5">
       <div className="flex w-full flex-col-reverse items-start justify-between sm:flex-row">
@@ -48,6 +48,4 @@ const Career = (props: Career) => {
       </ul>
     </div>
   );
-};
-
-export default Career;
+}

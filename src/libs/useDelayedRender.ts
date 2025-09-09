@@ -8,13 +8,13 @@ interface Options {
   onUnmount?: () => void; // 마운트가 해제되었을 때 호출되는 콜백
 }
 
-export const useDelayedRender = (
+export function useDelayedRender(
   active = false,
   options: Options = {}
 ): {
   mounted: boolean; // DOM에 마운트되어 있는지 여부
   rendered: boolean; // 컴포넌트가 visible한지 여부
-} => {
+} {
   const [, force] = useState<unknown>();
   const mounted = useRef(active);
   const rendered = useRef(false);
@@ -74,4 +74,4 @@ export const useDelayedRender = (
     mounted: mounted.current,
     rendered: rendered.current,
   };
-};
+}

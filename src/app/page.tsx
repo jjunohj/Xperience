@@ -1,7 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import PostCards from "../components/PostCards";
 import Pill from "../components/common/Pill";
+import NotionPostCardsServer from "../components/notion/NotionPostCardsServer";
+
+// ISR - 1시간마다 재검증
+export const revalidate = 3600;
 
 export default function HomePage() {
   return (
@@ -21,10 +24,7 @@ export default function HomePage() {
               alternateName: "jjunohj",
               url: "https://github.com/jjunohj",
               jobTitle: "Frontend Developer",
-              sameAs: [
-                "https://github.com/jjunohj",
-                "https://blog.xuuno.me/about",
-              ],
+              sameAs: ["https://github.com/jjunohj", "https://blog.xuuno.me/about"],
             },
             publisher: {
               "@type": "Organization",
@@ -70,20 +70,14 @@ export default function HomePage() {
           <div className="flex w-1/2 flex-col justify-center sm:w-fit">
             <h3 className="text-sm font-normal sm:mb-1 sm:text-xl lg:mb-2">
               사용자 중심 개발자
-              <span className="ml-2 text-sm font-extralight text-neutral-400">
-                @xuuno
-              </span>
+              <span className="ml-2 text-sm font-extralight text-neutral-400">@xuuno</span>
             </h3>
-            <h1 className="mb-2 text-3xl font-extrabold sm:mb-4 sm:text-6xl">
-              CHEONG JUNHO
-            </h1>
+            <h1 className="mb-2 text-3xl font-extrabold sm:mb-4 sm:text-6xl">CHEONG JUNHO</h1>
             <p className="hidden font-extralight text-gray-600 dark:text-gray-400 sm:block">
-              사용자가 아주 상식적이고 쾌적한 경험을 갖는 그 작고 당연한 가치를
-              최우선으로 여깁니다.
+              사용자가 아주 상식적이고 쾌적한 경험을 갖는 그 작고 당연한 가치를 최우선으로 여깁니다.
             </p>
             <p className="hidden font-extralight text-gray-600 dark:text-gray-400 sm:mb-2 sm:block lg:mb-6">
-              비효율적인 개발 환경과 프로세스를 파악하고 개선하며, 개발의
-              생산성에 대해 늘 고민합니다.
+              비효율적인 개발 환경과 프로세스를 파악하고 개선하며, 개발의 생산성에 대해 늘 고민합니다.
             </p>
             <Link href="/about" className="flex w-40 justify-start">
               <Pill className="rounded-full px-3 py-2 text-xs font-light text-neutral-600 dark:text-neutral-400 sm:px-4 sm:py-2 sm:text-sm">
@@ -94,7 +88,7 @@ export default function HomePage() {
         </div>
       </section>
       <div className="h-10 w-full sm:hidden" />
-      <PostCards />
+      <NotionPostCardsServer />
     </div>
   );
 }

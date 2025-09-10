@@ -10,11 +10,14 @@ export default function useSearch(
   const [searchValue, setSearchValue] = useState("");
 
   const searchHandler = useCallback(
-    debounce((e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      callback?.(value);
-      setSearchValue(value);
-    }, wait),
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const debouncedHandler = debounce((value: string) => {
+        callback?.(value);
+        setSearchValue(value);
+      }, wait);
+      
+      debouncedHandler(e.target.value);
+    },
     [callback, wait],
   );
 

@@ -21,13 +21,15 @@ import type {
   PageRawMetadata,
   PageReference,
   PageMetadata,
+  Category,
 } from "@/src/data/types/notion";
 import { CacheData, getFromDevCache, setToDevCache } from "./cache";
 import { calculateReadingTime, calculateWordCount } from "../utils/post";
 import { pageIdToSlug, slugToPageId } from "../utils/notion-slug";
 
 if (!process.env.NOTION_API_KEY) throw new Error("NOTION_API_KEY 환경변수 없음");
-if (!process.env.NOTION_DATABASE_ID) throw new Error("NOTION_DATABASE_ID 환경변수 없음");
+if (!process.env.NOTION_CATEGORY_DB_ID) throw new Error("NOTION_CATEGORY_DB_ID 환경변수 없음");
+if (!process.env.NOTION_POST_DB_ID) throw new Error("NOTION_POST_DB_ID 환경변수 없음");
 
 // Notion client 초기화
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
@@ -141,7 +143,7 @@ async function queryAllPages() {
   let cursor: string | undefined;
   do {
     const res = await notion.databases.query({
-      database_id: process.env.NOTION_DATABASE_ID,
+      database_id: process.env.NOTION_POST_DB_ID,
       start_cursor: cursor,
       ...POSTS_QUERY_CONFIG,
     });
@@ -150,27 +152,34 @@ async function queryAllPages() {
   } while (cursor);
 
   return results;
-};
+}
+
+async function queryAllCategories() {
+  const results: PageObjectResponse[] = [];
+
+  const res = await notion.databases.query({
+    database_id: process.env.NOTION_CATEGORY_DB_ID,
+  });
+  results.push(...(res.results.filter(isFullPage) as PageObjectResponse[]));
+
+  return results;
+}
 
 function getPlainText(richText: PropertyValueMap["title"] | PropertyValueMap["rich_text"] | undefined): string {
   return richText?.map((text) => text.plain_text).join("") || "";
-};
-
-function getSelect(select: PropertyValueMap["select"] | undefined): string {
-  return select?.name || "";
-};
+}
 
 function getStatus(status: PropertyValueMap["status"] | undefined): string {
   return status?.name || "";
-};
+}
 
 function getMultiSelect(multiSelect: PropertyValueMap["multi_select"] | undefined): string[] {
   return multiSelect?.map((item) => item.name) || [];
-};
+}
 
 function getDate(date: PropertyValueMap["date"] | undefined): string {
   return date?.start || "";
-};
+}
 
 function getFileUrl(files: PropertyValueMap["files"] | undefined): string | undefined {
   if (!files || files.length === 0) return undefined;
@@ -191,13 +200,18 @@ function getFileUrl(files: PropertyValueMap["files"] | undefined): string | unde
   }
 
   return undefined;
-};
+}
 
 // relation은 배열로 떨어지지만, 실제로는 하나의 관계만 설정하므로 첫 번째 ID만 사용, 단일 문자열로 반환
-function getRelation(relation: PropertyValueMap["relation"] | undefined): string {
-  if (!relation || relation.length === 0) return "";
-  return relation.map((item) => item.id)[0];
-};
+function getRelations(relation: PropertyValueMap["relation"] | undefined): string[] {
+  if (!relation || relation.length === 0) return [];
+  return relation.map((item) => item.id);
+}
+
+function getRollupCategory(rollup: PropertyValueMap["rollup"] | undefined): string {
+  if (!rollup || rollup.type !== "array") return "";
+  return rollup.array.map((item) => (item.type === "title" ? item.title[0].plain_text : ""))[0];
+}
 
 const getProperty = <T extends AllowedPropertyTypes>(
   props: NotionPageProperties,
@@ -227,6 +241,8 @@ const getProperty = <T extends AllowedPropertyTypes>(
       return (prop as PropertyValue<"files">).files as PropertyValueMap[T];
     case "relation":
       return (prop as PropertyValue<"relation">).relation as PropertyValueMap[T];
+    case "rollup":
+      return (prop as PropertyValue<"rollup">).rollup as PropertyValueMap[T];
     default:
       return undefined;
   }
@@ -240,16 +256,28 @@ function extractNotionRawData(pageData: PageObjectResponse): PageRawMetadata {
     title: getPlainText(getProperty(properties, "title", "title")),
     description: getPlainText(getProperty(properties, "description", "rich_text")),
     summary: getPlainText(getProperty(properties, "summary", "rich_text")),
-    category: getSelect(getProperty(properties, "category", "select")),
+    category: getRollupCategory(getProperty(properties, "category_name", "rollup")),
     tags: getMultiSelect(getProperty(properties, "tags", "multi_select")),
     date: getDate(getProperty(properties, "date", "date")),
     status: getStatus(getProperty(properties, "status", "status")),
     thumbnail: getFileUrl(getProperty(properties, "thumbnail", "files")),
     slug: pageIdToSlug(pageData.id),
-    prevPageId: getRelation(getProperty(properties, "prev_post", "relation")),
-    nextPageId: getRelation(getProperty(properties, "next_post", "relation")),
+    prevPageId: getRelations(getProperty(properties, "prev_post", "relation"))[0], // 관계 페이지는 1개 제한 걸어놔서 무조건 0번째 인덱스 사용
+    nextPageId: getRelations(getProperty(properties, "next_post", "relation"))[0], // 관계 페이지는 1개 제한 걸어놔서 무조건 0번째 인덱스 사용
   };
-};
+}
+
+function convertToCategory(pageData: PageObjectResponse): Category {
+  const { properties } = pageData;
+
+  return {
+    id: pageData.id,
+    name: getPlainText(getProperty(properties, "name", "title")),
+    description: getPlainText(getProperty(properties, "description", "rich_text")),
+    thumbnail: getFileUrl(getProperty(properties, "thumbnail", "files")),
+    pageIds: getRelations(getProperty(properties, "pages", "relation")),
+  };
+}
 
 /**
  * 관계 페이지 ID를 받아 참조 정보를 반환하는 함수
@@ -259,7 +287,7 @@ function extractNotionRawData(pageData: PageObjectResponse): PageRawMetadata {
  */
 async function getRelatedPosts(prevPageId: string, nextPageId: string): Promise<RelatedPostsResult> {
   async function getRelatedPost(pageId: string): Promise<PageReference | undefined> {
-    if (pageId.length === 0) {
+    if (!pageId) {
       return undefined;
     }
 
@@ -283,12 +311,12 @@ async function getRelatedPosts(prevPageId: string, nextPageId: string): Promise<
     }
 
     return undefined;
-  };
+  }
 
   const [prevPost, nextPost] = await Promise.all([getRelatedPost(prevPageId), getRelatedPost(nextPageId)]);
 
   return { prevPost, nextPost };
-};
+}
 
 /**
  * 해당하는 페이지를 마크다운으로 변환하여 반환
@@ -311,7 +339,7 @@ async function getPageContentAsMarkdown(pageId: string): Promise<string> {
   setToDevCache<string>(devCache, `markdown-${pageId}`, content);
 
   return content;
-};
+}
 
 /**
  * DB의 모든 페이지 메타데이터 조회 (마크다운 변환 X, 관계 페이지 포함)
@@ -363,7 +391,72 @@ export async function getAllPageMetadata(): Promise<PageMetadata[]> {
     console.error("포스트 미리보기 처리 실패:", error);
     throw new Error("Notion에서 포스트 미리보기를 조회하는 데 실패했습니다.");
   }
-};
+}
+
+/**
+ * DB의 카테고리 데이터 조회
+ * @returns Category[]
+ */
+export async function getCategories(): Promise<Category[]> {
+  try {
+    const cachedData = getFromDevCache<Category[]>(devCache, "categories");
+    if (cachedData) {
+      console.log("🎯 [DEV 캐시 HIT] 카테고리 데이터");
+      return cachedData;
+    }
+
+    const pages = await queryAllCategories();
+
+    const categories = await Promise.all(
+      pages.map(async (page) => {
+        return convertToCategory(page);
+      }),
+    );
+
+    console.log("💬 [Notion DB] 조회된 카테고리 개수:", categories.length);
+
+    const validCategories = categories.filter((category) => category !== null) as Category[];
+    console.log(`✅ 총 ${validCategories.length} 개의 카테고리 데이터 처리 완료`);
+
+    setToDevCache<Category[]>(devCache, "categories", validCategories);
+
+    return validCategories;
+  } catch (error) {
+    console.error("카테고리 데이터 조회 실패:", error);
+    throw new Error("Notion에서 카테고리 데이터를 조회하는 데 실패했습니다.");
+  }
+}
+
+/**
+ * Upload된 포스트가 있는 카테고리만 조회
+ * @returns Category[]
+ */
+export async function getCategoriesWithUploadedPosts(): Promise<Category[]> {
+  try {
+    const cachedData = getFromDevCache<Category[]>(devCache, "categories-with-posts");
+    if (cachedData) {
+      console.log("🎯 [DEV 캐시 HIT] Upload된 포스트가 있는 카테고리");
+      return cachedData;
+    }
+
+    const uploadedPosts = await getAllPageMetadata();
+    const uploadedCategoryNames = new Set(
+      uploadedPosts.map((post) => post.category).filter(Boolean), // 빈 카테고리 제외
+    );
+
+    const allCategories = await getCategories();
+    const categoriesWithPosts = allCategories.filter((category) => uploadedCategoryNames.has(category.name));
+
+    console.log(`✅ Upload된 포스트가 있는 카테고리: ${categoriesWithPosts.length}개`);
+
+    setToDevCache<Category[]>(devCache, "categories-with-posts", categoriesWithPosts);
+
+    return categoriesWithPosts;
+  } catch (error) {
+    console.error("Upload된 포스트가 있는 카테고리 조회 실패:", error);
+    throw new Error("Notion에서 Upload된 포스트가 있는 카테고리를 조회하는 데 실패했습니다.");
+  }
+}
 
 /**
  * 해당하는 slug의 포스트 상세 데이터 반환

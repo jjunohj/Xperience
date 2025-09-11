@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     template: "%s | Xperiences",
   },
   description: "프론트엔드 개발자의 실전 경험과 인사이트를 공유하는 기술 블로그",
-  keywords: ["프론트엔드", "개발", "기술블로그", "React", "Next.js", "웹개발"],
+  keywords: ["프론트엔드", "개발", "기술블로그", "노션블로그", "React", "Next.js", "웹개발"],
   icons: {
     icon: "/favicon.ico",
   },

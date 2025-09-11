@@ -20,10 +20,10 @@ export default function NotionPostCard({ post }: NotionPostCardProps) {
       <motion.div
         className="group h-72 w-full overflow-hidden p-4 sm:h-96"
         variants={fadeInSlideToRight}
-        whileHover={{ scale: 0.98 }}
-        whileTap={{ scale: 0.95 }}
+        whileHover={{ scale: 1.02, y: -2 }}
+        whileTap={{ scale: 0.98 }}
       >
-        <div className="relative h-full w-full">
+        <div className="relative h-full w-full overflow-hidden">
           {post.thumbnail ? (
             <Image
               src={post.thumbnail}

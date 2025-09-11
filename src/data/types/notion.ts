@@ -14,7 +14,8 @@ export type AllowedPropertyTypes =
   | "status"
   | "date"
   | "files"
-  | "relation";
+  | "relation"
+  | "rollup";
 
 export type PropertyValueMap = {
   title: PropertyValue<"title">["title"];
@@ -25,7 +26,16 @@ export type PropertyValueMap = {
   date: PropertyValue<"date">["date"];
   files: PropertyValue<"files">["files"];
   relation: PropertyValue<"relation">["relation"];
+  rollup: PropertyValue<"rollup">["rollup"];
 };
+
+export interface Category {
+  id: string;
+  name: string;
+  description: string;
+  thumbnail?: string;
+  pageIds: string[];
+}
 
 // 노션 페이지의 기본 메타데이터
 interface PageBasicInfo {

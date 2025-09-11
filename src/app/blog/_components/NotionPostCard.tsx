@@ -17,7 +17,7 @@ export default function NotionPostCard({ post }: NotionPostCardProps) {
       transition={{ duration: 0.2 }}
       className="flex h-full flex-col overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-300 hover:shadow-lg dark:bg-gray-800"
     >
-      <Link href={`/blog/${post.slug}`} className="block flex h-full flex-col">
+      <Link href={`/blog/${post.slug}`} className="flex h-full flex-col">
         {/* 썸네일 */}
         <div className="relative h-48 w-full flex-shrink-0 bg-gray-100 dark:bg-gray-800">
           <Image

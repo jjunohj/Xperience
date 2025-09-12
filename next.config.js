@@ -12,25 +12,6 @@ const nextConfig = {
     dangerouslyAllowSVG: true,
     contentDispositionType: "attachment",
     remotePatterns: [
-      // GitHub 이미지 도메인들
-      "github.com",
-      "user-images.githubusercontent.com",
-      "camo.githubusercontent.com",
-      "raw.githubusercontent.com",
-      // Notion 이미지 도메인들
-      "prod-files-secure.s3.us-west-2.amazonaws.com",
-      "s3.us-west-2.amazonaws.com",
-      "www.notion.so",
-      "images.unsplash.com",
-      // 외부 이미지 도메인들
-      "techrecipe.co.kr",
-      "cdn.jsdelivr.net",
-      "img1.daumcdn.net",
-      "t1.kakaocdn.net",
-      "blogfiles.pstatic.net",
-      "postfiles.pstatic.net",
-    ],
-    remotePatterns: [
       {
         protocol: "https",
         hostname: "github.com",
@@ -153,8 +134,7 @@ const nextConfig = {
         headers: [
           {
             key: "Cache-Control",
-            value:
-              "public, max-age=0, s-maxage=3600, stale-while-revalidate=59",
+            value: "public, max-age=0, s-maxage=3600, stale-while-revalidate=59",
           },
         ],
       },
@@ -163,8 +143,7 @@ const nextConfig = {
         headers: [
           {
             key: "Cache-Control",
-            value:
-              "public, max-age=0, s-maxage=3600, stale-while-revalidate=59",
+            value: "public, max-age=0, s-maxage=3600, stale-while-revalidate=59",
           },
         ],
       },
@@ -173,8 +152,7 @@ const nextConfig = {
         headers: [
           {
             key: "Cache-Control",
-            value:
-              "public, max-age=0, s-maxage=3600, stale-while-revalidate=7200",
+            value: "public, max-age=0, s-maxage=3600, stale-while-revalidate=7200",
           },
         ],
       },
@@ -183,8 +161,7 @@ const nextConfig = {
         headers: [
           {
             key: "Cache-Control",
-            value:
-              "public, max-age=0, s-maxage=3600, stale-while-revalidate=7200",
+            value: "public, max-age=0, s-maxage=3600, stale-while-revalidate=7200",
           },
         ],
       },

@@ -33,21 +33,24 @@ export default function NotionBlogClient({ pages, categories }: NotionBlogClient
   // 필터링된 페이지
   const filteredPages = useMemo(() => {
     return pages.filter((page) => {
-      const matchesSearch =
-        !filters.searchTerm ||
-        page.title.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-        page.description.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-        (page.tags && page.tags.some((tag) => tag.toLowerCase().includes(filters.searchTerm.toLowerCase()))) ||
-        (page.category && page.category.toLowerCase().includes(filters.searchTerm.toLowerCase()));
-
-      // 카테고리 필터링
       const matchesCategory = !filters.selectedCategory || page.category === filters.selectedCategory;
-
-      // 태그 필터링
       const matchesTags =
         filters.selectedTags.length === 0 || filters.selectedTags.some((tag) => page.tags.includes(tag));
 
-      return matchesSearch && matchesCategory && matchesTags;
+      if (!matchesCategory || !matchesTags) {
+        return false;
+      }
+
+      if (!filters.searchTerm) {
+        return true;
+      }
+
+      const lowercasedSearchTerm = filters.searchTerm.toLowerCase();
+      const searchableContent = [page.title, page.description, page.category || "", ...(page.tags || [])]
+        .join(" ")
+        .toLowerCase();
+
+      return searchableContent.includes(lowercasedSearchTerm);
     });
   }, [pages, filters]);
 

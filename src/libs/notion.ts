@@ -193,6 +193,8 @@ function getFileUrl(files: PropertyValueMap["files"] | undefined): string | unde
       if (expiryTime > new Date()) {
         return url;
       }
+      // 만료된 경우 undefined 반환
+      return undefined;
     }
     return url;
   } else if ("external" in file && file.external?.url) {

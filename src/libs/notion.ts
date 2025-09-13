@@ -221,33 +221,10 @@ const getProperty = <T extends AllowedPropertyTypes>(
   type: T,
 ): PropertyValueMap[T] | undefined => {
   const prop = props[key];
-
-  if (!prop || prop.type !== type) {
-    return undefined;
+  if (prop?.type === type) {
+    return (prop as any)[type] as PropertyValueMap[T];
   }
-
-  switch (type) {
-    case "title":
-      return (prop as PropertyValue<"title">).title as PropertyValueMap[T];
-    case "rich_text":
-      return (prop as PropertyValue<"rich_text">).rich_text as PropertyValueMap[T];
-    case "select":
-      return (prop as PropertyValue<"select">).select as PropertyValueMap[T];
-    case "multi_select":
-      return (prop as PropertyValue<"multi_select">).multi_select as PropertyValueMap[T];
-    case "status":
-      return (prop as PropertyValue<"status">).status as PropertyValueMap[T];
-    case "date":
-      return (prop as PropertyValue<"date">).date as PropertyValueMap[T];
-    case "files":
-      return (prop as PropertyValue<"files">).files as PropertyValueMap[T];
-    case "relation":
-      return (prop as PropertyValue<"relation">).relation as PropertyValueMap[T];
-    case "rollup":
-      return (prop as PropertyValue<"rollup">).rollup as PropertyValueMap[T];
-    default:
-      return undefined;
-  }
+  return undefined;
 };
 
 function extractNotionRawData(pageData: PageObjectResponse): PageRawMetadata {

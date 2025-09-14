@@ -42,14 +42,22 @@ jobs:
 
           # Direct prompt for automated review (no @claude mention needed)
           direct_prompt: |
-            Please review this pull request and provide feedback on:
-            - Code quality and best practices
-            - Potential bugs or issues
-            - Performance considerations
-            - Security concerns
-            - Test coverage
+            이 풀 리퀘스트를 한국어로 리뷰해주세요. 다음 사항들에 대해 피드백을 제공해주세요:
             
-            Be constructive and helpful in your feedback.
+            - 코드 품질과 모범 사례
+            - 잠재적인 버그나 문제점
+            - 성능 고려사항
+            - 보안 문제
+            - 테스트 커버리지
+            - Next.js 15와 TypeScript 모범 사례
+            
+            피드백 형식:
+            1. 문제점을 발견했을 때는 구체적인 개선 코드를 함께 제시해주세요
+            2. 변경 전/후 코드를 비교해서 보여주세요
+            3. 개선 이유와 장점을 설명해주세요
+            4. 건설적이고 도움이 되는 피드백을 제공해주세요
+            
+            리뷰는 한국어로 작성하되, 코드와 기술 용어는 영어를 사용해주세요.
 
           # Optional: Use sticky comments to make Claude reuse the same comment on subsequent pushes to the same PR
           # use_sticky_comment: true

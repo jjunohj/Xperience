@@ -71,7 +71,24 @@ export default function FilterPanel({
 
   return (
     <div className={cn("space-y-4", className)}>
+      <div className="mb-4 flex items-center justify-between gap-2">
+        {/* 필터 토글 */}
+        <div className="flex items-center justify-between">
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
             className="hover:text-brand-600 dark:hover:text-brand-400 flex items-center gap-2 text-lg font-light text-neutral-900 transition-colors dark:text-neutral-100"
+          >
+            {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            <Filter size={20} />
+          </button>
+        </div>
+
+        {/* 검색 바 */}
+        <SearchInput
+          value={filters.searchTerm}
+          onChangeAction={handleSearchChange}
+          placeholder="제목이나 내용으로 검색..."
+        />
       </div>
 
       {!isExpanded && hasActiveFilters && (

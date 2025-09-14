@@ -64,7 +64,7 @@ export default function NotionBlogClient({ pages, categories }: NotionBlogClient
         onFiltersChangeAction={updateFilters}
         showCategoryGrid={true}
         showTag={true}
-        defaultExpanded={true}
+        defaultExpanded={false}
       />
 
       <h2 className="mt-4 text-2xl font-extrabold sm:mt-8 sm:text-3xl">Posts</h2>
@@ -111,7 +111,7 @@ export default function NotionBlogClient({ pages, categories }: NotionBlogClient
                 {hasActiveFilters && (
                   <button
                     onClick={clearFilters}
-                    className="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    className="inline-flex items-center rounded-md border border-transparent bg-brand-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
                   >
                     모든 필터 제거
                   </button>

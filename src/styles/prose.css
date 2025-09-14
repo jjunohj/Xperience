@@ -64,6 +64,7 @@
 .prose code:not(:where(pre *)) {
   @apply text-primary rounded-md font-medium content-none;
   @apply bg-neutral-200 dark:bg-[var(--prism-background)];
+  padding: 0.2em 0.4em;
 }
 
 .prose pre::-webkit-scrollbar {

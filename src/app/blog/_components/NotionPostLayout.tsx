@@ -125,7 +125,7 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
           {/* 카테고리 */}
           {post.category && (
             <div className="mb-4">
-              <span className="inline-block rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+              <span className="inline-block rounded-full bg-brand-100 px-3 py-1 text-sm font-medium text-brand-800 dark:bg-brand-900 dark:text-brand-200">
                 {post.category}
               </span>
             </div>
@@ -352,7 +352,7 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
                       href={href || ""}
                       target={isExternal ? "_blank" : undefined}
                       rel={isExternal ? "noopener noreferrer" : undefined}
-                      className="text-blue-600 hover:underline dark:text-blue-400"
+                      className="text-brand-600 hover:underline dark:text-brand-400"
                       {...props}
                     >
                       {children}
@@ -402,7 +402,7 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
         {/* 푸터 */}
         <footer className="mt-16 border-t border-neutral-200 pt-8 dark:border-neutral-700">
           <div className="flex items-center justify-between">
-            <Link href="/blog" className="flex items-center text-blue-600 hover:underline dark:text-blue-400">
+            <Link href="/blog" className="flex items-center text-brand-600 hover:underline dark:text-brand-400">
               <svg className="mr-2 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   fillRule="evenodd"

@@ -37,14 +37,14 @@ export default function NotionPostCard({ post }: NotionPostCardProps) {
           {/* 카테고리 */}
           {post.category && (
             <div className="mb-2">
-              <span className="inline-block rounded bg-blue-100 px-2 py-1 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+              <span className="inline-block rounded bg-brand-100 px-2 py-1 text-xs font-medium text-brand-800 dark:bg-brand-900 dark:text-brand-200">
                 {post.category}
               </span>
             </div>
           )}
 
           {/* 제목 */}
-          <h2 className="mb-2 line-clamp-2 text-xl font-bold text-neutral-900 transition-colors hover:text-blue-600 dark:text-white dark:hover:text-blue-400">
+          <h2 className="mb-2 line-clamp-2 text-xl font-bold text-neutral-900 transition-colors hover:text-brand-600 dark:text-white dark:hover:text-brand-400">
             {post.title || "제목 없음"}
           </h2>
 

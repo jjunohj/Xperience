@@ -31,10 +31,10 @@ export default function CategoryCard({ category, count, isSelected = false, onCl
         className={cn(
           "relative overflow-hidden rounded-2xl transition-all duration-500",
           "shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2",
-          "focus:ring-primary/30 border border-neutral-200/20 dark:border-neutral-700/30",
+          "focus:ring-brand-700/30 border border-neutral-200/20 dark:border-neutral-700/30",
           "h-28 w-40 sm:h-32 sm:w-48 md:h-36 md:w-56",
           "group cursor-pointer select-none backdrop-blur-sm",
-          isSelected ? "ring-primary/40 shadow-lg ring-2 ring-offset-2" : "shadow-md",
+          isSelected ? "ring-brand-700/40 shadow-lg ring-2 ring-offset-2" : "shadow-md",
         )}
       >
         {/* 배경 이미지와 오버레이 */}
@@ -48,7 +48,7 @@ export default function CategoryCard({ category, count, isSelected = false, onCl
           />
           {/* 미니멀한 오버레이 */}
           <div className="absolute inset-0 bg-white/80 backdrop-blur-[2px] dark:bg-neutral-900/80" />
-          <div className="to-primary/10 absolute inset-0 bg-gradient-to-br from-transparent via-transparent" />
+          <div className="to-brand-700/10 absolute inset-0 bg-gradient-to-br from-transparent via-transparent" />
         </div>
 
         {/* 콘텐츠 */}
@@ -66,7 +66,7 @@ export default function CategoryCard({ category, count, isSelected = false, onCl
 
         {/* 호버 이펙트 */}
         <div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-          <div className="from-primary/5 to-primary/10 absolute inset-0 bg-gradient-to-br" />
+          <div className="from-brand-700/5 to-brand-700/10 absolute inset-0 bg-gradient-to-br" />
         </div>
       </button>
     </motion.div>

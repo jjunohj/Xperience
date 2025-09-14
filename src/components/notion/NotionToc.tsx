@@ -146,7 +146,7 @@ export default function NotionToc({ layout = "floating" }: NotionTocProps) {
                         className={cn(
                           "group block rounded-md px-2 py-1.5 text-xs transition-all duration-200 hover:scale-[1.02] hover:bg-neutral-100 dark:hover:bg-neutral-700",
                           currentId === heading.id
-                            ? "bg-blue-50 font-semibold text-blue-600 dark:border-blue-400 dark:bg-blue-900/20 dark:text-blue-400"
+                            ? "bg-brand-50 font-semibold text-brand-600 dark:border-brand-400 dark:bg-brand-900/20 dark:text-brand-400"
                             : "text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-200",
                           // 개선된 레벨별 들여쓰기와 시각적 구분
                           heading.level === 1
@@ -228,7 +228,7 @@ export default function NotionToc({ layout = "floating" }: NotionTocProps) {
                     className={cn(
                       "group block rounded-md px-2 py-1.5 text-xs transition-all duration-200 hover:scale-[1.02] hover:bg-neutral-100 dark:hover:bg-neutral-700",
                       currentId === heading.id
-                        ? "bg-blue-50 font-semibold text-blue-600 dark:border-blue-400 dark:bg-blue-900/20 dark:text-blue-400"
+                        ? "bg-brand-50 font-semibold text-brand-600 dark:border-brand-400 dark:bg-brand-900/20 dark:text-brand-400"
                         : "text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-200",
                       // 개선된 레벨별 들여쓰기와 시각적 구분
                       heading.level === 1

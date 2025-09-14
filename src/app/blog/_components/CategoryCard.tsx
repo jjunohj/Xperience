@@ -31,7 +31,7 @@ export default function CategoryCard({ category, count, isSelected = false, onCl
         className={cn(
           "relative overflow-hidden rounded-2xl transition-all duration-500",
           "shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2",
-          "focus:ring-primary/30 border border-gray-200/20 dark:border-gray-700/30",
+          "focus:ring-primary/30 border border-neutral-200/20 dark:border-neutral-700/30",
           "h-28 w-40 sm:h-32 sm:w-48 md:h-36 md:w-56",
           "group cursor-pointer select-none backdrop-blur-sm",
           isSelected ? "ring-primary/40 shadow-lg ring-2 ring-offset-2" : "shadow-md",
@@ -47,19 +47,19 @@ export default function CategoryCard({ category, count, isSelected = false, onCl
             sizes="(max-width: 768px) 128px, 208px"
           />
           {/* 미니멀한 오버레이 */}
-          <div className="absolute inset-0 bg-white/80 backdrop-blur-[2px] dark:bg-gray-900/80" />
+          <div className="absolute inset-0 bg-white/80 backdrop-blur-[2px] dark:bg-neutral-900/80" />
           <div className="to-primary/10 absolute inset-0 bg-gradient-to-br from-transparent via-transparent" />
         </div>
 
         {/* 콘텐츠 */}
         <div className="relative z-10 flex h-full flex-col items-center justify-center p-4">
           {/* 카테고리 이름 */}
-          <h3 className="mb-2 text-center text-sm font-medium tracking-tight text-gray-800 dark:text-gray-100 sm:text-base">
+          <h3 className="mb-2 text-center text-sm font-medium tracking-tight text-neutral-800 dark:text-neutral-100 sm:text-base">
             {category.name}
           </h3>
 
           {/* 게시물 개수 */}
-          <span className="text-xs font-normal tracking-wide text-gray-500 dark:text-gray-400 sm:text-sm">
+          <span className="text-xs font-normal tracking-wide text-neutral-500 dark:text-neutral-400 sm:text-sm">
             {count} {count === 1 ? "Post" : "Posts"}
           </span>
         </div>

@@ -88,7 +88,7 @@ export default function NotionBlogClient({ pages, categories }: NotionBlogClient
             <motion.div className="col-span-full py-16 text-center" variants={fadeInUp}>
               <div className="mx-auto max-w-md">
                 <svg
-                  className="mx-auto mb-4 h-12 w-12 text-gray-400"
+                  className="mx-auto mb-4 h-12 w-12 text-neutral-400"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -102,9 +102,9 @@ export default function NotionBlogClient({ pages, categories }: NotionBlogClient
                   />
                 </svg>
 
-                <h3 className="mb-2 text-lg font-medium text-gray-900 dark:text-gray-100">검색 결과가 없습니다</h3>
+                <h3 className="mb-2 text-lg font-medium text-neutral-900 dark:text-neutral-100">검색 결과가 없습니다</h3>
 
-                <p className="mb-4 text-gray-500 dark:text-gray-400">
+                <p className="mb-4 text-neutral-500 dark:text-neutral-400">
                   {hasActiveFilters ? "다른 검색어나 필터 조건을 시도해보세요." : "게시글이 없습니다."}
                 </p>
 

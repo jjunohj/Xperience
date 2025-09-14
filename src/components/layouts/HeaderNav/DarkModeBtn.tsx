@@ -13,7 +13,7 @@ export default function DarkModeBtn(props: React.ComponentProps<"button">) {
       <button
         {...props}
         className={cn(
-          "rounded-lg p-2 transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800",
+          "rounded-lg p-2 transition-all duration-200 hover:bg-neutral-100 dark:hover:bg-neutral-800",
           props.className,
         )}
         disabled
@@ -27,7 +27,7 @@ export default function DarkModeBtn(props: React.ComponentProps<"button">) {
     <button
       {...props}
       className={cn(
-        "group rounded-lg p-2 transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800",
+        "group rounded-lg p-2 transition-all duration-200 hover:bg-neutral-100 dark:hover:bg-neutral-800",
         props.className,
       )}
       aria-label={isThemeDark ? "라이트 모드로 전환" : "다크 모드로 전환"}

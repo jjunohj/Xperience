@@ -107,7 +107,7 @@ export default function NotionToc({ layout = "floating" }: NotionTocProps) {
           {/* 목차 컨텐츠 */}
           <div
             className={cn(
-              "overflow-hidden rounded-lg border border-gray-200 bg-white shadow-xl transition-all duration-500 ease-out dark:border-gray-700 dark:bg-gray-800",
+              "overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-xl transition-all duration-500 ease-out dark:border-neutral-700 dark:bg-neutral-800",
               isExpanded ? "max-h-96 w-72 opacity-100" : "max-h-0 w-72 opacity-0",
             )}
           >
@@ -118,7 +118,7 @@ export default function NotionToc({ layout = "floating" }: NotionTocProps) {
               )}
             >
               <div className="p-4">
-                <h3 className="mb-3 flex items-center text-sm font-semibold text-gray-900 dark:text-white">
+                <h3 className="mb-3 flex items-center text-sm font-semibold text-neutral-900 dark:text-white">
                   <svg className="mr-2 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 16a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" />
                   </svg>
@@ -144,10 +144,10 @@ export default function NotionToc({ layout = "floating" }: NotionTocProps) {
                         href={`#${heading.id}`}
                         onClick={(e) => handleSmoothScroll(e, heading.id)}
                         className={cn(
-                          "group block rounded-md px-2 py-1.5 text-xs transition-all duration-200 hover:scale-[1.02] hover:bg-gray-100 dark:hover:bg-gray-700",
+                          "group block rounded-md px-2 py-1.5 text-xs transition-all duration-200 hover:scale-[1.02] hover:bg-neutral-100 dark:hover:bg-neutral-700",
                           currentId === heading.id
                             ? "bg-blue-50 font-semibold text-blue-600 dark:border-blue-400 dark:bg-blue-900/20 dark:text-blue-400"
-                            : "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200",
+                            : "text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-200",
                           // 개선된 레벨별 들여쓰기와 시각적 구분
                           heading.level === 1
                             ? "text-sm font-medium"
@@ -164,7 +164,7 @@ export default function NotionToc({ layout = "floating" }: NotionTocProps) {
                       >
                         <span className="flex items-center">
                           {heading.level > 2 && (
-                            <span className="mr-2 h-1 w-1 rounded-full bg-gray-400 opacity-50"></span>
+                            <span className="mr-2 h-1 w-1 rounded-full bg-neutral-400 opacity-50"></span>
                           )}
                           <span className="transition-transform duration-200 group-hover:translate-x-0.5">
                             {heading.text}
@@ -181,12 +181,12 @@ export default function NotionToc({ layout = "floating" }: NotionTocProps) {
           {/* 토글 버튼 - 목차 오른쪽 위에 위치 */}
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="absolute -top-12 right-2 z-10 rounded-full bg-white p-2 shadow-lg transition-all hover:scale-105 hover:shadow-xl active:scale-95 dark:bg-gray-800"
+            className="absolute -top-12 right-2 z-10 rounded-full bg-white p-2 shadow-lg transition-all hover:scale-105 hover:shadow-xl active:scale-95 dark:bg-neutral-800"
             aria-label="목차 토글"
           >
             <svg
               className={cn(
-                "h-4 w-4 text-gray-600 transition-transform duration-300 dark:text-gray-400",
+                "h-4 w-4 text-neutral-600 transition-transform duration-300 dark:text-neutral-400",
                 isExpanded ? "rotate-180" : "",
               )}
               fill="none"
@@ -206,8 +206,8 @@ export default function NotionToc({ layout = "floating" }: NotionTocProps) {
     return (
       <aside className="hidden xl:block xl:w-72 xl:flex-shrink-0">
         <div className="sticky top-24 h-screen overflow-y-auto p-6">
-          <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-            <h3 className="mb-4 flex items-center text-sm font-semibold text-gray-900 dark:text-white">
+          <div className="rounded-lg border border-neutral-200 bg-white p-4 shadow-sm dark:border-neutral-700 dark:bg-neutral-800">
+            <h3 className="mb-4 flex items-center text-sm font-semibold text-neutral-900 dark:text-white">
               <svg className="mr-2 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 16a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" />
               </svg>
@@ -226,10 +226,10 @@ export default function NotionToc({ layout = "floating" }: NotionTocProps) {
                     href={`#${heading.id}`}
                     onClick={(e) => handleSmoothScroll(e, heading.id)}
                     className={cn(
-                      "group block rounded-md px-2 py-1.5 text-xs transition-all duration-200 hover:scale-[1.02] hover:bg-gray-100 dark:hover:bg-gray-700",
+                      "group block rounded-md px-2 py-1.5 text-xs transition-all duration-200 hover:scale-[1.02] hover:bg-neutral-100 dark:hover:bg-neutral-700",
                       currentId === heading.id
                         ? "bg-blue-50 font-semibold text-blue-600 dark:border-blue-400 dark:bg-blue-900/20 dark:text-blue-400"
-                        : "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200",
+                        : "text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-200",
                       // 개선된 레벨별 들여쓰기와 시각적 구분
                       heading.level === 1
                         ? "text-sm font-medium"

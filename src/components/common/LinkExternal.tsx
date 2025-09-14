@@ -9,7 +9,7 @@ export default function LinkExternal({
     <a
       {...props}
       className={cn(
-        " text-gray-600 transition hover:text-secondary dark:text-gray-400",
+        " text-neutral-600 transition hover:text-secondary dark:text-neutral-400",
         className,
       )}
       target="_blank"

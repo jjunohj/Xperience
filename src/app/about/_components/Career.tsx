@@ -28,7 +28,7 @@ export default function Career(props: Career) {
       <span className="text-sm text-black dark:text-white sm:text-base">
         {props.role}
       </span>
-      <div className="my-1 flex w-4/5 flex-wrap gap-x-1 gap-y-0.5 text-sm font-light text-gray-500 dark:text-white sm:text-base">
+      <div className="my-1 flex w-4/5 flex-wrap gap-x-1 gap-y-0.5 text-sm font-light text-neutral-500 dark:text-white sm:text-base">
         {props.stacks.map((stack, index) => (
           <React.Fragment key={index}>
             {index !== 0 && <span>|</span>}

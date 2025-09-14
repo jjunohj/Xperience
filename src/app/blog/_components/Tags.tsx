@@ -34,8 +34,8 @@ function TagItem({ tag, isSelected, onSelect, onRemove }: TagItemProps) {
         "focus:outline-none focus:ring-2 focus:ring-current focus:ring-offset-1",
         "cursor-pointer select-none",
         isSelected
-          ? "border-gray-600 bg-gray-600 text-white"
-          : "border-gray-200 bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700",
+          ? "border-neutral-600 bg-neutral-600 text-white"
+          : "border-neutral-200 bg-neutral-50 text-neutral-600 hover:bg-neutral-100 hover:text-neutral-700 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700",
       )}
       whileHover={{
         scale: 1.05,
@@ -99,7 +99,7 @@ export default function Tags({
 
   if (processedTags.length === 0) {
     return showEmpty ? (
-      <div className={cn("py-8 text-center text-gray-500 dark:text-gray-400", className)}>
+      <div className={cn("py-8 text-center text-neutral-500 dark:text-neutral-400", className)}>
         <Hash className="mx-auto mb-2 opacity-50" size={32} />
         <p>{emptyMessage}</p>
       </div>
@@ -136,7 +136,7 @@ export function SelectedTags({ tags, onRemoveAction, onClearAction, className }:
 
   return (
     <div className={cn("flex flex-wrap items-center gap-2", className)}>
-      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">선택된 태그:</span>
+      <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">선택된 태그:</span>
 
       <div className="flex flex-wrap gap-1">
         <AnimatePresence>
@@ -144,7 +144,7 @@ export function SelectedTags({ tags, onRemoveAction, onClearAction, className }:
             <motion.button
               key={tag}
               onClick={() => onRemoveAction(tag)}
-              className="inline-flex items-center gap-1 rounded-full bg-gray-600 px-2 py-1 text-xs text-white transition-colors hover:bg-gray-700"
+              className="inline-flex items-center gap-1 rounded-full bg-neutral-600 px-2 py-1 text-xs text-white transition-colors hover:bg-neutral-700"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
@@ -162,7 +162,7 @@ export function SelectedTags({ tags, onRemoveAction, onClearAction, className }:
       {tags.length > 0 && (
         <button
           onClick={onClearAction}
-          className="text-xs text-gray-500 underline hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+          className="text-xs text-neutral-500 underline hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
         >
           모두 지우기
         </button>

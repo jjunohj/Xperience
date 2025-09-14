@@ -83,7 +83,7 @@ export default function FilterPanel({
       <div className="flex items-center justify-between">
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="flex items-center gap-2 text-lg font-semibold text-gray-900 transition-colors hover:text-blue-600 dark:text-gray-100 dark:hover:text-blue-400"
+          className="flex items-center gap-2 text-lg font-semibold text-neutral-900 transition-colors hover:text-blue-600 dark:text-neutral-100 dark:hover:text-blue-400"
         >
           <Filter size={20} />
           {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
@@ -91,7 +91,7 @@ export default function FilterPanel({
       </div>
 
       {!isExpanded && hasActiveFilters && (
-        <div className="flex flex-wrap gap-2 rounded-lg bg-gray-50 p-3 dark:bg-gray-800">
+        <div className="flex flex-wrap gap-2 rounded-lg bg-neutral-50 p-3 dark:bg-neutral-800">
           {filters.searchTerm && (
             <span className="inline-flex items-center gap-1 rounded bg-blue-100 px-2 py-1 text-xs text-blue-800 dark:bg-blue-900 dark:text-blue-200">
               <Search size={10} />
@@ -126,7 +126,7 @@ export default function FilterPanel({
             {/* 카테고리 필터 */}
             {showCategoryGrid && (
               <div className="space-y-3">
-                <h3 className="mt-4 text-xl font-extrabold text-gray-900 dark:text-gray-100 sm:mt-8 sm:text-2xl">
+                <h3 className="mt-4 text-xl font-extrabold text-neutral-900 dark:text-neutral-100 sm:mt-8 sm:text-2xl">
                   Categories
                 </h3>
 
@@ -142,11 +142,11 @@ export default function FilterPanel({
             {showTag && (
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <h3 className="mt-4 text-xl font-extrabold text-gray-900 dark:text-gray-100 sm:mt-8 sm:text-2xl">
+                  <h3 className="mt-4 text-xl font-extrabold text-neutral-900 dark:text-neutral-100 sm:mt-8 sm:text-2xl">
                     Tags
                     <button
                       onClick={handleTagsClear}
-                      className="ml-2 p-1 text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300"
+                      className="ml-2 p-1 text-neutral-400 transition-colors hover:text-neutral-600 dark:hover:text-neutral-300"
                       title="태그 선택 초기화"
                     >
                       <RefreshIcon width={14} height={14} />

@@ -29,7 +29,7 @@ export default function SearchInput({ value, onChangeAction, placeholder = "ê²€ì
       {value ? (
         <button
           onClick={() => onChangeAction("")}
-          className="absolute right-3 top-1/2 -translate-y-1/2 transform text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+          className="absolute right-3 top-1/2 -translate-y-1/2 transform text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
         >
           <X size={16} />
         </button>

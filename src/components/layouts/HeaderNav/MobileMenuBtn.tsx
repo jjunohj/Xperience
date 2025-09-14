@@ -9,7 +9,7 @@ export default function MobileMenuBtn({ isMenuOpen, toggleMenu }: MobileMenuBtnP
   return (
     <button
       onClick={toggleMenu}
-      className="rounded-lg p-2 transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+      className="rounded-lg p-2 transition-all duration-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
       aria-label={isMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
       aria-expanded={isMenuOpen}
     >

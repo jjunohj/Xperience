@@ -88,7 +88,7 @@ export default async function NotionBlogPage() {
 
       <div className="mb-4">
         <h1 className="mb-3 text-4xl font-extrabold lg:text-5xl">Blog</h1>
-        <span className="pl-1 text-sm font-light text-gray-600 dark:text-gray-400">
+        <span className="pl-1 text-sm font-light text-neutral-600 dark:text-neutral-400">
           다시 보고 싶은 기술들을 저만의 언어로 공유합니다.
         </span>
       </div>

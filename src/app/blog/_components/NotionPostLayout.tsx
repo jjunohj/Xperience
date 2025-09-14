@@ -132,15 +132,15 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
           )}
 
           {/* 제목 */}
-          <h1 className="mb-4 text-4xl font-bold leading-tight text-gray-900 dark:text-white md:text-5xl">
+          <h1 className="mb-4 text-4xl font-bold leading-tight text-neutral-900 dark:text-white md:text-5xl">
             {post.title || "제목 없음"}
           </h1>
 
           {/* 설명 */}
-          {post.description && <p className="mb-6 text-xl text-gray-600 dark:text-gray-300">{post.description}</p>}
+          {post.description && <p className="mb-6 text-xl text-neutral-600 dark:text-neutral-300">{post.description}</p>}
 
           {/* 메타 정보 */}
-          <div className="mb-6 flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+          <div className="mb-6 flex flex-wrap items-center gap-4 text-sm text-neutral-500 dark:text-neutral-400">
             <time dateTime={post.date} className="flex items-center">
               <svg className="mr-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                 <path
@@ -172,7 +172,7 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
           </div>
 
           {/* 썸네일 */}
-          <div className="relative mb-8 h-64 w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800 md:h-96">
+          <div className="relative mb-8 h-64 w-full overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800 md:h-96">
             <Image
               src={post.thumbnail || "/og-image.png"}
               alt={post.title || "블로그 포스트"}
@@ -191,7 +191,7 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
               {post.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-block rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                  className="inline-block rounded-full bg-neutral-100 px-3 py-1 text-sm text-neutral-600 transition-colors hover:bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-600"
                 >
                   #{tag}
                 </span>
@@ -338,7 +338,7 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
                         />
                       </div>
                       {cleanAlt && (
-                        <figcaption className="mt-3 text-center text-sm italic text-gray-600 dark:text-gray-400">
+                        <figcaption className="mt-3 text-center text-sm italic text-neutral-600 dark:text-neutral-400">
                           {cleanAlt}
                         </figcaption>
                       )}
@@ -377,7 +377,7 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
           <div className="my-16 text-center">
             <div className="mx-auto max-w-md">
               <svg
-                className="mx-auto mb-4 h-12 w-12 text-gray-400"
+                className="mx-auto mb-4 h-12 w-12 text-neutral-400"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -390,8 +390,8 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
                   d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                 />
               </svg>
-              <h3 className="mb-2 text-lg font-medium text-gray-900 dark:text-gray-100">콘텐츠를 불러올 수 없습니다</h3>
-              <p className="text-gray-500 dark:text-gray-400">게시글 내용을 불러오는 중 문제가 발생했습니다.</p>
+              <h3 className="mb-2 text-lg font-medium text-neutral-900 dark:text-neutral-100">콘텐츠를 불러올 수 없습니다</h3>
+              <p className="text-neutral-500 dark:text-neutral-400">게시글 내용을 불러오는 중 문제가 발생했습니다.</p>
             </div>
           </div>
         )}
@@ -400,7 +400,7 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
         <NotionAdjacentPostNav prevPost={post.prevPost} nextPost={post.nextPost} />
 
         {/* 푸터 */}
-        <footer className="mt-16 border-t border-gray-200 pt-8 dark:border-gray-700">
+        <footer className="mt-16 border-t border-neutral-200 pt-8 dark:border-neutral-700">
           <div className="flex items-center justify-between">
             <Link href="/blog" className="flex items-center text-blue-600 hover:underline dark:text-blue-400">
               <svg className="mr-2 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">

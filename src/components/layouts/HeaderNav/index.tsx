@@ -73,12 +73,12 @@ export default function HeaderNav() {
     if (isSpecialPage) {
       // 특수 페이지에서는 항상 배경이 있으므로 보더 제거
       return isScrolled
-        ? "bg-white/95 dark:bg-neutral-900/95 backdrop-blur-md shadow-sm shadow-gray-200/10 dark:shadow-neutral-800/20"
+        ? "bg-white/95 dark:bg-neutral-900/95 backdrop-blur-md shadow-sm shadow-neutral-200/10 dark:shadow-neutral-800/20"
         : "bg-white/80 dark:bg-neutral-900/80 backdrop-blur-sm";
     }
     // 일반 페이지에서도 보더 대신 그림자만 사용
     return isScrolled
-      ? "bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md shadow-sm shadow-gray-200/10 dark:shadow-neutral-800/20"
+      ? "bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md shadow-sm shadow-neutral-200/10 dark:shadow-neutral-800/20"
       : "bg-transparent";
   };
 
@@ -109,14 +109,14 @@ export default function HeaderNav() {
                 <NavItem
                   key={link.label}
                   href={link.path}
-                  className="rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-gray-100/80 dark:hover:bg-gray-800/80"
+                  className="rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80"
                 >
                   {link.label}
                 </NavItem>
               ))}
 
               {/* 다크모드 토글 */}
-              <div className="ml-4 border-l border-gray-200 pl-4 dark:border-gray-700">
+              <div className="ml-4 border-l border-neutral-200 pl-4 dark:border-neutral-700">
                 <DarkModeBtn />
               </div>
             </div>
@@ -154,7 +154,7 @@ export default function HeaderNav() {
               <div className="space-y-2">
                 <NavItem
                   href="/"
-                  className="block rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                  className="block rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800"
                   onClick={toggleMenu}
                 >
                   Home
@@ -163,7 +163,7 @@ export default function HeaderNav() {
                   <NavItem
                     key={link.label}
                     href={link.path}
-                    className="block rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                    className="block rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800"
                     onClick={toggleMenu}
                   >
                     {link.label}

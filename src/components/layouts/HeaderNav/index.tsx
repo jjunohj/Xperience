@@ -59,7 +59,6 @@ export default function HeaderNav() {
     };
   }, [isMenuOpen]);
 
-
   // 메뉴 토글
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -97,10 +96,16 @@ export default function HeaderNav() {
             {/* 로고 */}
             <NavItem
               href="/"
-              className="flex-shrink-0 text-2xl font-bold transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400"
+              className="group flex-shrink-0 text-2xl font-bold transition-all duration-300"
               aria-label="home"
             >
-              <LogoIcon className="h-8 w-8" />
+              <div className="relative h-8 w-8">
+                <LogoIcon className="h-8 w-8 opacity-100 transition-all duration-300 group-hover:opacity-0" />
+                <LogoIcon
+                  enableGradient
+                  className="absolute inset-0 h-8 w-8 opacity-0 transition-all duration-300 group-hover:opacity-100"
+                />
+              </div>
             </NavItem>
 
             {/* 데스크톱 메뉴 */}

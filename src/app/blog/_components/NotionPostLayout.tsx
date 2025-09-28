@@ -48,30 +48,18 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
               "@type": "Organization",
               name: "Xperiences",
               url: "https://blog.xuuno.me",
-              logo: {
-                "@type": "ImageObject",
-                url: "https://blog.xuuno.me/og-image.png",
-                width: 1200,
-                height: 630,
-              },
+              logo: { "@type": "ImageObject", url: "https://blog.xuuno.me/og-image.png", width: 1200, height: 630 },
             },
             datePublished: post.date || new Date().toISOString(),
             dateModified: post.date || new Date().toISOString(),
-            mainEntityOfPage: {
-              "@type": "WebPage",
-              "@id": `https://blog.xuuno.me/blog/${post.slug}`,
-            },
+            mainEntityOfPage: { "@type": "WebPage", "@id": `https://blog.xuuno.me/blog/${post.slug}` },
             url: `https://blog.xuuno.me/blog/${post.slug}`,
             wordCount: post.wordCount || 0,
             timeRequired: `PT${post.readingTime || 1}M`,
             keywords: post.tags?.join(", ") || "",
             articleSection: post.category || "기타",
             inLanguage: "ko-KR",
-            isPartOf: {
-              "@type": "Blog",
-              name: "Xperiences",
-              url: "https://blog.xuuno.me/blog",
-            },
+            isPartOf: { "@type": "Blog", name: "Xperiences", url: "https://blog.xuuno.me/blog" },
           }),
         }}
       />
@@ -84,18 +72,8 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             itemListElement: [
-              {
-                "@type": "ListItem",
-                position: 1,
-                name: "Home",
-                item: "https://blog.xuuno.me",
-              },
-              {
-                "@type": "ListItem",
-                position: 2,
-                name: "Blog",
-                item: "https://blog.xuuno.me/blog",
-              },
+              { "@type": "ListItem", position: 1, name: "Home", item: "https://blog.xuuno.me" },
+              { "@type": "ListItem", position: 2, name: "Blog", item: "https://blog.xuuno.me/blog" },
               {
                 "@type": "ListItem",
                 position: 3,
@@ -108,91 +86,99 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
       />
 
       {/* 히어로 이미지 헤더 */}
-      <header className="relative mb-12 h-72 w-full overflow-hidden text-center shadow-2xl shadow-gray-50 drop-shadow-sm dark:shadow-neutral-800 md:h-96 xl:h-[32rem]">
-          <Image
-            src={post.thumbnail || "/og-image.png"}
-            alt={post.title || "블로그 포스트"}
-            fill
-            className="absolute inset-0 object-cover blur-sm filter dark:brightness-75 dark:contrast-125 dark:grayscale"
-            sizes="100vw"
-            priority
-            placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAf/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCwAA8A/9k="
-          />
+      <header className="relative h-72 w-full overflow-hidden text-center shadow-2xl shadow-gray-50 drop-shadow-sm dark:shadow-neutral-800 md:h-80 xl:mb-12 xl:h-[32rem]">
+        <Image
+          src={post.thumbnail || "/og-image.png"}
+          alt={post.title || "블로그 포스트"}
+          fill
+          className="absolute inset-0 object-cover blur-sm brightness-75 filter dark:brightness-75 dark:contrast-125 dark:grayscale"
+          sizes="100vw"
+          priority
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAf/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCwAA8A/9k="
+        />
 
-          {/* 그라디언트 오버레이 */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/60 dark:to-black/60" />
+        {/* 그라디언트 오버레이 */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent dark:from-black/70 dark:via-black/30" />
 
-          {/* 중앙 콘텐츠 */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="flex max-w-4xl flex-col items-center space-y-6 px-6">
-              {/* 카테고리 */}
-              {post.category && (
-                <span className="inline-block rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-brand-700 backdrop-blur-sm dark:bg-black/80 dark:text-brand-300">
-                  {post.category}
-                </span>
-              )}
+        {/* 통합된 중앙 콘텐츠 */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="flex max-w-4xl flex-col items-center space-y-3 px-4 md:space-y-4 lg:space-y-6">
+            {/* 카테고리 */}
+            {post.category && (
+              <span className="inline-block rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-brand-700 backdrop-blur-sm dark:bg-black/80 dark:text-brand-300 md:px-4 md:py-2 md:text-sm">
+                {post.category}
+              </span>
+            )}
 
-              {/* 제목 */}
-              <h1 className="text-center text-3xl font-bold leading-tight text-white drop-shadow-lg md:text-5xl xl:text-6xl">
-                {post.title || "제목 없음"}
-              </h1>
+            {/* 제목 */}
+            <h1 className="text-center text-3xl font-bold leading-tight text-white drop-shadow-lg md:text-4xl xl:text-6xl">
+              {post.title || "제목 없음"}
+            </h1>
 
-              {/* 설명 */}
-              {post.description && (
-                <p className="max-w-2xl text-center text-lg text-white/90 drop-shadow-md md:text-xl">
-                  {post.description}
-                </p>
-              )}
+            {/* 설명 - 반응형 */}
+            {post.description && (
+              <p className="max-w-2xl text-center text-sm text-white/90 drop-shadow-md md:text-lg lg:text-xl">
+                {post.description}
+              </p>
+            )}
 
-              {/* 태그 */}
-              {post.tags && post.tags.length > 0 && (
-                <div className="flex flex-wrap justify-center gap-2">
-                  {post.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="inline-block rounded-full bg-white/20 px-3 py-1 text-sm text-white backdrop-blur-sm transition-colors hover:bg-white/30"
-                    >
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
-              )}
+            {/* 태그 - 반응형 */}
+            {post.tags && post.tags.length > 0 && (
+              <div className="flex flex-wrap justify-center gap-1 md:gap-2">
+                {post.tags.slice(0, 4).map((tag) => (
+                  <span
+                    key={tag}
+                    className="inline-block rounded-full bg-white/20 px-2 py-1 text-xs text-white backdrop-blur-sm transition-colors hover:bg-white/30 md:px-3"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+                {post.tags.length > 4 && (
+                  <span className="inline-block rounded-full bg-white/15 px-2 py-1 text-xs text-white/80 backdrop-blur-sm md:px-3">
+                    +{post.tags.length - 4}
+                  </span>
+                )}
+              </div>
+            )}
 
-              {/* 메타 정보 */}
-              <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-white/80">
-                <time dateTime={post.date} className="flex items-center">
-                  <svg className="mr-2 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+            {/* 메타 정보 - 반응형 */}
+            <div className="flex items-center justify-center gap-4 text-xs text-white/80 md:gap-6 md:text-sm">
+              <time dateTime={post.date} className="flex items-center">
+                <svg className="mr-1 h-3 w-3 md:mr-2 md:h-4 md:w-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fillRule="evenodd"
+                    d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="md:hidden">{post.date ? dayjs(post.date).format("MM.DD") : "날짜 없음"}</span>
+                <span className="hidden md:inline">
                   {post.date ? dayjs(post.date).format("YYYY년 MM월 DD일") : "날짜 없음"}
-                </time>
+                </span>
+              </time>
 
-                <div className="flex items-center">
-                  <svg className="mr-2 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  {post.readingTime || 1}분
-                </div>
+              <div className="flex items-center">
+                <svg className="mr-1 h-3 w-3 md:mr-2 md:h-4 md:w-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                {post.readingTime || 1}분
+              </div>
 
-                <div className="flex items-center">
-                  <svg className="mr-2 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
-                  </svg>
-                  {(post.wordCount || 0).toLocaleString()}자
-                </div>
+              <div className="flex items-center">
+                <svg className="mr-1 h-3 w-3 md:mr-2 md:h-4 md:w-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
+                </svg>
+                {(post.wordCount || 0).toLocaleString()}자
               </div>
             </div>
           </div>
-        </header>
+        </div>
+      </header>
 
       {/* 메인 컨텐츠 영역 - 목차와 아티클 분리 */}
       <div className="xl:mx-auto xl:flex xl:max-w-7xl">
@@ -400,7 +386,9 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
                     d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                   />
                 </svg>
-                <h3 className="mb-2 text-lg font-medium text-neutral-900 dark:text-neutral-100">콘텐츠를 불러올 수 없습니다</h3>
+                <h3 className="mb-2 text-lg font-medium text-neutral-900 dark:text-neutral-100">
+                  콘텐츠를 불러올 수 없습니다
+                </h3>
                 <p className="text-neutral-500 dark:text-neutral-400">게시글 내용을 불러오는 중 문제가 발생했습니다.</p>
               </div>
             </div>

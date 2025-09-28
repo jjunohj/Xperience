@@ -8,22 +8,17 @@ import { Analytics } from "@vercel/analytics/react";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-};
+export const viewport: Viewport = { width: "device-width", initialScale: 1 };
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://blog.xuuno.me"),
-  title: {
-    default: "Xperiences",
-    template: "%s | Xperiences",
-  },
+  title: { default: "Xperiences", template: "%s | Xperiences" },
   description: "프론트엔드 개발자의 실전 경험과 인사이트를 공유하는 기술 블로그",
   keywords: ["프론트엔드", "개발", "기술블로그", "노션블로그", "React", "Next.js", "웹개발"],
-  icons: {
-    icon: "/favicon.ico",
-  },
+  icons: [
+    { rel: "icon", url: "/favicon/logo-black.svg", media: "(prefers-color-scheme: light)" },
+    { rel: "icon", url: "/favicon/logo-white.svg", media: "(prefers-color-scheme: dark)" },
+  ],
   openGraph: {
     type: "website",
     locale: "ko_KR",
@@ -31,14 +26,7 @@ export const metadata: Metadata = {
     siteName: "Xperiences",
     title: "Xperiences",
     description: "프론트엔드 개발자의 실전 경험과 인사이트를 공유하는 기술 블로그",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Xperiences 블로그",
-      },
-    ],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Xperiences 블로그" }],
   },
   twitter: {
     card: "summary_large_image",
@@ -47,17 +35,10 @@ export const metadata: Metadata = {
     images: ["/og-image.png"],
     creator: "@xuuno",
   },
-  authors: [
-    {
-      name: "jjunohj",
-      url: "https://github.com/jjunohj",
-    },
-  ],
+  authors: [{ name: "jjunohj", url: "https://github.com/jjunohj" }],
   creator: "jjunohj",
   publisher: "Xperiences",
-  alternates: {
-    canonical: "https://blog.xuuno.me",
-  },
+  alternates: { canonical: "https://blog.xuuno.me" },
   robots: {
     index: true,
     follow: true,
@@ -98,12 +79,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 "@type": "Organization",
                 name: "Xperiences",
                 url: "https://blog.xuuno.me",
-                logo: {
-                  "@type": "ImageObject",
-                  url: "https://blog.xuuno.me/og-image.png",
-                  width: 1200,
-                  height: 630,
-                },
+                logo: { "@type": "ImageObject", url: "https://blog.xuuno.me/og-image.png", width: 1200, height: 630 },
               },
               potentialAction: {
                 "@type": "SearchAction",

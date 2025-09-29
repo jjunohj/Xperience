@@ -1,7 +1,8 @@
-export default function LogoIcon({
-  className,
-  ...props
-}: React.ComponentProps<"svg">) {
+interface LogoIconProps extends React.ComponentProps<"svg"> {
+  enableGradient?: boolean;
+}
+
+export default function LogoIcon({ className, enableGradient = false, ...props }: LogoIconProps) {
   return (
     <svg
       width="40"
@@ -12,9 +13,17 @@ export default function LogoIcon({
       className={className}
       {...props}
     >
+      {enableGradient && (
+        <defs>
+          <linearGradient id="logo-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#7dc7d6" />
+            <stop offset="70%" stopColor="#e8c8bc" />
+          </linearGradient>
+        </defs>
+      )}
       <path
         d="M19.3739 7.63478H7.63478V8.10435C8.73043 8.10435 9.98261 8.41739 10.7652 9.2C11.3913 9.82609 12.3826 11.3391 12.8 12.0174L17.9652 20C15.6696 23.1826 10.8591 29.8609 9.98261 31.113C8.88696 32.6783 7.0087 34.8696 5.6 35.9652C4.47304 36.8417 2.73043 37.0609 2 37.0609V37.5304C2.26087 37.5826 3.06435 37.687 4.1913 37.687C7.69739 37.687 11.0783 34.0348 12.3304 32.2087L19.3739 22.1913C21.0435 24.6957 24.3826 29.36 24.3826 30.487C24.3826 31.6139 23.2348 31.8957 22.6609 31.8957V32.2087H34.5565V31.8957C32.2087 31.8957 31.113 30.6435 30.0174 29.2348C29.1409 28.1078 25.2696 21.9826 23.4435 19.0609C25.8435 15.6174 30.8313 8.4487 31.5826 7.32174C32.5217 5.91304 33.7739 4.50435 35.0261 3.56522C36.0278 2.81391 37.4261 2.52174 38 2.46957V2C32.9913 2 29.4435 5.75652 28.2957 7.63478L22.0348 16.8696L22.0348 16.8695C20.5739 14.7304 17.6522 10.4522 17.6522 9.2C17.6522 8.19826 18.8 8.15652 19.3739 8.26087V7.63478Z"
-        fill="currentColor"
+        fill={enableGradient ? "url(#logo-gradient)" : "currentColor"}
       />
     </svg>
   );

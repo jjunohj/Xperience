@@ -1,14 +1,25 @@
 "use client";
 
 import mediumZoom, { Zoom } from "medium-zoom";
+import Image from "next/image";
 import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
+
+interface ZoomImageProps {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  className?: string;
+}
 
 export default function ZoomImage({
   src,
   alt,
-  ...props
-}: React.ComponentProps<"img">) {
+  width = 800,
+  height = 600,
+  className,
+}: ZoomImageProps) {
   const ref = useRef<HTMLImageElement>(null);
   const [zoom, setZoom] = useState<Zoom>();
 
@@ -26,5 +37,14 @@ export default function ZoomImage({
     zoom?.update({ background });
   }, [background, zoom]);
 
-  return <img ref={ref} src={src} alt={alt} {...props} />;
+  return (
+    <Image
+      ref={ref}
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      className={className}
+    />
+  );
 }

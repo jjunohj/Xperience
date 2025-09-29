@@ -1,4 +1,4 @@
-import { $ } from "@/src/libs/core";
+import { cn } from "@/src/libs/core";
 
 export default function IconButton({
   className,
@@ -10,7 +10,7 @@ export default function IconButton({
       aria-label="icon-button"
       {...props}
       type={type}
-      className={$(
+      className={cn(
         "flex items-center justify-center transition-all",
         "text-secondary hover:scale-95",
         className,

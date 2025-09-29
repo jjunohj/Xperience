@@ -1,7 +1,7 @@
 import React from "react";
 
 import { siteConfig } from "@/config";
-import { $ } from "@/src/libs/core";
+import { cn } from "@/src/libs/core";
 
 import ContactsIcon from "./ContactsIcon";
 import LinkExternal from "./LinkExternal";
@@ -11,7 +11,7 @@ export default function AuthorContacts({
   ...props
 }: React.ComponentProps<"div">) {
   return (
-    <div {...props} className={$("flex space-x-2", className)}>
+    <div {...props} className={cn("flex space-x-2", className)}>
       {Object.keys(siteConfig.author.contacts).map((sns) => {
         let contact =
           siteConfig.author.contacts[

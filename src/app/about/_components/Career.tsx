@@ -2,7 +2,7 @@ import React from "react";
 import { Career } from "./type";
 import Image from "next/image";
 
-const Career = (props: Career) => {
+export default function Career(props: Career) {
   return (
     <div className="flex w-full flex-col gap-1.5">
       <div className="flex w-full flex-col-reverse items-start justify-between sm:flex-row">
@@ -28,7 +28,7 @@ const Career = (props: Career) => {
       <span className="text-sm text-black dark:text-white sm:text-base">
         {props.role}
       </span>
-      <div className="my-1 flex w-4/5 flex-wrap gap-x-1 gap-y-0.5 text-sm font-light text-gray-500 dark:text-white sm:text-base">
+      <div className="my-1 flex w-4/5 flex-wrap gap-x-1 gap-y-0.5 text-sm font-light text-neutral-500 dark:text-white sm:text-base">
         {props.stacks.map((stack, index) => (
           <React.Fragment key={index}>
             {index !== 0 && <span>|</span>}
@@ -48,6 +48,4 @@ const Career = (props: Career) => {
       </ul>
     </div>
   );
-};
-
-export default Career;
+}

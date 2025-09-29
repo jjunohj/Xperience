@@ -1,65 +1,44 @@
 import "../styles/globals.css";
 import Providers from "../components/layouts/Providers";
 import HeaderNav from "../components/layouts/HeaderNav";
-import { Metadata } from "next";
+import { Metadata, Viewport } from "next";
 import AuthorContacts from "../components/common/AuthorContacts";
 import LinkExternal from "../components/common/LinkExternal";
 import { Analytics } from "@vercel/analytics/react";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
+export const viewport: Viewport = { width: "device-width", initialScale: 1 };
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://blog.xuuno.me"),
-  title: {
-    default: "Xperiences",
-    template: "%s | Xperiences",
-  },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-  },
-  description:
-    "프론트엔드 개발자의 실전 경험과 인사이트를 공유하는 기술 블로그",
-  keywords: ["프론트엔드", "개발", "기술블로그", "React", "Next.js", "웹개발"],
-  icons: {
-    icon: "/favicon.ico",
-  },
+  title: { default: "Xperiences", template: "%s | Xperiences" },
+  description: "프론트엔드 개발자의 실전 경험과 인사이트를 공유하는 기술 블로그",
+  keywords: ["프론트엔드", "개발", "기술블로그", "노션블로그", "React", "Next.js", "웹개발"],
+  icons: [
+    { rel: "icon", url: "/favicon/logo-black.svg", media: "(prefers-color-scheme: light)" },
+    { rel: "icon", url: "/favicon/logo-white.svg", media: "(prefers-color-scheme: dark)" },
+  ],
   openGraph: {
     type: "website",
     locale: "ko_KR",
     url: "https://blog.xuuno.me",
     siteName: "Xperiences",
     title: "Xperiences",
-    description:
-      "프론트엔드 개발자의 실전 경험과 인사이트를 공유하는 기술 블로그",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Xperiences 블로그",
-      },
-    ],
+    description: "프론트엔드 개발자의 실전 경험과 인사이트를 공유하는 기술 블로그",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Xperiences 블로그" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Xperiences",
-    description:
-      "프론트엔드 개발자의 실전 경험과 인사이트를 공유하는 기술 블로그",
+    description: "프론트엔드 개발자의 실전 경험과 인사이트를 공유하는 기술 블로그",
     images: ["/og-image.png"],
     creator: "@xuuno",
   },
-  authors: [
-    {
-      name: "jjunohj",
-      url: "https://github.com/jjunohj",
-    },
-  ],
+  authors: [{ name: "jjunohj", url: "https://github.com/jjunohj" }],
   creator: "jjunohj",
   publisher: "Xperiences",
-  alternates: {
-    canonical: "https://blog.xuuno.me",
-  },
+  alternates: { canonical: "https://blog.xuuno.me" },
   robots: {
     index: true,
     follow: true,
@@ -89,34 +68,24 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               "@type": "WebSite",
               name: "Xperiences",
               url: "https://blog.xuuno.me",
-              description:
-                "프론트엔드 개발자의 실전 경험과 인사이트를 공유하는 기술 블로그",
+              description: "프론트엔드 개발자의 실전 경험과 인사이트를 공유하는 기술 블로그",
               author: {
                 "@type": "Person",
                 name: "jjunohj",
                 url: "https://github.com/jjunohj",
-                sameAs: [
-                  "https://github.com/jjunohj",
-                  "https://blog.xuuno.me/about",
-                ],
+                sameAs: ["https://github.com/jjunohj", "https://blog.xuuno.me/about"],
               },
               publisher: {
                 "@type": "Organization",
                 name: "Xperiences",
                 url: "https://blog.xuuno.me",
-                logo: {
-                  "@type": "ImageObject",
-                  url: "https://blog.xuuno.me/og-image.png",
-                  width: 1200,
-                  height: 630,
-                },
+                logo: { "@type": "ImageObject", url: "https://blog.xuuno.me/og-image.png", width: 1200, height: 630 },
               },
               potentialAction: {
                 "@type": "SearchAction",
                 target: {
                   "@type": "EntryPoint",
-                  urlTemplate:
-                    "https://blog.xuuno.me/blog?search={search_term_string}",
+                  urlTemplate: "https://blog.xuuno.me/blog?search={search_term_string}",
                 },
                 "query-input": "required name=search_term_string",
               },
@@ -141,19 +110,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <div className="flex flex-col items-center space-y-1">
                   <AuthorContacts />
                   <p>
-                    <span className="text-gray-600 dark:text-gray-400">
-                      © 2024{" "}
-                    </span>
-                    <LinkExternal href="https://github.com/jjunohj">
-                      jjunohj
-                    </LinkExternal>
-                    <span className="text-gray-600 dark:text-gray-400">
-                      {" "}
-                      Powered by{" "}
-                    </span>
-                    <LinkExternal href="https://nextjs.org/">
-                      Next 15
-                    </LinkExternal>
+                    <span className="text-neutral-600 dark:text-neutral-400">© 2025 </span>
+                    <LinkExternal href="https://github.com/jjunohj">jjunohj</LinkExternal>
+                    <span className="text-neutral-600 dark:text-neutral-400"> Powered by </span>
+                    <LinkExternal href="https://nextjs.org/">Next 15 & Notion</LinkExternal>
                   </p>
                 </div>
               </footer>

@@ -1,19 +1,16 @@
-const { withContentlayer } = require("next-contentlayer2");
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   trailingSlash: false,
 
   // 외부 이미지 도메인 허용
   images: {
-    unoptimized: true, // GitHub assets에 대해 최적화 비활성화
-    domains: [
-      // GitHub 이미지 도메인들
-      "github.com",
-      "user-images.githubusercontent.com",
-      "camo.githubusercontent.com",
-      "raw.githubusercontent.com",
-    ],
+    unoptimized: false, // 이미지 최적화 활성화
+    loader: "default",
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    formats: ["image/avif", "image/webp"],
+    dangerouslyAllowSVG: true,
+    contentDispositionType: "attachment",
     remotePatterns: [
       {
         protocol: "https",
@@ -33,6 +30,58 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "raw.githubusercontent.com",
+        pathname: "/**",
+      },
+      // Notion 이미지 패턴들
+      {
+        protocol: "https",
+        hostname: "prod-files-secure.s3.us-west-2.amazonaws.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "s3.us-west-2.amazonaws.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "www.notion.so",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
+      // 외부 이미지 패턴들
+      {
+        protocol: "https",
+        hostname: "techrecipe.co.kr",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.jsdelivr.net",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "img1.daumcdn.net",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "t1.kakaocdn.net",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "blogfiles.pstatic.net",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "postfiles.pstatic.net",
         pathname: "/**",
       },
     ],
@@ -85,8 +134,7 @@ const nextConfig = {
         headers: [
           {
             key: "Cache-Control",
-            value:
-              "public, max-age=0, s-maxage=3600, stale-while-revalidate=59",
+            value: "public, max-age=0, s-maxage=3600, stale-while-revalidate=59",
           },
         ],
       },
@@ -95,8 +143,7 @@ const nextConfig = {
         headers: [
           {
             key: "Cache-Control",
-            value:
-              "public, max-age=0, s-maxage=3600, stale-while-revalidate=59",
+            value: "public, max-age=0, s-maxage=3600, stale-while-revalidate=59",
           },
         ],
       },
@@ -105,8 +152,7 @@ const nextConfig = {
         headers: [
           {
             key: "Cache-Control",
-            value:
-              "public, max-age=0, s-maxage=86400, stale-while-revalidate=59",
+            value: "public, max-age=0, s-maxage=3600, stale-while-revalidate=7200",
           },
         ],
       },
@@ -115,16 +161,13 @@ const nextConfig = {
         headers: [
           {
             key: "Cache-Control",
-            value:
-              "public, max-age=0, s-maxage=86400, stale-while-revalidate=59",
+            value: "public, max-age=0, s-maxage=3600, stale-while-revalidate=7200",
           },
         ],
       },
     ];
   },
 
-  // Contentlayer가 변경사항을 빠르게 감지하도록 설정
-  serverExternalPackages: ["contentlayer2"],
   // 개발 모드에서 빠른 새로고침 활성화
   reactStrictMode: true,
 
@@ -160,4 +203,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withContentlayer(nextConfig);
+module.exports = nextConfig;

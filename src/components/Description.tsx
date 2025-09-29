@@ -1,4 +1,4 @@
-import { $ } from "../libs/core";
+import { cn } from "../libs/core";
 
 interface DescriptionProps extends React.ComponentProps<"div"> {
   description: string;
@@ -11,7 +11,7 @@ const Description = ({
 }: DescriptionProps) => {
   return (
     <div
-      className={$(
+      className={cn(
         "prose prose-neutral relative w-full px-4 text-center font-spoqa text-xl font-light tracking-tight md:text-2xl",
         className,
       )}

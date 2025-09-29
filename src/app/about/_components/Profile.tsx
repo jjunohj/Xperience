@@ -3,7 +3,7 @@ import GithubIcon from "@/src/components/icons/GithubIcon";
 import MailIcon from "@/src/components/icons/MailIcon";
 import Image from "next/image";
 
-const Profile = () => {
+export default function Profile() {
   return (
     <section className="flex h-fit w-full flex-col-reverse items-center justify-between p-4 sm:p-8 sm:pb-0 lg:flex-row">
       <div className="flex w-full flex-col items-start justify-start gap-6 lg:w-2/3">
@@ -68,6 +68,4 @@ const Profile = () => {
       </div>
     </section>
   );
-};
-
-export default Profile;
+}

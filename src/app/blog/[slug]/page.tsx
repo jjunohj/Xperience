@@ -1,80 +1,111 @@
-"use client";;
-import { use } from "react";
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { cache } from "react";
+import NotionPostLayout from "../_components/NotionPostLayout";
+import { getAllPageMetadata, getPostDetail } from "@/src/libs/notion";
 
-import PostListItem from "@/src/components/PostListItem";
-import IconText from "@/src/components/common/IconText";
-import Tag from "@/src/components/common/Tag";
-import Title from "@/src/components/common/Title";
-import { allCategories } from "@/src/constants/dataset";
-import dayjs from "dayjs";
-import { motion } from "framer-motion";
-import Image from "next/image";
-import CalenderIcon from "~/components/icons/CalenderIcon";
-import ListIcon from "~/components/icons/ListIcon";
-import { fadeInUp, staggerOne } from "~/constants/animations";
+type NotionPostPageProps = {
+  params: Promise<{ slug: string }>;
+};
 
-export default function CategoryPage(props: { params: Promise<{ slug: string }> }) {
-  const params = use(props.params);
-  const category = allCategories.find((p) => p.category === params.slug);
+const getCachedPostDetail = cache(async function (slug: string) {
+  return await getPostDetail(slug);
+});
 
-  if (!category) {
-    return <div>Category not found</div>;
+export async function generateStaticParams() {
+  try {
+    const posts = await getAllPageMetadata();
+    const params = posts.map((post) => ({
+      slug: post.slug,
+    }));
+    console.log(`✅ 총 ${params.length} 개 페이지에 대한 정적 파라미터 생성 완료`);
+    return params;
+  } catch (error) {
+    console.error("정적 파라미터 생성 실패:", error);
+    return [];
   }
+}
 
-  return (
-    <div className="flex w-full flex-col">
-      <div className="border-b-1 relative mb-8 h-80 w-full animate-fadeInHalf overflow-hidden text-center shadow-2xl shadow-gray-50 drop-shadow-sm dark:shadow-neutral-800">
-        <Image
-          src={category.thumbnail}
-          alt={category.title}
-          layout="fill"
-          objectFit="cover"
-          className="absolute inset-0 blur-sm drop-shadow-sm filter dark:brightness-75 dark:contrast-125 dark:grayscale"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-transparent to-white opacity-60 dark:to-black" />
-        <figcaption className="absolute bottom-0 left-0 right-0 mb-20">
-          <Title className="mx-4">
-            {category.title || "Untitled category"}
-          </Title>
-          <div className="mt-4 flex flex-col items-center gap-1">
-            <p className="text-primary font-light">{category.description}</p>
-            <div className="text-primary flex justify-center gap-2">
-              <IconText
-                Icon={CalenderIcon}
-                text={dayjs(category.date).format("YY.MM.DD")}
-              />
-              <IconText
-                Icon={ListIcon}
-                text={`${category.posts.length} 게시글`}
-              />
-            </div>
-            <div className="mx-auto mt-1 flex gap-2 text-sm opacity-90">
-              {category.tags.map((tag) => (
-                <Tag key={tag} tag={tag} />
-              ))}
-            </div>
-          </div>
-        </figcaption>
-      </div>
-      <div className="mx-auto w-full max-w-6xl sm:col-span-2">
-        <motion.section
-          className="mt-8 space-y-4 sm:mt-16"
-          variants={staggerOne}
-          initial="initial"
-          animate="animate"
-        >
-          {category.posts.map((post, i) => (
-            <motion.div key={post.slug} variants={fadeInUp}>
-              <div className="flex space-x-6 px-4 sm:px-8">
-                <div className="pt-4 text-lg font-bold sm:text-xl">
-                  {i + 1}.
-                </div>
-                <PostListItem post={post} />
-              </div>
-            </motion.div>
-          ))}
-        </motion.section>
-      </div>
-    </div>
-  );
+export const revalidate = 3600;
+
+export const dynamicParams = false; // 빌드 시 모든 페이지 미리 생성
+
+export async function generateMetadata({ params }: NotionPostPageProps): Promise<Metadata> {
+  try {
+    const resolvedParams = await params;
+    const post = await getCachedPostDetail(resolvedParams.slug);
+
+    if (!post) {
+      return {
+        title: "Post Not Found",
+      };
+    }
+
+    return {
+      title: `${post.title} | Blog`,
+      description: post.description,
+      openGraph: {
+        title: post.title,
+        description: post.description,
+        images: post.thumbnail
+          ? [
+              {
+                url: post.thumbnail,
+                width: 1200,
+                height: 630,
+                alt: post.title,
+              },
+            ]
+          : [
+              {
+                url: "/og-image.png",
+                width: 1200,
+                height: 630,
+                alt: post.title,
+              },
+            ],
+        type: "article",
+        authors: ["@xuuno"],
+        publishedTime: post.date,
+        locale: "ko_KR",
+        siteName: "Xperiences",
+        url: `https://blog.xuuno.me/blog/${post.slug}`,
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: post.title,
+        description: post.description,
+        images: [post.thumbnail || "/og-image.png"],
+        creator: "@xuuno",
+      },
+      authors: [{ name: "xuuno", url: "https://blog.xuuno.me" }],
+      creator: "xuuno",
+      publisher: "Xperiences",
+      alternates: {
+        canonical: `https://blog.xuuno.me/blog/${post.slug}`,
+      },
+      keywords: [post.title, ...(post.tags || []), ...(post.category ? [post.category] : []), "기술블로그", "개발"],
+    };
+  } catch (error) {
+    console.error("Error generating metadata:", error);
+    return {
+      title: "Post Not Found",
+    };
+  }
+}
+
+export default async function NotionPostPage({ params }: NotionPostPageProps) {
+  try {
+    const resolvedParams = await params;
+    const post = await getCachedPostDetail(resolvedParams.slug);
+
+    if (!post) {
+      notFound();
+    }
+
+    return <NotionPostLayout post={post} />;
+  } catch (error) {
+    console.error("Stack trace:", error instanceof Error ? error.stack : "No stack");
+    notFound();
+  }
 }

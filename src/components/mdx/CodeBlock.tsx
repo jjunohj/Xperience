@@ -3,7 +3,7 @@
 import React, { useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 
-import { $ } from "@/src/libs/core";
+import { cn } from "@/src/libs/core";
 import useWatchTimeout from "@/src/libs/useWatchTimeout";
 
 import CheckIcon from "@/src/components/icons/CheckIcon";
@@ -12,7 +12,7 @@ export default function CodeBlock({
   children,
   title,
 }: React.ComponentProps<"pre">) {
-  const ref = useRef<HTMLPreElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const [copied, setCopied] = useState(false);
 
   useWatchTimeout(copied, 1500, () => {
@@ -34,23 +34,25 @@ export default function CodeBlock({
   };
 
   return (
-    <div className="group relative my-2 -mx-2 overflow-hidden rounded-lg sm:mx-0 sm:my-5">
+    <div
+      className="group relative overflow-hidden rounded-lg bg-[var(--prism-background)]"
+      ref={ref}
+    >
       {title && (
-        <div className="flex bg-[var(--prism-background)]">
-          <div className="flex-none border-b-4 border-[#bbbbbb] px-5 pt-2 pb-1.5 text-sm font-bold text-[#bbbbbb]">
-            {title}
-          </div>
-          <div className="mt-2 w-full rounded-tl bg-[var(--prism-selection)] ring-1 ring-inset ring-white/5" />
+        <div className="absolute left-5 top-3 z-10 text-xs text-neutral-400">
+          {title}
         </div>
       )}
-      <pre ref={ref} className={"m-0 rounded-none p-5 leading-4"}>
+      <div className={cn("relative", title ? "pt-10" : "pt-5", "px-5 pb-5")}>
         {children}
-      </pre>
+      </div>
       <button
-        className={$(
-          "absolute right-2 bottom-2 flex h-8 w-8 items-center justify-center rounded-lg",
-          "bg-neutral-700 text-xs text-neutral-400 hover:text-neutral-300",
-          "opacity-0 transition-all group-hover:opacity-100"
+        className={cn(
+          "absolute right-3 flex h-7 w-7 items-center justify-center rounded-md",
+          "bg-neutral-700/70 text-neutral-300 hover:bg-neutral-600 hover:text-white",
+          "opacity-0 transition-all group-hover:opacity-100",
+          "focus:opacity-100 focus:outline-none",
+          title ? "top-10" : "top-5",
         )}
         aria-label="copy-button"
         onClick={handleCopy}
@@ -60,8 +62,8 @@ export default function CodeBlock({
         ) : (
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            height="16"
-            width="16"
+            height="14"
+            width="14"
             viewBox="0 0 16 16"
             fill="currentColor"
           >

@@ -1,7 +1,7 @@
 import React from "react";
 import { TechStack } from "./type";
 
-const TechStack = ({ title, elements }: TechStack) => {
+export default function TechStack({ title, elements }: TechStack) {
   return (
     <div className="w-full flex flex-col gap-2">
       <h1 className="text-base sm:text-lg lg:text-xl font-semibold dark:text-white">
@@ -21,6 +21,4 @@ const TechStack = ({ title, elements }: TechStack) => {
       </div>
     </div>
   );
-};
-
-export default TechStack;
+}

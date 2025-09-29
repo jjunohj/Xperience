@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from "react";
 
 import useDarkMode from "@/src/libs/useDarkMode";
 
-const Comments = () => {
+export default function Comments() {
   const ref = useRef<HTMLDivElement>(null);
   const { isThemeDark } = useDarkMode();
 
@@ -36,6 +36,4 @@ const Comments = () => {
   }, [isThemeDark]);
 
   return <div ref={ref}></div>;
-};
-
-export default Comments;
+}

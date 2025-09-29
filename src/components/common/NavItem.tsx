@@ -1,6 +1,6 @@
 import { usePathname } from "next/navigation";
 
-import { $ } from "@/src/libs/core";
+import { cn } from "@/src/libs/core";
 
 import LinkHover from "./LinkHover";
 
@@ -17,7 +17,7 @@ export default function NavItem({
     <LinkHover
       {...props}
       href={href}
-      className={$(
+      className={cn(
         isActive ? "text-primary font-semibold" : "text-secondary font-normal",
         className,
       )}

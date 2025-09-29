@@ -1,4 +1,4 @@
-import { $ } from "@/src/libs/core";
+import { cn } from "@/src/libs/core";
 
 export default function LinkExternal({
   children,
@@ -8,8 +8,8 @@ export default function LinkExternal({
   return (
     <a
       {...props}
-      className={$(
-        " text-gray-600 transition hover:text-secondary dark:text-gray-400",
+      className={cn(
+        " text-neutral-600 transition hover:text-secondary dark:text-neutral-400",
         className,
       )}
       target="_blank"

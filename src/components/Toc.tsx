@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getIntersectionObserver } from "../libs/observer";
-import { $ } from "../libs/core";
+import { cn } from "../libs/core";
 
 export default function Toc() {
   const [currentId, setCurrentId] = useState<string>("");
@@ -26,7 +26,7 @@ export default function Toc() {
           <li key={heading.id} className="mb-2">
             <a
               href={`#${heading.id}`}
-              className={$(
+              className={cn(
                 "block text-xs font-light text-neutral-400 transition-all hover:scale-105",
                 currentId === heading.id ? "text-primary font-semibold" : "",
                 heading.tagName === "H3"

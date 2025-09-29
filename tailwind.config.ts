@@ -8,6 +8,19 @@ module.exports = {
     extend: {
       colors: {
         point: "#ed907b",
+        // 브랜드 컬러 (로고 그라데이션의 조화로운 브랜드 톤: #a8c0c3)
+        brand: {
+          50: "#f4f8f8",
+          100: "#e9f0f1",
+          200: "#d3e1e3",
+          300: "#bdd2d5",
+          400: "#a8c0c3", // 조화로운 브랜드 메인 컬러
+          500: "#94aeb2",
+          600: "#809ca1",
+          700: "#6c8a90",
+          800: "#58787f",
+          900: "#44666e",
+        },
         neutral: {
           50: "#fafafa",
           100: "#f5f5f5",
@@ -26,6 +39,9 @@ module.exports = {
           800: "#262626",
           900: "#171717",
         },
+      },
+      backgroundImage: {
+        "gradient-logo": "linear-gradient(135deg, #7dc7d6 0%, #e8c8bc 100%)",
       },
       dropShadow: {
         base: "0px 0px 10px rgba(204, 183, 174, 0.4)",

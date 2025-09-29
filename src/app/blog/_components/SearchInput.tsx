@@ -1,34 +1,41 @@
-import { $ } from "~/libs/core";
+"use client";
 
-export default function SearchInput({
-  className,
-  ...props
-}: React.ComponentProps<"input">) {
+import React from "react";
+import { X, Search } from "lucide-react";
+import { cn } from "~/libs/core";
+
+interface SearchInputProps {
+  value: string;
+  onChangeAction: (value: string) => void;
+  placeholder?: string;
+  className?: string;
+}
+
+export default function SearchInput({ value, onChangeAction, placeholder = "검색...", className }: SearchInputProps) {
   return (
-    <div className={$("relative mb-4 w-full", className)}>
+    <div className={cn("relative w-full", className)}>
       <input
         type="text"
-        className={$(
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChangeAction(e.target.value)}
+        className={cn(
           "block w-full rounded-full border px-4 py-2 font-light",
           "border-neutral-200 bg-white dark:border-neutral-900 dark:bg-neutral-800",
-          "focus:outline-none focus:ring-1 focus:ring-neutral-200 dark:focus:ring-neutral-500",
+          "focus:ring-brand-200 dark:focus:ring-brand-500 focus:outline-none focus:ring-1",
+          "pr-10",
         )}
-        {...props}
       />
-      <svg
-        className="text-secondary absolute right-3 top-3 h-5 w-5"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-        />
-      </svg>
+      {value ? (
+        <button
+          onClick={() => onChangeAction("")}
+          className="hover:text-brand-600 dark:hover:text-brand-300 absolute right-3 top-1/2 -translate-y-1/2 transform text-neutral-400"
+        >
+          <X size={16} />
+        </button>
+      ) : (
+        <Search size={16} className="text-secondary absolute right-3 top-3 h-5 w-5" />
+      )}
     </div>
   );
 }

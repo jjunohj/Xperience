@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   keywords: ["블로그", "노션블로그", "개발블로그", "기술블로그", "React", "Next.js", "TypeScript"],
 };
 
-export const revalidate = 3600;
+export const revalidate = 3000;
 
 export default async function NotionBlogPage() {
   const [pages, categories] = await Promise.all([getAllPageMetadata(), getCategoriesWithUploadedPosts()]);

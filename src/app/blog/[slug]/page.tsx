@@ -1,16 +1,11 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { cache } from "react";
 import NotionPostLayout from "../_components/NotionPostLayout";
 import { getAllPageMetadata, getPostDetail } from "@/src/libs/notion";
 
 type NotionPostPageProps = {
   params: Promise<{ slug: string }>;
 };
-
-const getCachedPostDetail = cache(async function (slug: string) {
-  return await getPostDetail(slug);
-});
 
 export async function generateStaticParams() {
   try {
@@ -26,14 +21,14 @@ export async function generateStaticParams() {
   }
 }
 
-export const revalidate = 3600;
+export const revalidate = 3000;
 
 export const dynamicParams = false; // 빌드 시 모든 페이지 미리 생성
 
 export async function generateMetadata({ params }: NotionPostPageProps): Promise<Metadata> {
   try {
     const resolvedParams = await params;
-    const post = await getCachedPostDetail(resolvedParams.slug);
+    const post = await getPostDetail(resolvedParams.slug);
 
     if (!post) {
       return {
@@ -97,7 +92,7 @@ export async function generateMetadata({ params }: NotionPostPageProps): Promise
 export default async function NotionPostPage({ params }: NotionPostPageProps) {
   try {
     const resolvedParams = await params;
-    const post = await getCachedPostDetail(resolvedParams.slug);
+    const post = await getPostDetail(resolvedParams.slug);
 
     if (!post) {
       notFound();

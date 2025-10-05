@@ -44,13 +44,41 @@ const POSTS_QUERY_CONFIG: Omit<QueryDatabaseParameters, "database_id"> = {
   sorts: [{ property: "date", direction: "descending" }],
 };
 
+/**
+ * Notion API 이미지 URL을 공개 페이지 URL로 변환
+ * @param notionUrl Notion API에서 제공하는 원본 이미지 URL
+ * @param pageId 페이지 또는 블록 ID
+ * @returns 만료되지 않는 공개 페이지 이미지 URL
+ */
+function getNotionImageUrl(notionUrl: string | undefined, pageId: string): string | undefined {
+  if (!notionUrl) return undefined;
+  if (!process.env.NEXT_PUBLIC_NOTION_SITE_URL) {
+    console.warn("⚠️ NEXT_PUBLIC_NOTION_SITE_URL이 설정되지 않았습니다. 원본 URL을 사용합니다.");
+    return notionUrl;
+  }
+
+  // 외부 URL (예: Unsplash, GitHub 등)인 경우 그대로 반환
+  if (!notionUrl.includes("s3.us-west-2.amazonaws.com") && !notionUrl.includes("prod-files-secure")) {
+    return notionUrl;
+  }
+
+  // URL에서 쿼리 파라미터 제거
+  const encodedUrl = encodeURIComponent(notionUrl.split("?")[0]);
+
+  // 공개 페이지 이미지 URL 형식으로 변환
+  return `${process.env.NEXT_PUBLIC_NOTION_SITE_URL}/image/${encodedUrl}?table=block&id=${pageId}&cache=v2`;
+}
+
 // 이미지 블록 변환
 n2m.setCustomTransformer("image", async (block: BlockObjectResponse) => {
   const imageBlock = block as ImageBlockObjectResponse;
-  const url = imageBlock.image.type === "file" ? imageBlock.image.file.url : imageBlock.image.external.url;
+  const originalUrl = imageBlock.image.type === "file" ? imageBlock.image.file.url : imageBlock.image.external.url;
   const caption = imageBlock.image.caption?.[0]?.plain_text || "";
 
-  if (!url) return "";
+  if (!originalUrl) return "";
+
+  // Notion 호스팅 이미지 URL을 공개 페이지 URL로 변환
+  const url = getNotionImageUrl(originalUrl, block.id) || originalUrl;
 
   // 캡션에서 사이즈 prefix 추출 ex) sm:, md:, lg:
   let size = "";
@@ -100,10 +128,13 @@ n2m.setCustomTransformer("code", async (block: BlockObjectResponse) => {
 // 비디오 블록 변환
 n2m.setCustomTransformer("video", async (block: BlockObjectResponse) => {
   const videoBlock = block as VideoBlockObjectResponse;
-  const url = videoBlock.video.type === "file" ? videoBlock.video.file.url : videoBlock.video.external.url;
+  const originalUrl = videoBlock.video.type === "file" ? videoBlock.video.file.url : videoBlock.video.external.url;
   const caption = videoBlock.video.caption?.[0]?.plain_text || "";
 
-  if (!url) return "";
+  if (!originalUrl) return "";
+
+  // Notion 호스팅 비디오 URL을 공개 페이지 URL로 변환
+  const url = getNotionImageUrl(originalUrl, block.id) || originalUrl;
 
   // video: 플래그 넣어서, 이미지 마크다운 문법 활용해서 전달
   return `![video:${caption}](${url})\n`;
@@ -112,11 +143,14 @@ n2m.setCustomTransformer("video", async (block: BlockObjectResponse) => {
 // 파일 블록 변환
 n2m.setCustomTransformer("file", async (block: BlockObjectResponse) => {
   const fileBlock = block as FileBlockObjectResponse;
-  const url = fileBlock.file.type === "file" ? fileBlock.file.file.url : fileBlock.file.external.url;
+  const originalUrl = fileBlock.file.type === "file" ? fileBlock.file.file.url : fileBlock.file.external.url;
   const caption = fileBlock.file.caption?.[0]?.plain_text || "";
   const name = fileBlock.file.type === "file" ? "File" : "File";
 
-  if (!url) return "";
+  if (!originalUrl) return "";
+
+  // Notion 호스팅 파일 URL을 공개 페이지 URL로 변환
+  const url = getNotionImageUrl(originalUrl, block.id) || originalUrl;
 
   if (caption) {
     return `[📎 ${caption}](${url})\n*${caption}*\n`;
@@ -181,22 +215,14 @@ function getDate(date: PropertyValueMap["date"] | undefined): string {
   return date?.start || "";
 }
 
-function getFileUrl(files: PropertyValueMap["files"] | undefined): string | undefined {
+function getFileUrl(files: PropertyValueMap["files"] | undefined, pageId: string): string | undefined {
   if (!files || files.length === 0) return undefined;
 
   const file = files[0];
   if ("file" in file && file.file?.url) {
     const url = file.file.url;
-    // Notion 호스팅 파일은 유효 기간이 있으므로 expiry_time을 체크하여 만료되지 않은 URL만 반환
-    if (file.file.expiry_time) {
-      const expiryTime = new Date(file.file.expiry_time);
-      if (expiryTime > new Date()) {
-        return url;
-      }
-      // 만료된 경우 undefined 반환
-      return undefined;
-    }
-    return url;
+    // Notion 호스팅 파일은 공개 페이지 URL로 변환하여 만료 문제 해결
+    return getNotionImageUrl(url, pageId);
   } else if ("external" in file && file.external?.url) {
     return file.external.url;
   }
@@ -239,7 +265,7 @@ function extractNotionRawData(pageData: PageObjectResponse): PageRawMetadata {
     tags: getMultiSelect(getProperty(properties, "tags", "multi_select")),
     date: getDate(getProperty(properties, "date", "date")),
     status: getStatus(getProperty(properties, "status", "status")),
-    thumbnail: getFileUrl(getProperty(properties, "thumbnail", "files")),
+    thumbnail: getFileUrl(getProperty(properties, "thumbnail", "files"), pageData.id),
     slug: pageIdToSlug(pageData.id),
     prevPageId: getRelations(getProperty(properties, "prev_post", "relation"))[0], // 관계 페이지는 1개 제한 걸어놔서 무조건 0번째 인덱스 사용
     nextPageId: getRelations(getProperty(properties, "next_post", "relation"))[0], // 관계 페이지는 1개 제한 걸어놔서 무조건 0번째 인덱스 사용
@@ -253,7 +279,7 @@ function convertToCategory(pageData: PageObjectResponse): Category {
     id: pageData.id,
     name: getPlainText(getProperty(properties, "name", "title")),
     description: getPlainText(getProperty(properties, "description", "rich_text")),
-    thumbnail: getFileUrl(getProperty(properties, "thumbnail", "files")),
+    thumbnail: getFileUrl(getProperty(properties, "thumbnail", "files"), pageData.id),
     pageIds: getRelations(getProperty(properties, "pages", "relation")),
   };
 }

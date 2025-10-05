@@ -50,6 +50,11 @@ const nextConfig = {
       },
       {
         protocol: "https",
+        hostname: "jjunohj.notion.site",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "images.unsplash.com",
         pathname: "/**",
       },

@@ -104,7 +104,7 @@ n2m.setCustomTransformer("image", async (block: BlockObjectResponse) => {
 // 코드 블록 변환
 n2m.setCustomTransformer("code", async (block: BlockObjectResponse) => {
   const codeBlock = block as CodeBlockObjectResponse;
-  const code = codeBlock.code.rich_text?.[0]?.plain_text || "";
+  const code = codeBlock.code.rich_text?.map((text) => text.plain_text).join("") || "";
   const language = codeBlock.code.language || "";
   const caption = codeBlock.code.caption?.[0]?.plain_text || "";
 

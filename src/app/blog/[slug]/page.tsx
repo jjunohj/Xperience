@@ -23,7 +23,7 @@ export async function generateStaticParams() {
 
 export const revalidate = 3000;
 
-export const dynamicParams = false; // 빌드 시 모든 페이지 미리 생성
+export const dynamicParams = true; // 새 포스트 동적 생성 허용
 
 export async function generateMetadata({ params }: NotionPostPageProps): Promise<Metadata> {
   try {

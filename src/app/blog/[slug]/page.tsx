@@ -36,12 +36,14 @@ export async function generateMetadata({ params }: NotionPostPageProps): Promise
       };
     }
 
+    const ogDescription = post.summary || post.description;
+
     return {
       title: `${post.title} | Blog`,
       description: post.description,
       openGraph: {
         title: post.title,
-        description: post.description,
+        description: ogDescription,
         images: post.thumbnail
           ? [
               {
@@ -60,7 +62,7 @@ export async function generateMetadata({ params }: NotionPostPageProps): Promise
               },
             ],
         type: "article",
-        authors: ["@xuuno"],
+        authors: ["Junho Cheong"],
         publishedTime: post.date,
         locale: "ko_KR",
         siteName: "Xperiences",
@@ -69,12 +71,12 @@ export async function generateMetadata({ params }: NotionPostPageProps): Promise
       twitter: {
         card: "summary_large_image",
         title: post.title,
-        description: post.description,
+        description: ogDescription,
         images: [post.thumbnail || "/og-image.png"],
         creator: "@xuuno",
       },
-      authors: [{ name: "xuuno", url: "https://blog.xuuno.me" }],
-      creator: "xuuno",
+      authors: [{ name: "Junho Cheong", url: "https://blog.xuuno.me" }],
+      creator: "Junho Cheong",
       publisher: "Xperiences",
       alternates: {
         canonical: `https://blog.xuuno.me/blog/${post.slug}`,

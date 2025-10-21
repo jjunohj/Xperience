@@ -86,12 +86,12 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
       />
 
       {/* 히어로 이미지 헤더 */}
-      <header className="relative h-72 w-full overflow-hidden text-center shadow-2xl shadow-gray-50 drop-shadow-sm dark:shadow-neutral-800 md:h-80 xl:mb-12 xl:h-[32rem]">
+      <header className="isolate relative h-72 w-full overflow-hidden text-center shadow-2xl shadow-gray-50 drop-shadow-sm dark:shadow-neutral-800 md:h-80 xl:mb-12 xl:h-[32rem]">
         <Image
           src={post.thumbnail || "/og-image.png"}
           alt={post.title || "블로그 포스트"}
           fill
-          className="absolute inset-0 object-cover blur-sm brightness-75 filter dark:brightness-75 dark:contrast-125 dark:grayscale"
+          className="absolute inset-0 z-0 object-cover blur-sm brightness-75 filter dark:brightness-75 dark:contrast-125 dark:grayscale"
           sizes="100vw"
           priority
           placeholder="blur"
@@ -99,26 +99,26 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
         />
 
         {/* 그라디언트 오버레이 */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent dark:from-black/70 dark:via-black/30" />
+        <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-black/50 via-black/20 to-transparent dark:from-black/70 dark:via-black/30" />
 
         {/* 통합된 중앙 콘텐츠 */}
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div className="absolute inset-0 z-20 flex items-center justify-center">
           <div className="flex max-w-4xl flex-col items-center space-y-3 px-4 md:space-y-4 lg:space-y-6">
             {/* 카테고리 */}
             {post.category && (
-              <span className="inline-block rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-brand-700 backdrop-blur-sm dark:bg-black/80 dark:text-brand-300 md:px-4 md:py-2 md:text-sm">
+              <span className="inline-block transform-gpu rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-brand-700 dark:bg-black/80 dark:text-brand-300 md:px-4 md:py-2 md:text-sm">
                 {post.category}
               </span>
             )}
 
             {/* 제목 */}
-            <h1 className="text-center text-3xl font-bold leading-tight text-white drop-shadow-lg md:text-4xl xl:text-6xl">
+            <h1 className="transform-gpu text-center text-3xl font-bold leading-tight text-white drop-shadow-lg md:text-4xl xl:text-6xl">
               {post.title || "제목 없음"}
             </h1>
 
             {/* 설명 - 반응형 */}
             {post.description && (
-              <p className="max-w-2xl text-center text-sm text-white/90 drop-shadow-md md:text-lg lg:text-xl">
+              <p className="max-w-2xl transform-gpu text-center text-sm text-white/90 drop-shadow-md md:text-lg lg:text-xl">
                 {post.description}
               </p>
             )}
@@ -129,13 +129,13 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
                 {post.tags.slice(0, 4).map((tag) => (
                   <span
                     key={tag}
-                    className="inline-block rounded-full bg-white/20 px-2 py-1 text-xs text-white backdrop-blur-sm transition-colors hover:bg-white/30 md:px-3"
+                    className="inline-block transform-gpu rounded-full bg-white/20 px-2 py-1 text-xs text-white transition-colors hover:bg-white/30 md:px-3"
                   >
                     #{tag}
                   </span>
                 ))}
                 {post.tags.length > 4 && (
-                  <span className="inline-block rounded-full bg-white/15 px-2 py-1 text-xs text-white/80 backdrop-blur-sm md:px-3">
+                  <span className="inline-block transform-gpu rounded-full bg-white/15 px-2 py-1 text-xs text-white/80 md:px-3">
                     +{post.tags.length - 4}
                   </span>
                 )}

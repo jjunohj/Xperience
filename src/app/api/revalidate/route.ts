@@ -1,6 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath, revalidateTag } from "next/cache";
 
+type RevalidateRequestBody = {
+  path?: unknown;
+  tag?: unknown;
+};
+
+async function parseOptionalJsonBody(request: NextRequest): Promise<RevalidateRequestBody> {
+  const contentType = request.headers.get("content-type") || "";
+  if (!contentType.includes("application/json")) {
+    return {};
+  }
+
+  const rawBody = await request.text();
+  if (!rawBody.trim()) {
+    return {};
+  }
+
+  try {
+    return JSON.parse(rawBody) as RevalidateRequestBody;
+  } catch {
+    throw new Error("Invalid JSON body");
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const secret = request.nextUrl.searchParams.get("secret");
@@ -10,8 +33,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid secret" }, { status: 401 });
     }
 
-    const body = await request.json();
-    const { path, tag } = body;
+    const body = await parseOptionalJsonBody(request);
+    const queryPath = request.nextUrl.searchParams.get("path");
+    const queryTag = request.nextUrl.searchParams.get("tag");
+
+    const path = typeof body.path === "string" ? body.path : queryPath;
+    const tag = typeof body.tag === "string" ? body.tag : queryTag;
 
     // 특정 경로 재검증
     if (path) {
@@ -39,6 +66,10 @@ export async function POST(request: NextRequest) {
     );
   } catch (error) {
     console.error("Revalidation error:", error);
+    if (error instanceof Error && error.message === "Invalid JSON body") {
+      return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+    }
+
     return NextResponse.json({ error: "Failed to revalidate" }, { status: 500 });
   }
 }

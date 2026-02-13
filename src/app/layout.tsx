@@ -38,20 +38,6 @@ export const metadata: Metadata = {
   authors: [{ name: "jjunohj", url: "https://github.com/jjunohj" }],
   creator: "jjunohj",
   publisher: "Xperiences",
-  alternates: { canonical: "https://blog.xuuno.me" },
-  robots: {
-    index: true,
-    follow: true,
-    // nocache: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      noimageindex: false,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

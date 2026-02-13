@@ -23,6 +23,49 @@ interface NotionPostLayoutProps {
   post: PostDetail;
 }
 
+const SITE_ORIGIN = "https://blog.xuuno.me";
+
+const LEGACY_BLOG_REDIRECTS: Record<string, string> = {
+  "/blog/Xperience/02-monorepo-2": "/blog/261c324b92cc80a3a38cc29219647d01",
+  "/blog/xperience/02-monorepo-2": "/blog/261c324b92cc80a3a38cc29219647d01",
+  "/blog/Xperience/03-package-manager": "/blog/261c324b92cc80e496badb15c7551905",
+  "/blog/xperience/03-package-manager": "/blog/261c324b92cc80e496badb15c7551905",
+};
+
+function normalizePostHref(href?: string): string {
+  if (!href) return "";
+  if (href.startsWith("#")) return href;
+
+  try {
+    const parsed = new URL(href, SITE_ORIGIN);
+    const isInternal = parsed.origin === SITE_ORIGIN;
+    if (!isInternal) {
+      return href;
+    }
+
+    const pathname = parsed.pathname.replace(/\/+$/, "") || "/";
+
+    const normalizedPath =
+      LEGACY_BLOG_REDIRECTS[pathname] ?? (/^\/blog\/[^/]+\/[^/]+$/.test(pathname) ? "/blog" : pathname);
+
+    return `${normalizedPath}${parsed.search}${parsed.hash}`;
+  } catch {
+    return href;
+  }
+}
+
+function isExternalHref(href: string): boolean {
+  if (!href || href.startsWith("#") || href.startsWith("/")) {
+    return false;
+  }
+
+  try {
+    return new URL(href, SITE_ORIGIN).origin !== SITE_ORIGIN;
+  } catch {
+    return false;
+  }
+}
+
 export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
   return (
     <div className="relative">
@@ -86,7 +129,7 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
       />
 
       {/* 히어로 이미지 헤더 */}
-      <header className="isolate relative h-72 w-full overflow-hidden text-center shadow-2xl shadow-gray-50 drop-shadow-sm dark:shadow-neutral-800 md:h-80 xl:mb-12 xl:h-[32rem]">
+      <header className="relative isolate h-72 w-full overflow-hidden text-center shadow-2xl shadow-gray-50 drop-shadow-sm dark:shadow-neutral-800 md:h-80 xl:mb-12 xl:h-[32rem]">
         <Image
           src={post.thumbnail || "/og-image.png"}
           alt={post.title || "블로그 포스트"}
@@ -198,7 +241,7 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
         >
           {/* 콘텐츠 */}
           {post.content && (
-            <div className="prose prose-lg max-w-none dark:prose-invert">
+            <div className="prose max-w-none dark:prose-invert">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 rehypePlugins={[
@@ -342,10 +385,12 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
                     );
                   },
                   a({ href, children, ...props }) {
-                    const isExternal = href?.startsWith("http");
+                    const normalizedHref = normalizePostHref(href);
+                    const isExternal = isExternalHref(normalizedHref);
+
                     return (
                       <Link
-                        href={href || ""}
+                        href={normalizedHref || "#"}
                         target={isExternal ? "_blank" : undefined}
                         rel={isExternal ? "noopener noreferrer" : undefined}
                         className="text-brand-600 hover:underline dark:text-brand-400"

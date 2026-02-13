@@ -92,6 +92,36 @@ const nextConfig = {
     ],
   },
 
+  async redirects() {
+    return [
+      {
+        source: "/blog/Xperience/02-monorepo-2",
+        destination: "/blog/261c324b92cc80a3a38cc29219647d01",
+        permanent: true,
+      },
+      {
+        source: "/blog/xperience/02-monorepo-2",
+        destination: "/blog/261c324b92cc80a3a38cc29219647d01",
+        permanent: true,
+      },
+      {
+        source: "/blog/Xperience/03-package-manager",
+        destination: "/blog/261c324b92cc80e496badb15c7551905",
+        permanent: true,
+      },
+      {
+        source: "/blog/xperience/03-package-manager",
+        destination: "/blog/261c324b92cc80e496badb15c7551905",
+        permanent: true,
+      },
+      {
+        source: "/blog/:legacySection/:legacySlug",
+        destination: "/blog",
+        permanent: true,
+      },
+    ];
+  },
+
   async headers() {
     return [
       {

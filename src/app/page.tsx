@@ -1,10 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Metadata } from "next";
 import Pill from "../components/common/Pill";
 import NotionPostCardsServer from "../components/notion/NotionPostCardsServer";
 
 // ISR - 1시간마다 재검증
 export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "https://blog.xuuno.me",
+  },
+};
 
 export default function HomePage() {
   return (

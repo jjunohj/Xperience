@@ -2,11 +2,94 @@
 .prose {
   @apply text-secondary;
 }
+
+/* 헤딩 스타일 - 한글 최적화 */
+.prose h1 {
+  @apply text-primary font-bold;
+  font-size: 1.75rem; /* 28px - 모바일 */
+  line-height: 1.35;
+  margin-top: 2.5rem;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+.prose h2 {
+  @apply text-primary font-bold;
+  font-size: 1.5rem; /* 24px - 모바일 */
+  line-height: 1.4;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.prose h3 {
+  @apply text-primary font-semibold;
+  font-size: 1.25rem; /* 20px - 모바일 */
+  line-height: 1.45;
+  margin-top: 1.75rem;
+  margin-bottom: 0.875rem;
+  letter-spacing: -0.01em;
+}
+
+.prose h4 {
+  @apply text-primary font-semibold;
+  font-size: 1.125rem; /* 18px - 모바일 */
+  line-height: 1.5;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.prose h5 {
+  @apply text-primary font-medium;
+  font-size: 1.0625rem; /* 17px - 모바일 */
+  line-height: 1.55;
+  margin-top: 1.25rem;
+  margin-bottom: 0.625rem;
+}
+
+.prose h6 {
+  @apply text-primary font-medium;
+  font-size: 1rem; /* 16px */
+  line-height: 1.6;
+  margin-top: 1.25rem;
+  margin-bottom: 0.625rem;
+}
+
+/* 데스크톱 헤딩 크기 */
+@media (min-width: 768px) {
+  .prose h1 {
+    font-size: 2.25rem; /* 36px */
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .prose h2 {
+    font-size: 1.875rem; /* 30px */
+    margin-top: 2.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .prose h3 {
+    font-size: 1.5rem; /* 24px */
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .prose h4 {
+    font-size: 1.25rem; /* 20px */
+    margin-top: 1.75rem;
+    margin-bottom: 0.875rem;
+  }
+
+  .prose h5 {
+    font-size: 1.125rem; /* 18px */
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+}
+
 .prose strong,
-.prose h1,
-.prose h2,
-.prose h3,
-.prose h4,
 .prose thead th {
   @apply text-primary;
 }
@@ -16,7 +99,90 @@
 }
 
 .prose p {
-  @apply leading-7 sm:leading-8;
+  font-size: 1rem; /* 16px */
+  line-height: 1.6; /* 25.6px */
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .prose p {
+    font-size: 1.0625rem; /* 17px */
+    line-height: 1.65; /* 28px */
+  }
+}
+
+/* 리스트 스타일 */
+.prose ul {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.prose ol {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.prose li {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+.prose li > p {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* 인용구 스타일 */
+.prose blockquote {
+  @apply border-l-4 border-brand-400;
+  padding-left: 1.25rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.prose blockquote p {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* 테이블 스타일 */
+.prose table {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem; /* 15px */
+  line-height: 1.5;
+}
+
+.prose thead th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+.prose tbody td {
+  padding: 0.75rem 1rem;
+}
+
+.prose tbody tr {
+  border-bottom-width: 1px;
+}
+
+/* 수평선 스타일 */
+.prose hr {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  border-top-width: 1px;
 }
 
 .prose img {
@@ -27,7 +193,6 @@
   max-height: 600px;
   object-fit: contain;
 }
-
 
 .prose img + span {
   display: block;
@@ -45,12 +210,14 @@
 
 .prose code {
   font-family: var(--font-mono), Consolas, Monaco, "Andale Mono", monospace;
+  font-size: 0.875em;
 }
 
 .prose code:not(:where(pre *)) {
-  @apply text-primary rounded-md font-medium content-none;
+  @apply text-primary rounded font-medium content-none;
   @apply bg-neutral-200 dark:bg-[var(--prism-background)];
-  padding: 0.2em 0.4em;
+  padding: 0.125em 0.375em;
+  font-weight: 500;
 }
 
 .prose pre::-webkit-scrollbar {
@@ -75,7 +242,8 @@
   -ms-overflow-style: -ms-autohiding-scrollbar; /* IE and Edge */
   scrollbar-width: thin; /* Firefox */
   scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-  margin: 0;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
   padding: 0 !important;
   border-radius: 0.5rem;
   color: var(--prism-foreground);

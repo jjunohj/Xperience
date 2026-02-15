@@ -12,6 +12,8 @@ on:
 
 jobs:
   claude-review:
+    # Temporary switch: set to true to re-enable this workflow.
+    if: ${{ false }}
     # Optional: Filter by PR author
     # if: |
     #   github.event.pull_request.user.login == 'external-contributor' ||
@@ -83,4 +85,3 @@ jobs:
           # if: |
           #   !contains(github.event.pull_request.title, '[skip-review]') &&
           #   !contains(github.event.pull_request.title, '[WIP]')
-

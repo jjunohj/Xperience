@@ -7,6 +7,12 @@ type NotionPostPageProps = {
   params: Promise<{ slug: string }>;
 };
 
+const SITE_ORIGIN = "https://blog.xuuno.me";
+
+function getPostCanonicalUrl(slug: string): string {
+  return `${SITE_ORIGIN}/blog/${encodeURIComponent(slug)}`;
+}
+
 export async function generateStaticParams() {
   try {
     const posts = await getAllPageMetadata();
@@ -26,13 +32,22 @@ export const revalidate = 3000;
 export const dynamicParams = true; // 새 포스트 동적 생성 허용
 
 export async function generateMetadata({ params }: NotionPostPageProps): Promise<Metadata> {
+  const resolvedParams = await params;
+  const canonicalUrl = getPostCanonicalUrl(resolvedParams.slug);
+
   try {
-    const resolvedParams = await params;
     const post = await getPostDetail(resolvedParams.slug);
 
     if (!post) {
       return {
         title: "Post Not Found",
+        alternates: {
+          canonical: canonicalUrl,
+        },
+        robots: {
+          index: false,
+          follow: false,
+        },
       };
     }
 
@@ -66,7 +81,7 @@ export async function generateMetadata({ params }: NotionPostPageProps): Promise
         publishedTime: post.date,
         locale: "ko_KR",
         siteName: "Xperiences",
-        url: `https://blog.xuuno.me/blog/${post.slug}`,
+        url: canonicalUrl,
       },
       twitter: {
         card: "summary_large_image",
@@ -79,7 +94,7 @@ export async function generateMetadata({ params }: NotionPostPageProps): Promise
       creator: "Junho Cheong",
       publisher: "Xperiences",
       alternates: {
-        canonical: `https://blog.xuuno.me/blog/${post.slug}`,
+        canonical: canonicalUrl,
       },
       keywords: [post.title, ...(post.tags || []), ...(post.category ? [post.category] : []), "기술블로그", "개발"],
     };
@@ -87,6 +102,9 @@ export async function generateMetadata({ params }: NotionPostPageProps): Promise
     console.error("Error generating metadata:", error);
     return {
       title: "Post Not Found",
+      alternates: {
+        canonical: canonicalUrl,
+      },
     };
   }
 }

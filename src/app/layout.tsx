@@ -96,7 +96,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <div className="flex flex-col items-center space-y-1">
                   <AuthorContacts />
                   <p>
-                    <span className="text-neutral-600 dark:text-neutral-400">© 2025 </span>
+                    <span className="text-neutral-600 dark:text-neutral-400">© 2026 </span>
                     <LinkExternal href="https://github.com/jjunohj">jjunohj</LinkExternal>
                     <span className="text-neutral-600 dark:text-neutral-400"> Powered by </span>
                     <LinkExternal href="https://nextjs.org/">Next 15 & Notion</LinkExternal>

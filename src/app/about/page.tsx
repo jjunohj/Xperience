@@ -1,26 +1,12 @@
 import { Metadata } from "next";
 import Profile from "./_components/Profile";
-import InfoSection from "./_components/InfoSection";
-import TechStack from "./_components/TechStack";
-import {
-  techStacks,
-  projects,
-  activities,
-  awards,
-  educations,
-  certifications,
-  career,
-} from "./_components/data";
-import Project from "./_components/Project";
-import Activity from "./_components/Activity";
-import Career from "./_components/Career";
 
 export const metadata: Metadata = {
   title: "About",
-  description: "사용자 중심 프론트엔드 개발자 정준호입니다. React, Next.js, TypeScript를 활용한 웹 개발 전문가입니다.",
+  description: "AI를 활용해 서비스 전체 아키텍처를 최적화하고 비용 절감과 신규 기회 창출을 고민합니다.",
   openGraph: {
     title: "About | Xperiences",
-    description: "사용자 중심 프론트엔드 개발자 정준호입니다. React, Next.js, TypeScript를 활용한 웹 개발 전문가입니다.",
+    description: "AI를 활용해 서비스 전체 아키텍처를 최적화하고 비용 절감과 신규 기회 창출을 고민합니다.",
     url: "https://blog.xuuno.me/about",
     siteName: "Xperiences",
     locale: "ko_KR",
@@ -37,7 +23,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary",
     title: "About | Xperiences",
-    description: "사용자 중심 프론트엔드 개발자 정준호입니다.",
+    description: "AI 기반 아키텍처 최적화와 비즈니스 가치 극대화에 집중합니다.",
     images: ["/images/profile.png"],
     creator: "@xuuno",
   },
@@ -61,7 +47,7 @@ export default function AboutPage() {
             url: "https://blog.xuuno.me/about",
             image: "https://blog.xuuno.me/images/profile.png",
             jobTitle: "Frontend Developer",
-            description: "사용자 중심 프론트엔드 개발자 정준호입니다. React, Next.js, TypeScript를 활용한 웹 개발 전문가입니다.",
+            description: "AI를 활용해 서비스 전체 아키텍처를 최적화하고 비용 절감과 신규 기회 창출을 고민합니다.",
             sameAs: [
               "https://github.com/jjunohj",
               "https://blog.xuuno.me",
@@ -87,47 +73,8 @@ export default function AboutPage() {
           }),
         }}
       />
-      <div id="resume">
+      <div id="about" className="w-full">
         <Profile />
-        <InfoSection title={"기술"}>
-          {techStacks.map((stack, index) => (
-            <TechStack
-              key={index}
-              title={stack.title}
-              elements={stack.elements}
-            />
-          ))}
-        </InfoSection>
-        <InfoSection title={"경력"}>
-          {career.map((career, index) => (
-            <Career key={index} {...career} />
-          ))}
-        </InfoSection>
-        <InfoSection title={"프로젝트"}>
-          {projects.map((project, index) => (
-            <Project key={index} {...project} />
-          ))}
-        </InfoSection>
-        <InfoSection title={"활동·교육"}>
-          {activities.map((activity, index) => (
-            <Activity key={index} {...activity} />
-          ))}
-        </InfoSection>
-        <InfoSection title={"수상"}>
-          {awards.map((award, index) => (
-            <Activity key={index} {...award} />
-          ))}
-        </InfoSection>
-        <InfoSection title={"자격·어학"}>
-          {certifications.map((certification, index) => (
-            <Activity key={index} {...certification} />
-          ))}
-        </InfoSection>
-        <InfoSection title={"학력"}>
-          {educations.map((education, index) => (
-            <Activity key={index} {...education} />
-          ))}
-        </InfoSection>
       </div>
     </div>
   );

@@ -83,11 +83,22 @@ module.exports = {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
         },
-        // Add more custom keyframes for other animations
+        profileReveal: {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(16px) scale(0.985)",
+            filter: "blur(2px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0) scale(1)",
+            filter: "blur(0)",
+          },
+        },
       },
       animation: {
-        fadeInHalf: "fadeIn 0.6s ease-out", // Adjust the timing to match your original animation
-        // Define other animations here
+        fadeInHalf: "fadeIn 0.6s ease-out",
+        profileReveal: "profileReveal 700ms cubic-bezier(0.22, 1, 0.36, 1) both",
       },
     },
   },

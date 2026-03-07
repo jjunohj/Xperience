@@ -44,3 +44,5 @@ yarn-error.log
 # next
 dist
 .next
+
+.omx

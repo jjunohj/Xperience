@@ -1,7 +1,22 @@
 import type { MetadataRoute } from "next";
-import { getAllBookMetadata, getAllPageMetadata } from "../libs/notion";
+import { getSitemapBookMetadata, getSitemapPageMetadata } from "../libs/notion";
 
 export const revalidate = 3600;
+const SITEMAP_FETCH_TIMEOUT_MS = 8000;
+
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+  const timeoutPromise = new Promise<T>((_, reject) => {
+    timeoutId = setTimeout(() => {
+      reject(new Error(`Sitemap generation timed out after ${timeoutMs}ms`));
+    }, timeoutMs);
+  });
+
+  return Promise.race([promise, timeoutPromise]).finally(() => {
+    if (timeoutId) clearTimeout(timeoutId);
+  });
+}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://blog.xuuno.me";
@@ -36,21 +51,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   try {
-    const [pages, books] = await Promise.all([getAllPageMetadata(), getAllBookMetadata()]);
+    const [pages, books] = await withTimeout(
+      Promise.all([getSitemapPageMetadata(), getSitemapBookMetadata()]),
+      SITEMAP_FETCH_TIMEOUT_MS,
+    );
 
-    const blogPages: MetadataRoute.Sitemap = pages.map((page) => ({
-      url: `${baseUrl}/blog/${page.slug}`,
-      lastModified: page.date || currentDate,
-      changeFrequency: "weekly" as const,
-      priority: 0.8,
-    }));
+    const blogPages: MetadataRoute.Sitemap = pages
+      .filter((page) => Boolean(page.slug))
+      .map((page) => ({
+        url: `${baseUrl}/blog/${page.slug}`,
+        lastModified: page.date || currentDate,
+        changeFrequency: "weekly" as const,
+        priority: 0.8,
+      }));
 
-    const bookPages: MetadataRoute.Sitemap = books.map((book) => ({
-      url: `${baseUrl}/book/${book.slug}`,
-      lastModified: book.date || book.publishedAt || currentDate,
-      changeFrequency: "monthly" as const,
-      priority: 0.75,
-    }));
+    const bookPages: MetadataRoute.Sitemap = books
+      .filter((book) => Boolean(book.slug))
+      .map((book) => ({
+        url: `${baseUrl}/book/${book.slug}`,
+        lastModified: book.date || book.publishedAt || currentDate,
+        changeFrequency: "monthly" as const,
+        priority: 0.75,
+      }));
 
     return [...staticPages, ...blogPages, ...bookPages];
   } catch (error) {

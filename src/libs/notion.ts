@@ -52,6 +52,9 @@ const BOOKS_QUERY_CONFIG: Omit<QueryDatabaseParameters, "database_id"> = {
   sorts: [{ property: "date", direction: "descending" }],
 };
 
+export type SitemapPageMetadata = Pick<PageMetadata, "slug" | "date">;
+export type SitemapBookMetadata = Pick<BookMetadata, "slug" | "date" | "publishedAt">;
+
 /**
  * Notion API 이미지 URL을 공개 페이지 URL로 변환
  * @param notionUrl Notion API에서 제공하는 원본 이미지 URL
@@ -397,6 +400,39 @@ async function getPageContentAsMarkdown(pageId: string): Promise<string> {
   setToDevCache<string>(devCache, `markdown-${pageId}`, content);
 
   return content;
+}
+
+/**
+ * 사이트맵 생성용 경량 페이지 메타데이터 조회
+ * - 상세/연관 포스트 조회를 생략해 타임아웃 위험을 줄인다.
+ */
+export async function getSitemapPageMetadata(): Promise<SitemapPageMetadata[]> {
+  try {
+    const pages = await queryAllPages();
+    return pages.map((page) => {
+      const { slug, date } = extractNotionRawData(page);
+      return { slug, date };
+    });
+  } catch (error) {
+    console.error("사이트맵용 페이지 메타데이터 조회 실패:", error);
+    return [];
+  }
+}
+
+/**
+ * 사이트맵 생성용 경량 책 메타데이터 조회
+ */
+export async function getSitemapBookMetadata(): Promise<SitemapBookMetadata[]> {
+  try {
+    const pages = await queryAllBooks();
+    return pages.map((page) => {
+      const { slug, date, publishedAt } = extractNotionBookData(page);
+      return { slug, date, publishedAt };
+    });
+  } catch (error) {
+    console.error("사이트맵용 책 메타데이터 조회 실패:", error);
+    return [];
+  }
 }
 
 /**

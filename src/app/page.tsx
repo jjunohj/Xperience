@@ -69,7 +69,9 @@ export default function HomePage() {
       />
 
       <section className="mx-auto mt-20 w-full max-w-6xl px-4 sm:hidden">
-        <h1 className="text-3xl font-extrabold">CHEONG JUNHO</h1>
+        <h1 className="inline text-3xl font-extrabold">CHEONG JUNHO</h1>
+        <span className="ml-2 text-sm font-extralight text-neutral-400">@xuuno</span>
+
         <p className="mt-2 text-sm text-neutral-700 dark:text-neutral-300">
           AI를 활용해 서비스의 전체 아키텍처를 최적화하고 비즈니스의 비용을 절감하며 새로운 기회를 창출합니다.
         </p>

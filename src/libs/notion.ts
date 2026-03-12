@@ -18,9 +18,11 @@ import type {
   PropertyValue,
   PropertyValueMap,
   PostDetail,
+  BookDetail,
   PageRawMetadata,
   PageReference,
   PageMetadata,
+  BookMetadata,
   Category,
 } from "@/src/data/types/notion";
 import { CacheData, getFromDevCache, setToDevCache } from "./cache";
@@ -30,6 +32,7 @@ import { pageIdToSlug, slugToPageId } from "../utils/notion-slug";
 if (!process.env.NOTION_API_KEY) throw new Error("NOTION_API_KEY 환경변수 없음");
 if (!process.env.NOTION_CATEGORY_DB_ID) throw new Error("NOTION_CATEGORY_DB_ID 환경변수 없음");
 if (!process.env.NOTION_POST_DB_ID) throw new Error("NOTION_POST_DB_ID 환경변수 없음");
+const NOTION_BOOK_DB_ID = process.env.NOTION_BOOK_DB_ID || "31cc324b92cc8091a003ca8be309f3f1";
 
 // Notion client 초기화
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
@@ -40,6 +43,11 @@ const devCache = new Map<string, CacheData>();
 
 // 노션 쿼리 상수 (업로드 상태, 날짜 내림차순)
 const POSTS_QUERY_CONFIG: Omit<QueryDatabaseParameters, "database_id"> = {
+  filter: { property: "status", status: { equals: "Upload" } },
+  sorts: [{ property: "date", direction: "descending" }],
+};
+
+const BOOKS_QUERY_CONFIG: Omit<QueryDatabaseParameters, "database_id"> = {
   filter: { property: "status", status: { equals: "Upload" } },
   sorts: [{ property: "date", direction: "descending" }],
 };
@@ -188,6 +196,22 @@ async function queryAllPages() {
   return results;
 }
 
+async function queryAllBooks() {
+  const results: PageObjectResponse[] = [];
+  let cursor: string | undefined;
+  do {
+    const res = await notion.databases.query({
+      database_id: NOTION_BOOK_DB_ID,
+      start_cursor: cursor,
+      ...BOOKS_QUERY_CONFIG,
+    });
+    results.push(...(res.results.filter(isFullPage) as PageObjectResponse[]));
+    cursor = res.has_more ? (res.next_cursor ?? undefined) : undefined;
+  } while (cursor);
+
+  return results;
+}
+
 async function queryAllCategories() {
   const results: PageObjectResponse[] = [];
 
@@ -207,12 +231,21 @@ function getStatus(status: PropertyValueMap["status"] | undefined): string {
   return status?.name || "";
 }
 
+function getSelect(select: PropertyValueMap["select"] | undefined): string {
+  return select?.name || "";
+}
+
 function getMultiSelect(multiSelect: PropertyValueMap["multi_select"] | undefined): string[] {
   return multiSelect?.map((item) => item.name) || [];
 }
 
 function getDate(date: PropertyValueMap["date"] | undefined): string {
   return date?.start || "";
+}
+
+function getNumber(number: PropertyValueMap["number"] | undefined): number | undefined {
+  if (typeof number !== "number") return undefined;
+  return number;
 }
 
 function getFileUrl(files: PropertyValueMap["files"] | undefined, pageId: string): string | undefined {
@@ -269,6 +302,26 @@ function extractNotionRawData(pageData: PageObjectResponse): PageRawMetadata {
     slug: pageIdToSlug(pageData.id),
     prevPageId: getRelations(getProperty(properties, "prev_post", "relation"))[0], // 관계 페이지는 1개 제한 걸어놔서 무조건 0번째 인덱스 사용
     nextPageId: getRelations(getProperty(properties, "next_post", "relation"))[0], // 관계 페이지는 1개 제한 걸어놔서 무조건 0번째 인덱스 사용
+  };
+}
+
+function extractNotionBookData(pageData: PageObjectResponse): BookMetadata {
+  const { properties } = pageData;
+  const reviewDate = getDate(getProperty(properties, "date", "date"));
+  const publishedAt = getDate(getProperty(properties, "published_at", "date"));
+
+  return {
+    id: pageData.id,
+    title: getPlainText(getProperty(properties, "title", "title")),
+    slug: pageIdToSlug(pageData.id),
+    description: getPlainText(getProperty(properties, "summary", "rich_text")),
+    author: getPlainText(getProperty(properties, "author", "rich_text")),
+    category: getSelect(getProperty(properties, "category", "select")),
+    date: reviewDate,
+    publishedAt: publishedAt,
+    status: getStatus(getProperty(properties, "status", "status")),
+    cover: getFileUrl(getProperty(properties, "cover", "files"), pageData.id),
+    rating: getNumber(getProperty(properties, "rating", "number")),
   };
 }
 
@@ -395,6 +448,32 @@ export async function getAllPageMetadata(): Promise<PageMetadata[]> {
   } catch (error) {
     console.error("포스트 미리보기 처리 실패:", error);
     throw new Error("Notion에서 포스트 미리보기를 조회하는 데 실패했습니다.");
+  }
+}
+
+export async function getAllBookMetadata(): Promise<BookMetadata[]> {
+  try {
+    const cachedData = getFromDevCache<BookMetadata[]>(devCache, "books-metadata");
+    if (cachedData) {
+      console.log("🎯 [DEV 캐시 HIT] 모든 책 메타데이터");
+      return cachedData;
+    }
+
+    const pages = await queryAllBooks();
+
+    const books = pages.map((page) => extractNotionBookData(page)).sort((a, b) => {
+      const aDate = a.date || a.publishedAt || "";
+      const bDate = b.date || b.publishedAt || "";
+      return aDate < bDate ? 1 : -1;
+    });
+
+    console.log(`✅ 총 ${books.length} 개의 책 메타데이터 처리 완료`);
+    setToDevCache<BookMetadata[]>(devCache, "books-metadata", books);
+
+    return books;
+  } catch (error) {
+    console.error("책 목록 처리 실패:", error);
+    return [];
   }
 }
 
@@ -539,6 +618,52 @@ export const getPostDetail = cache(async function (slug: string): Promise<PostDe
 
       if (error.code === "object_not_found") {
         console.log("❌ 페이지를 찾을 수 없음: ", slug);
+        return null;
+      }
+    }
+
+    return null;
+  }
+});
+
+export const getBookDetail = cache(async function (slug: string): Promise<BookDetail | null> {
+  try {
+    const decodedSlug = decodeURIComponent(slug);
+    const cachedData = getFromDevCache<BookDetail>(devCache, `book-detail-${decodedSlug}`);
+    if (cachedData) {
+      console.log("🎯 [DEV 캐시 HIT] 책 상세 데이터 조회: ", decodedSlug);
+      return cachedData;
+    }
+
+    const pageId = slugToPageId(decodedSlug);
+    const page = await notion.pages.retrieve({ page_id: pageId });
+
+    if (!isFullPage(page)) {
+      return null;
+    }
+
+    const metadata = extractNotionBookData(page);
+
+    if (metadata.status !== "Upload") {
+      return null;
+    }
+
+    const content = await getPageContentAsMarkdown(pageId);
+
+    const bookDetail: BookDetail = {
+      ...metadata,
+      content,
+      readingTime: calculateReadingTime(content),
+      wordCount: calculateWordCount(content),
+    };
+
+    setToDevCache<BookDetail>(devCache, `book-detail-${decodedSlug}`, bookDetail);
+    return bookDetail;
+  } catch (error) {
+    console.error("책 상세 조회 실패:", error);
+
+    if (error instanceof APIResponseError) {
+      if (error.code === "rate_limited" || error.code === "object_not_found") {
         return null;
       }
     }

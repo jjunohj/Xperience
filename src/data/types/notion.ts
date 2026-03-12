@@ -13,6 +13,7 @@ export type AllowedPropertyTypes =
   | "multi_select"
   | "status"
   | "date"
+  | "number"
   | "files"
   | "relation"
   | "rollup";
@@ -24,6 +25,7 @@ export type PropertyValueMap = {
   multi_select: PropertyValue<"multi_select">["multi_select"];
   status: PropertyValue<"status">["status"];
   date: PropertyValue<"date">["date"];
+  number: PropertyValue<"number">["number"];
   files: PropertyValue<"files">["files"];
   relation: PropertyValue<"relation">["relation"];
   rollup: PropertyValue<"rollup">["rollup"];
@@ -72,6 +74,31 @@ export interface PageMetadata extends PageBasicInfo {
 
 // 모든 정보가 포함된 완전한 포스트 데이터 (콘텐츠 포함)
 export interface PostDetail extends PageMetadata {
+  content: string;
+  readingTime: number;
+  wordCount: number;
+}
+
+// 책 페이지 기본 메타데이터
+interface BookBasicInfo {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  author: string;
+  category?: string;
+  date: string; // 리뷰 작성일
+  publishedAt?: string; // 도서 출판일
+  status: string;
+  cover?: string;
+  rating?: number;
+}
+
+// 책 목록에 사용하는 메타데이터
+export interface BookMetadata extends BookBasicInfo {}
+
+// 책 상세 페이지 데이터
+export interface BookDetail extends BookMetadata {
   content: string;
   readingTime: number;
   wordCount: number;

@@ -26,6 +26,10 @@ export const siteConfig = {
       path: "/about",
     },
     {
+      label: "Book",
+      path: "/book",
+    },
+    {
       label: "Blog",
       path: "/blog",
     },

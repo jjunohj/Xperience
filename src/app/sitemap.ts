@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getAllPageMetadata } from "../libs/notion";
+import { getAllBookMetadata, getAllPageMetadata } from "../libs/notion";
 
 export const revalidate = 3600;
 
@@ -22,6 +22,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.95,
     },
     {
+      url: `${baseUrl}/book`,
+      lastModified: currentDate,
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    },
+    {
       url: `${baseUrl}/about`,
       lastModified: currentDate,
       changeFrequency: "monthly" as const,
@@ -30,7 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   try {
-    const pages = await getAllPageMetadata();
+    const [pages, books] = await Promise.all([getAllPageMetadata(), getAllBookMetadata()]);
 
     const blogPages: MetadataRoute.Sitemap = pages.map((page) => ({
       url: `${baseUrl}/blog/${page.slug}`,
@@ -39,7 +45,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     }));
 
-    return [...staticPages, ...blogPages];
+    const bookPages: MetadataRoute.Sitemap = books.map((book) => ({
+      url: `${baseUrl}/book/${book.slug}`,
+      lastModified: book.date || book.publishedAt || currentDate,
+      changeFrequency: "monthly" as const,
+      priority: 0.75,
+    }));
+
+    return [...staticPages, ...blogPages, ...bookPages];
   } catch (error) {
     console.error("Error generating sitemap:", error);
     return staticPages;

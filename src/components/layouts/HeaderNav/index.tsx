@@ -64,8 +64,9 @@ export default function HeaderNav() {
 
   // 특정 페이지에서는 다른 스타일 적용 (콘텐츠가 바로 시작하는 페이지들)
   const isBlogPost = pathname.startsWith("/blog");
+  const isBookPost = pathname.startsWith("/book");
   const isAboutPage = pathname.startsWith("/about");
-  const isSpecialPage = isBlogPost || isAboutPage;
+  const isSpecialPage = isBlogPost || isBookPost || isAboutPage;
 
   // 헤더 배경 스타일 결정
   const getHeaderBgClass = () => {

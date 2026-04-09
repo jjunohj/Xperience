@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import BookShelfClient from "./_components/BookShelfClient";
-import { getAllBookMetadata } from "@/src/libs/notion";
+import { getBookShelfMetadata } from "@/src/libs/notion";
 
 export const metadata: Metadata = {
   title: "Book",
@@ -37,7 +37,8 @@ export const metadata: Metadata = {
 export const revalidate = 3000;
 
 export default async function BookPage() {
-  const books = await getAllBookMetadata();
+  const books = await getBookShelfMetadata();
+  const uploadedBooks = books.filter((book) => book.status === "Upload");
 
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 p-4">
@@ -57,8 +58,8 @@ export default async function BookPage() {
             },
             mainEntity: {
               "@type": "ItemList",
-              numberOfItems: books.length,
-              itemListElement: books.slice(0, 10).map((book, index) => ({
+              numberOfItems: uploadedBooks.length,
+              itemListElement: uploadedBooks.slice(0, 10).map((book, index) => ({
                 "@type": "ListItem",
                 position: index + 1,
                 url: `https://blog.xuuno.me/book/${book.slug}`,

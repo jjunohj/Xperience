@@ -47,8 +47,19 @@ const POSTS_QUERY_CONFIG: Omit<QueryDatabaseParameters, "database_id"> = {
   sorts: [{ property: "date", direction: "descending" }],
 };
 
-const BOOKS_QUERY_CONFIG: Omit<QueryDatabaseParameters, "database_id"> = {
+const BOOKS_UPLOAD_QUERY_CONFIG: Omit<QueryDatabaseParameters, "database_id"> = {
   filter: { property: "status", status: { equals: "Upload" } },
+  sorts: [{ property: "date", direction: "descending" }],
+};
+
+const BOOK_SHELF_VISIBLE_STATUSES = ["Upload", "Writing", "Reading"] as const;
+const BOOKS_SHELF_QUERY_CONFIG: Omit<QueryDatabaseParameters, "database_id"> = {
+  filter: {
+    or: BOOK_SHELF_VISIBLE_STATUSES.map((status) => ({
+      property: "status",
+      status: { equals: status },
+    })),
+  },
   sorts: [{ property: "date", direction: "descending" }],
 };
 
@@ -206,7 +217,23 @@ async function queryAllBooks() {
     const res = await notion.databases.query({
       database_id: NOTION_BOOK_DB_ID,
       start_cursor: cursor,
-      ...BOOKS_QUERY_CONFIG,
+      ...BOOKS_UPLOAD_QUERY_CONFIG,
+    });
+    results.push(...(res.results.filter(isFullPage) as PageObjectResponse[]));
+    cursor = res.has_more ? (res.next_cursor ?? undefined) : undefined;
+  } while (cursor);
+
+  return results;
+}
+
+async function queryBookShelfPages() {
+  const results: PageObjectResponse[] = [];
+  let cursor: string | undefined;
+  do {
+    const res = await notion.databases.query({
+      database_id: NOTION_BOOK_DB_ID,
+      start_cursor: cursor,
+      ...BOOKS_SHELF_QUERY_CONFIG,
     });
     results.push(...(res.results.filter(isFullPage) as PageObjectResponse[]));
     cursor = res.has_more ? (res.next_cursor ?? undefined) : undefined;
@@ -509,6 +536,31 @@ export async function getAllBookMetadata(): Promise<BookMetadata[]> {
     return books;
   } catch (error) {
     console.error("책 목록 처리 실패:", error);
+    return [];
+  }
+}
+
+export async function getBookShelfMetadata(): Promise<BookMetadata[]> {
+  try {
+    const cachedData = getFromDevCache<BookMetadata[]>(devCache, "books-shelf-metadata");
+    if (cachedData) {
+      console.log("🎯 [DEV 캐시 HIT] 책장 메타데이터");
+      return cachedData;
+    }
+
+    const pages = await queryBookShelfPages();
+    const books = pages.map((page) => extractNotionBookData(page)).sort((a, b) => {
+      const aDate = a.date || a.publishedAt || "";
+      const bDate = b.date || b.publishedAt || "";
+      return aDate < bDate ? 1 : -1;
+    });
+
+    console.log(`✅ 총 ${books.length} 개의 책장 메타데이터 처리 완료`);
+    setToDevCache<BookMetadata[]>(devCache, "books-shelf-metadata", books);
+
+    return books;
+  } catch (error) {
+    console.error("책장 목록 처리 실패:", error);
     return [];
   }
 }

@@ -19,7 +19,12 @@ export default function BookShelfClient({ books }: BookShelfClientProps) {
       if (!searchTerm.trim()) return true;
 
       const keyword = searchTerm.toLowerCase();
-      const searchableText = [book.title, book.author, book.description, book.category || ""].join(" ").toLowerCase();
+      const searchableFields = [book.title, book.author, book.category || "", book.publishedAt || "", book.status];
+      if (book.status === "Upload") {
+        searchableFields.push(book.description);
+      }
+
+      const searchableText = searchableFields.join(" ").toLowerCase();
 
       return searchableText.includes(keyword);
     });

@@ -88,10 +88,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           ></iframe>
         </noscript>
         <Providers>
-          <div className="max-w-screen h-full dark:bg-neutral-900 dark:text-neutral-100">
-            <div className="flex flex-col">
+          <div className="max-w-screen min-h-screen dark:bg-neutral-900 dark:text-neutral-100">
+            <div className="flex min-h-screen flex-col">
               <HeaderNav />
-              <main className="relative pb-20">{children}</main>
+              <main className="relative grow pb-20">{children}</main>
               <footer className="pb-8 text-sm text-neutral-800 dark:text-neutral-400">
                 <div className="flex flex-col items-center space-y-1">
                   <AuthorContacts />

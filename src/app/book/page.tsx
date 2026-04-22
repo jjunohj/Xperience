@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/og-image.png",
+        url: "/og-books.png",
         width: 1200,
         height: 630,
         alt: "Xperiences Book Archive",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Book | Xperiences",
     description: BOOK_DESCRIPTION,
-    images: ["/og-image.png"],
+    images: ["/og-books.png"],
     creator: "@xuuno",
   },
   alternates: {

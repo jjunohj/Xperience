@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
+import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
@@ -93,7 +94,7 @@ export default function BookPostLayout({ book }: BookPostLayoutProps) {
           {book.content ? (
             <div className="prose prose-stone max-w-none dark:prose-invert">
               <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
+                remarkPlugins={[remarkGfm, remarkBreaks]}
                 rehypePlugins={[
                   rehypeRaw,
                   [

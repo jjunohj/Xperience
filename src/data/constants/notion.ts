@@ -1,0 +1,1 @@
+export const NOTION_CALLOUT_MARKER = "NOTION_CALLOUT";

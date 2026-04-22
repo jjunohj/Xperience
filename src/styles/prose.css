@@ -154,6 +154,36 @@
   margin-bottom: 0.5rem;
 }
 
+.prose .notion-callout {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 0.75rem;
+  align-items: start;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border: 1px solid;
+  border-radius: 0.5rem;
+  @apply text-secondary border-brand-200 bg-brand-50 dark:border-brand-800 dark:bg-brand-900/30;
+}
+
+.prose .notion-callout__icon {
+  font-size: 1.125rem;
+  line-height: 1.55;
+}
+
+.prose .notion-callout__content {
+  min-width: 0;
+}
+
+.prose .notion-callout__content > :first-child {
+  margin-top: 0;
+}
+
+.prose .notion-callout__content > :last-child {
+  margin-bottom: 0;
+}
+
 /* 테이블 스타일 */
 .prose table {
   margin-top: 2rem;

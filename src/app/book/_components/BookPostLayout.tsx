@@ -12,6 +12,7 @@ import NotionToc from "~/components/notion/NotionToc";
 import ReadingProgressBar from "~/components/ReadingProgressBar";
 import VideoPlayer from "~/components/mdx/VideoPlayer";
 import CodeBlock from "~/components/mdx/CodeBlock";
+import NotionBlockquote from "~/components/mdx/NotionBlockquote";
 import ZoomImage from "~/components/mdx/ZoomImage";
 import { fadeInUp } from "@/src/data/constants/animations";
 import { BookDetail } from "@/src/data/types/notion";
@@ -229,6 +230,9 @@ export default function BookPostLayout({ book }: BookPostLayoutProps) {
                         {children}
                       </Link>
                     );
+                  },
+                  blockquote({ node, ...props }: any) {
+                    return <NotionBlockquote {...props} />;
                   },
                   p({ children, ...props }: any) {
                     if (typeof children !== "string" && children?.props?.src) {

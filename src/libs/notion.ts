@@ -5,17 +5,18 @@ import type {
   PageObjectResponse,
   ImageBlockObjectResponse,
   CodeBlockObjectResponse,
+  CalloutBlockObjectResponse,
   VideoBlockObjectResponse,
   FileBlockObjectResponse,
   EmbedBlockObjectResponse,
   BlockObjectResponse,
+  RichTextItemResponse,
   QueryDatabaseParameters,
 } from "@notionhq/client/build/src/api-endpoints";
 import type {
   RelatedPostsResult,
   AllowedPropertyTypes,
   NotionPageProperties,
-  PropertyValue,
   PropertyValueMap,
   PostDetail,
   BookDetail,
@@ -25,6 +26,7 @@ import type {
   BookMetadata,
   Category,
 } from "@/src/data/types/notion";
+import { NOTION_CALLOUT_MARKER } from "@/src/data/constants/notion";
 import { CacheData, getFromDevCache, setToDevCache } from "./cache";
 import { calculateReadingTime, calculateWordCount } from "../utils/post";
 import { pageIdToSlug, slugToPageId } from "../utils/notion-slug";
@@ -91,6 +93,50 @@ function getNotionImageUrl(notionUrl: string | undefined, pageId: string): strin
   return `${process.env.NEXT_PUBLIC_NOTION_SITE_URL}/image/${encodedUrl}?table=block&id=${pageId}&cache=v2`;
 }
 
+function richTextToMarkdown(richText: RichTextItemResponse[]): string {
+  return richText
+    .map((content) => {
+      if (content.type === "equation") {
+        return `$${content.equation.expression}$`;
+      }
+
+      let text = (n2m as any).annotatePlainText(content.plain_text, content.annotations);
+
+      if (content.href) {
+        text = `[${text}](${content.href})`;
+      }
+
+      return text;
+    })
+    .join("");
+}
+
+function toBlockquoteMarkdown(markdown: string): string {
+  return markdown
+    .split("\n")
+    .map((line) => (line ? `> ${line}` : ">"))
+    .join("\n");
+}
+
+async function getChildrenAsMarkdown(blockId: string): Promise<string> {
+  const results: BlockObjectResponse[] = [];
+  let startCursor: string | undefined;
+
+  do {
+    const response = await notion.blocks.children.list({
+      block_id: blockId,
+      start_cursor: startCursor,
+    });
+
+    results.push(...(response.results.filter((block) => "type" in block) as BlockObjectResponse[]));
+    startCursor = response.has_more ? (response.next_cursor ?? undefined) : undefined;
+  } while (startCursor);
+
+  const mdBlocks = await n2m.blocksToMarkdown(results as any);
+
+  return n2m.toMarkdownString(mdBlocks).parent.trim();
+}
+
 // 이미지 블록 변환
 n2m.setCustomTransformer("image", async (block: BlockObjectResponse) => {
   const imageBlock = block as ImageBlockObjectResponse;
@@ -145,6 +191,22 @@ n2m.setCustomTransformer("code", async (block: BlockObjectResponse) => {
   }
   result += `${code}\n\`\`\``;
   return result;
+});
+
+// 콜아웃 블록 변환
+n2m.setCustomTransformer("callout", async (block: BlockObjectResponse) => {
+  const calloutBlock = block as CalloutBlockObjectResponse;
+  const icon = calloutBlock.callout.icon?.type === "emoji" ? calloutBlock.callout.icon.emoji : "💡";
+  const text = richTextToMarkdown(calloutBlock.callout.rich_text);
+  const children = calloutBlock.has_children ? await getChildrenAsMarkdown(block.id) : "";
+  const content = [text, children].filter(Boolean).join("\n\n").trim();
+  const marker = `> [!${NOTION_CALLOUT_MARKER}:${icon}]`;
+
+  if (!content) {
+    return marker;
+  }
+
+  return `${marker}\n>\n${toBlockquoteMarkdown(content)}`;
 });
 
 // 비디오 블록 변환
@@ -524,11 +586,13 @@ export async function getAllBookMetadata(): Promise<BookMetadata[]> {
 
     const pages = await queryAllBooks();
 
-    const books = pages.map((page) => extractNotionBookData(page)).sort((a, b) => {
-      const aDate = a.date || a.publishedAt || "";
-      const bDate = b.date || b.publishedAt || "";
-      return aDate < bDate ? 1 : -1;
-    });
+    const books = pages
+      .map((page) => extractNotionBookData(page))
+      .sort((a, b) => {
+        const aDate = a.date || a.publishedAt || "";
+        const bDate = b.date || b.publishedAt || "";
+        return aDate < bDate ? 1 : -1;
+      });
 
     console.log(`✅ 총 ${books.length} 개의 책 메타데이터 처리 완료`);
     setToDevCache<BookMetadata[]>(devCache, "books-metadata", books);
@@ -549,11 +613,13 @@ export async function getBookShelfMetadata(): Promise<BookMetadata[]> {
     }
 
     const pages = await queryBookShelfPages();
-    const books = pages.map((page) => extractNotionBookData(page)).sort((a, b) => {
-      const aDate = a.date || a.publishedAt || "";
-      const bDate = b.date || b.publishedAt || "";
-      return aDate < bDate ? 1 : -1;
-    });
+    const books = pages
+      .map((page) => extractNotionBookData(page))
+      .sort((a, b) => {
+        const aDate = a.date || a.publishedAt || "";
+        const bDate = b.date || b.publishedAt || "";
+        return aDate < bDate ? 1 : -1;
+      });
 
     console.log(`✅ 총 ${books.length} 개의 책장 메타데이터 처리 완료`);
     setToDevCache<BookMetadata[]>(devCache, "books-shelf-metadata", books);

@@ -15,6 +15,7 @@ import NotionToc from "~/components/notion/NotionToc";
 import ReadingProgressBar from "~/components/ReadingProgressBar";
 import VideoPlayer from "~/components/mdx/VideoPlayer";
 import CodeBlock from "~/components/mdx/CodeBlock";
+import NotionBlockquote from "~/components/mdx/NotionBlockquote";
 import ZoomImage from "~/components/mdx/ZoomImage";
 import { fadeInUp } from "@/src/data/constants/animations";
 import { PostDetail } from "@/src/data/types/notion";
@@ -399,6 +400,9 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
                         {children}
                       </Link>
                     );
+                  },
+                  blockquote({ node, ...props }: any) {
+                    return <NotionBlockquote {...props} />;
                   },
                   p({ children, ...props }: any) {
                     // 이미지가 포함된 p 태그를 div로 변환

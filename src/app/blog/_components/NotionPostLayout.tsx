@@ -13,6 +13,7 @@ import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import NotionAdjacentPostNav from "~/components/notion/NotionAdjacentPostNav";
 import NotionToc from "~/components/notion/NotionToc";
 import ReadingProgressBar from "~/components/ReadingProgressBar";
+import Comments from "~/components/Comments";
 import VideoPlayer from "~/components/mdx/VideoPlayer";
 import CodeBlock from "~/components/mdx/CodeBlock";
 import NotionBlockquote from "~/components/mdx/NotionBlockquote";
@@ -445,6 +446,8 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
 
           {/* 인접 포스트 네비게이션 */}
           <NotionAdjacentPostNav prevPost={post.prevPost} nextPost={post.nextPost} />
+
+          <Comments />
 
           {/* 푸터 */}
           <footer className="mt-16 border-t border-neutral-200 pt-8 dark:border-neutral-700">

@@ -10,6 +10,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import NotionToc from "~/components/notion/NotionToc";
 import ReadingProgressBar from "~/components/ReadingProgressBar";
+import Comments from "~/components/Comments";
 import VideoPlayer from "~/components/mdx/VideoPlayer";
 import CodeBlock from "~/components/mdx/CodeBlock";
 import NotionBlockquote from "~/components/mdx/NotionBlockquote";
@@ -253,6 +254,8 @@ export default function BookPostLayout({ book }: BookPostLayoutProps) {
               <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">잠시 후 다시 시도해주세요.</p>
             </div>
           )}
+
+          <Comments />
 
           <footer className="mt-16 border-t border-neutral-200 pt-8 dark:border-neutral-700">
             <Link

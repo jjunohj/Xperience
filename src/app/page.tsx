@@ -3,6 +3,8 @@ import Image from "next/image";
 import { Metadata } from "next";
 import Pill from "../components/common/Pill";
 import NotionPostCardsServer from "../components/notion/NotionPostCardsServer";
+import NotionBookCardsServer from "../components/notion/NotionBookCardsServer";
+import RecentTabsCarousel from "../components/notion/RecentTabsCarousel";
 
 // ISR - 1시간마다 재검증
 export const revalidate = 3600;
@@ -120,7 +122,10 @@ export default function HomePage() {
         </div>
       </section>
       <div className="h-10 w-full sm:hidden" />
-      <NotionPostCardsServer />
+      <RecentTabsCarousel
+        postsSlot={<NotionPostCardsServer />}
+        readingsSlot={<NotionBookCardsServer />}
+      />
     </div>
   );
 }

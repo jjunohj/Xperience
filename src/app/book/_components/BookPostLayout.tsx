@@ -10,6 +10,7 @@ import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import NotionToc from "~/components/notion/NotionToc";
+import NotionAdjacentPostNav from "~/components/notion/NotionAdjacentPostNav";
 import ReadingProgressBar from "~/components/ReadingProgressBar";
 import Comments from "~/components/Comments";
 import VideoPlayer from "~/components/mdx/VideoPlayer";
@@ -256,16 +257,15 @@ export default function BookPostLayout({ book }: BookPostLayoutProps) {
             </div>
           )}
 
-          <Comments />
+          <NotionAdjacentPostNav
+            prev={book.prevBook}
+            next={book.nextBook}
+            basePath="/book"
+            prevLabel="이전 책"
+            nextLabel="다음 책"
+          />
 
-          <footer className="mt-16 border-t border-neutral-200 pt-8 dark:border-neutral-700">
-            <Link
-              href="/book"
-              className="inline-flex items-center font-medium text-amber-700 hover:underline dark:text-amber-300"
-            >
-              ← Books로 돌아가기
-            </Link>
-          </footer>
+          <Comments />
         </motion.article>
       </div>
     </div>

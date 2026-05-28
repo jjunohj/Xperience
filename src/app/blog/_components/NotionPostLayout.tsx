@@ -445,7 +445,7 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
           )}
 
           {/* 인접 포스트 네비게이션 */}
-          <NotionAdjacentPostNav prevPost={post.prevPost} nextPost={post.nextPost} />
+          <NotionAdjacentPostNav prev={post.prevPost} next={post.nextPost} />
 
           <Comments />
 

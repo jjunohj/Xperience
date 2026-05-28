@@ -1,22 +1,22 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import NotionToc from "~/components/notion/NotionToc";
 import NotionAdjacentPostNav from "~/components/notion/NotionAdjacentPostNav";
 import ReadingProgressBar from "~/components/ReadingProgressBar";
 import Comments from "~/components/Comments";
 import VideoPlayer from "~/components/mdx/VideoPlayer";
-import CodeBlock from "~/components/mdx/CodeBlock";
 import NotionBlockquote from "~/components/mdx/NotionBlockquote";
 import ZoomImage from "~/components/mdx/ZoomImage";
+
+const MarkdownCodeBlock = dynamic(() => import("~/components/mdx/MarkdownCodeBlock"));
 import { fadeInUp } from "@/src/data/constants/animations";
 import { BookDetail } from "@/src/data/types/notion";
 import BookHeroHeader from "./BookHeroHeader";
@@ -116,7 +116,7 @@ export default function BookPostLayout({ book }: BookPostLayoutProps) {
                     if (!inline && match) {
                       const codeContent = String(children).replace(/\n$/, "");
                       const lines = codeContent.split("\n");
-                      let title = null;
+                      let title: string | undefined;
                       let actualCode = codeContent;
 
                       if (
@@ -139,25 +139,12 @@ export default function BookPostLayout({ book }: BookPostLayoutProps) {
                       }
 
                       return (
-                        <CodeBlock title={title}>
-                          <SyntaxHighlighter
-                            style={tomorrow as any}
-                            language={match[1]}
-                            PreTag="div"
-                            customStyle={{
-                              fontSize: "13px",
-                              lineHeight: "1.4",
-                              borderRadius: "0px",
-                              background: "transparent",
-                              border: "none",
-                              margin: 0,
-                              padding: 0,
-                            }}
-                            {...(props as any)}
-                          >
-                            {actualCode}
-                          </SyntaxHighlighter>
-                        </CodeBlock>
+                        <MarkdownCodeBlock
+                          language={match[1]}
+                          title={title}
+                          code={actualCode}
+                          highlighterProps={props}
+                        />
                       );
                     }
 

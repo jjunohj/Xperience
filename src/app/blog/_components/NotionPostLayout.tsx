@@ -2,22 +2,22 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import NotionAdjacentPostNav from "~/components/notion/NotionAdjacentPostNav";
 import NotionToc from "~/components/notion/NotionToc";
 import ReadingProgressBar from "~/components/ReadingProgressBar";
 import Comments from "~/components/Comments";
 import VideoPlayer from "~/components/mdx/VideoPlayer";
-import CodeBlock from "~/components/mdx/CodeBlock";
 import NotionBlockquote from "~/components/mdx/NotionBlockquote";
 import ZoomImage from "~/components/mdx/ZoomImage";
+
+const MarkdownCodeBlock = dynamic(() => import("~/components/mdx/MarkdownCodeBlock"));
 import { fadeInUp } from "@/src/data/constants/animations";
 import { PostDetail } from "@/src/data/types/notion";
 
@@ -268,7 +268,7 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
 
                       // 코드 블럭에서 첫 번째 줄이 주석으로 된 캡션인지 확인
                       const lines = codeContent.split("\n");
-                      let title = null;
+                      let title: string | undefined;
                       let actualCode = codeContent;
 
                       if (
@@ -293,25 +293,12 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
                       }
 
                       return (
-                        <CodeBlock title={title}>
-                          <SyntaxHighlighter
-                            style={tomorrow as any}
-                            language={match[1]}
-                            PreTag="div"
-                            customStyle={{
-                              fontSize: "13px",
-                              lineHeight: "1.4",
-                              borderRadius: "0px",
-                              background: "transparent",
-                              border: "none",
-                              margin: 0,
-                              padding: 0,
-                            }}
-                            {...(props as any)}
-                          >
-                            {actualCode}
-                          </SyntaxHighlighter>
-                        </CodeBlock>
+                        <MarkdownCodeBlock
+                          language={match[1]}
+                          title={title}
+                          code={actualCode}
+                          highlighterProps={props}
+                        />
                       );
                     }
 

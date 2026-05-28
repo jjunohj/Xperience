@@ -4,6 +4,7 @@ import HeaderNav from "../components/layouts/HeaderNav";
 import { Metadata, Viewport } from "next";
 import AuthorContacts from "../components/common/AuthorContacts";
 import LinkExternal from "../components/common/LinkExternal";
+import VisitorCounter from "../components/VisitorCounter";
 import { Analytics } from "@vercel/analytics/react";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -95,11 +96,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <footer className="pb-8 text-sm text-neutral-800 dark:text-neutral-400">
                 <div className="flex flex-col items-center space-y-1">
                   <AuthorContacts />
-                  <p>
-                    <span className="text-neutral-600 dark:text-neutral-400">© 2026 </span>
+                  <VisitorCounter />
+                  <p className="text-xs text-neutral-500 dark:text-neutral-500">
+                    <span>© 2026 </span>
                     <LinkExternal href="https://github.com/jjunohj">jjunohj</LinkExternal>
-                    <span className="text-neutral-600 dark:text-neutral-400"> Powered by </span>
-                    <LinkExternal href="https://nextjs.org/">Next 15 & Notion</LinkExternal>
+                    <span> Powered by Next 15 & Notion </span>
                   </p>
                 </div>
               </footer>

@@ -3,6 +3,7 @@
 import { cn } from "@/src/libs/core";
 import { getIntersectionObserver } from "@/src/libs/observer";
 import { useEffect, useState } from "react";
+import VisitorCounter from "@/src/components/VisitorCounter";
 
 interface Heading {
   id: string;
@@ -253,6 +254,10 @@ export default function NotionToc({ layout = "floating" }: NotionTocProps) {
                 </li>
               ))}
             </ul>
+          </div>
+
+          <div className="mt-4 px-4 py-3 text-center">
+            <VisitorCounter />
           </div>
         </div>
       </aside>

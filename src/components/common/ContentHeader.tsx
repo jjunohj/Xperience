@@ -2,11 +2,11 @@
 
 import { motion } from "framer-motion";
 
-export default function ContentHeader({ title }) {
+export default function ContentHeader({ title }: { title: string }) {
   return (
-    <div className="flex flex-col w-full h-fit">
+    <div className="flex h-fit w-full flex-col">
       <motion.h1
-        className="text-3xl font-bold text-black dark:text-white mb-2"
+        className="mb-2 text-3xl font-bold text-black dark:text-white"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}

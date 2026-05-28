@@ -17,11 +17,10 @@ const icons = {
   youtube: YoutubeIcon,
 };
 
-export default function ContactsIcon({
-  contact,
-  ...props
-}: React.ComponentProps<"svg"> & { contact: string }) {
-  const Component = icons[contact] ?? TagIcon;
+type ContactKey = keyof typeof icons;
+
+export default function ContactsIcon({ contact, ...props }: React.ComponentProps<"svg"> & { contact: string }) {
+  const Component = icons[contact as ContactKey] ?? TagIcon;
 
   return <Component {...props} />;
 }

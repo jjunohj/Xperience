@@ -14,10 +14,7 @@ const DEV_CACHE_TTL = 5 * 60 * 1000; // 5분
  * @param key 캐시 키
  * @returns 캐시된 데이터 또는 null
  */
-export const getFromDevCache = <T>(
-  cacheMap: Map<string, CacheData>,
-  key: string,
-): T | null => {
+export const getFromDevCache = <T>(cacheMap: Map<string, CacheData>, key: string): T | null => {
   if (process.env.NODE_ENV === "development") {
     const cached = cacheMap.get(key);
     if (cached && Date.now() - cached.timestamp < DEV_CACHE_TTL) {
@@ -33,11 +30,7 @@ export const getFromDevCache = <T>(
  * @param key 캐시 키
  * @param data 저장할 데이터
  */
-export const setToDevCache = <T>(
-  cacheMap: Map<string, CacheData>,
-  key: string,
-  data: T,
-): void => {
+export const setToDevCache = <T>(cacheMap: Map<string, CacheData>, key: string, data: T): void => {
   if (process.env.NODE_ENV === "development") {
     cacheMap.set(key, { data, timestamp: Date.now() });
   }

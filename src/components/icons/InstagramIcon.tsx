@@ -1,9 +1,4 @@
-export default function InstagramIcon({
-  className,
-  width = 16,
-  height = 16,
-  ...props
-}: React.ComponentProps<'svg'>) {
+export default function InstagramIcon({ className, width = 16, height = 16, ...props }: React.ComponentProps<"svg">) {
   return (
     <svg
       role="img"

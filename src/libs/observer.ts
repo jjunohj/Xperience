@@ -5,9 +5,7 @@ const observerOption = {
   rootMargin: "0px 100px 0px 0px",
 };
 
-export const getIntersectionObserver = (
-  setState: Dispatch<SetStateAction<string>>,
-) => {
+export const getIntersectionObserver = (setState: Dispatch<SetStateAction<string>>) => {
   let currentIntersecting: Element[] = [];
 
   const observer = new IntersectionObserver((entries) => {
@@ -15,9 +13,7 @@ export const getIntersectionObserver = (
       if (entry.isIntersecting) {
         currentIntersecting.push(entry.target);
       } else {
-        currentIntersecting = currentIntersecting.filter(
-          (el) => el !== entry.target,
-        );
+        currentIntersecting = currentIntersecting.filter((el) => el !== entry.target);
       }
     });
 

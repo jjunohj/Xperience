@@ -1,20 +1,12 @@
 import { cn } from "@/src/libs/core";
 
-export default function IconButton({
-  className,
-  type = "button",
-  ...props
-}: React.ComponentProps<"button">) {
+export default function IconButton({ className, type = "button", ...props }: React.ComponentProps<"button">) {
   return (
     <button
       aria-label="icon-button"
       {...props}
       type={type}
-      className={cn(
-        "flex items-center justify-center transition-all",
-        "text-secondary hover:scale-95",
-        className,
-      )}
+      className={cn("flex items-center justify-center transition-all", "text-secondary hover:scale-95", className)}
     />
   );
 }

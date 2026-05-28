@@ -122,10 +122,7 @@ export default function HomePage() {
         </div>
       </section>
       <div className="h-10 w-full sm:hidden" />
-      <RecentTabsCarousel
-        postsSlot={<NotionPostCardsServer />}
-        readingsSlot={<NotionBookCardsServer />}
-      />
+      <RecentTabsCarousel postsSlot={<NotionPostCardsServer />} readingsSlot={<NotionBookCardsServer />} />
     </div>
   );
 }

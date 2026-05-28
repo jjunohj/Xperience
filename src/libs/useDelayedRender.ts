@@ -10,7 +10,7 @@ interface Options {
 
 export function useDelayedRender(
   active = false,
-  options: Options = {}
+  options: Options = {},
 ): {
   mounted: boolean; // DOM에 마운트되어 있는지 여부
   rendered: boolean; // 컴포넌트가 visible한지 여부

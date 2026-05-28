@@ -77,7 +77,7 @@ export default function BookCard({ book }: BookCardProps) {
               className="object-cover transition duration-300 group-hover:scale-[1.01]"
               sizes="128px"
             />
-            <div className="absolute left-0 top-0 h-full w-[6px] bg-black/18" />
+            <div className="bg-black/18 absolute left-0 top-0 h-full w-[6px]" />
           </div>
         </div>
 

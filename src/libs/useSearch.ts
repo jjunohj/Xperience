@@ -3,10 +3,7 @@
 import debounce from "lodash.debounce";
 import React, { useCallback, useState } from "react";
 
-export default function useSearch(
-  callback?: (value: string) => void,
-  wait = 300,
-) {
+export default function useSearch(callback?: (value: string) => void, wait = 300) {
   const [searchValue, setSearchValue] = useState("");
 
   const searchHandler = useCallback(
@@ -15,7 +12,7 @@ export default function useSearch(
         callback?.(value);
         setSearchValue(value);
       }, wait);
-      
+
       debouncedHandler(e.target.value);
     },
     [callback, wait],

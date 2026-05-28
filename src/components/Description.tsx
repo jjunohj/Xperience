@@ -4,11 +4,7 @@ interface DescriptionProps extends React.ComponentProps<"div"> {
   description: string;
 }
 
-const Description = ({
-  description,
-  className,
-  ...props
-}: DescriptionProps) => {
+const Description = ({ description, className, ...props }: DescriptionProps) => {
   return (
     <div
       className={cn(

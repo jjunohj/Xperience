@@ -63,7 +63,7 @@ export default function NotionBookCard({ book }: NotionBookCardProps) {
           </div>
 
           {/* 하단 푸터: 콘텐츠 길이에 따라 자연 높이로 늘어남 */}
-          <div className="relative z-10 flex w-full min-h-32 flex-col justify-between gap-2 bg-white bg-opacity-60 p-3 dark:bg-black dark:bg-opacity-30 sm:min-h-[128px] sm:p-4">
+          <div className="relative z-10 flex min-h-32 w-full flex-col justify-between gap-2 bg-white bg-opacity-60 p-3 dark:bg-black dark:bg-opacity-30 sm:min-h-[128px] sm:p-4">
             <div className="flex flex-col items-start space-y-2">
               <h2 className="line-clamp-2 text-sm font-semibold group-hover:drop-shadow-base-bold sm:text-xl">
                 {book.title}

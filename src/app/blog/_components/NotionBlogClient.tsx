@@ -102,7 +102,9 @@ export default function NotionBlogClient({ pages, categories }: NotionBlogClient
                   />
                 </svg>
 
-                <h3 className="mb-2 text-lg font-medium text-neutral-900 dark:text-neutral-100">검색 결과가 없습니다</h3>
+                <h3 className="mb-2 text-lg font-medium text-neutral-900 dark:text-neutral-100">
+                  검색 결과가 없습니다
+                </h3>
 
                 <p className="mb-4 text-neutral-500 dark:text-neutral-400">
                   {hasActiveFilters ? "다른 검색어나 필터 조건을 시도해보세요." : "게시글이 없습니다."}

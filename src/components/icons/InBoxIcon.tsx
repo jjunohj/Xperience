@@ -1,9 +1,4 @@
-export default function InBoxIcon({
-  className,
-  width = 16,
-  height = 16,
-  ...props
-}: React.ComponentProps<'svg'>) {
+export default function InBoxIcon({ className, width = 16, height = 16, ...props }: React.ComponentProps<"svg">) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

@@ -48,10 +48,7 @@ export default function AboutPage() {
             image: "https://blog.xuuno.me/images/profile.png",
             jobTitle: "Frontend Developer",
             description: "AI를 활용해 서비스 전체 아키텍처를 최적화하고 비용 절감과 신규 기회 창출을 고민합니다.",
-            sameAs: [
-              "https://github.com/jjunohj",
-              "https://blog.xuuno.me",
-            ],
+            sameAs: ["https://github.com/jjunohj", "https://blog.xuuno.me"],
             knowsAbout: ["React", "Next.js", "TypeScript", "JavaScript", "Web Development", "Frontend Development"],
             breadcrumb: {
               "@type": "BreadcrumbList",

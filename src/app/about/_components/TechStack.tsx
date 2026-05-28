@@ -3,19 +3,13 @@ import { TechStack } from "./type";
 
 export default function TechStack({ title, elements }: TechStack) {
   return (
-    <div className="w-full flex flex-col gap-2">
-      <h1 className="text-base sm:text-lg lg:text-xl font-semibold dark:text-white">
-        {title}
-      </h1>
-      <div className="flex flex-wrap gap-1 sm:gap-2 text-sm sm:text-base">
+    <div className="flex w-full flex-col gap-2">
+      <h1 className="text-base font-semibold dark:text-white sm:text-lg lg:text-xl">{title}</h1>
+      <div className="flex flex-wrap gap-1 text-sm sm:gap-2 sm:text-base">
         {elements.map((element, index) => (
           <React.Fragment key={index}>
-            <span className="text-black font-light dark:text-white">
-              {element}
-            </span>
-            {index < elements.length - 1 && (
-              <span className="text-black dark:text-white ">|</span>
-            )}
+            <span className="font-light text-black dark:text-white">{element}</span>
+            {index < elements.length - 1 && <span className="text-black dark:text-white ">|</span>}
           </React.Fragment>
         ))}
       </div>

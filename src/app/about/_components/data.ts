@@ -137,16 +137,7 @@ export const projects: Project[] = [
     description: "2024-1학기 아주대학교 동아리박람회 실시간 정보 공유 웹 앱",
     role: "FE",
     period: "2024.03",
-    stacks: [
-      "Next 14",
-      "TypeScript",
-      "TailwindCSS",
-      "Zustand",
-      "ESLint",
-      "Prettier",
-      "PWA",
-      "GA",
-    ],
+    stacks: ["Next 14", "TypeScript", "TailwindCSS", "Zustand", "ESLint", "Prettier", "PWA", "GA"],
     info: [
       "GA적용 - 이틀간 실사용자 약 650명 유치",
       "PWA적용- 접근성/사용성 개선",
@@ -159,16 +150,7 @@ export const projects: Project[] = [
     description: "교환학생들을 위한 캠퍼스 주변 시설 정보 공유 플랫폼",
     role: "팀장, FE, Designer",
     period: "2023.09 ~ 2023.12",
-    stacks: [
-      "React",
-      "JavaScript",
-      "Emotion",
-      "Recoil",
-      "React-hook-form",
-      "KakaoMap SDK",
-      "Prettier",
-      "Figma",
-    ],
+    stacks: ["React", "JavaScript", "Emotion", "Recoil", "React-hook-form", "KakaoMap SDK", "Prettier", "Figma"],
     info: [
       "전체 서비스 UI 디자인 및 퍼블리시",
       "Container-Presenter 패턴 적용 - 코드 가독성 확보",
@@ -214,10 +196,7 @@ export const activities: Activity[] = [
   {
     title: "2021 군장병 공개SW 온라인 교육 및 해커톤 진행",
     period: "2021.08 ~ 2021.11",
-    contents: [
-      "군장병 집체교육 WEB 분야 수강",
-      "WEB 분야 온라인 교육 성적 우수자 선발",
-    ],
+    contents: ["군장병 집체교육 WEB 분야 수강", "WEB 분야 온라인 교육 성적 우수자 선발"],
   },
 ];
 
@@ -225,11 +204,7 @@ export const awards: Activity[] = [
   {
     title: "2024 SW인재페스티벌 <최우수상>",
     period: "2024.12",
-    contents: [
-      "전국 58개교 참여",
-      "최우수상 (정보통신기획평가원장상, 2위)",
-      "과학기술정보통신부 주관",
-    ],
+    contents: ["전국 58개교 참여", "최우수상 (정보통신기획평가원장상, 2위)", "과학기술정보통신부 주관"],
   },
   {
     title: "AJOU SOFTCON <최우수상 | 인기상(온라인 투표) | 인기상(현장 투표)>",
@@ -284,11 +259,7 @@ export const awards: Activity[] = [
   {
     title: "“모여서 각자 소프트웨어하자” 학습 공동체 성과발표 <우수상>",
     period: "2022.08",
-    contents: [
-      "“코딩에서 살아남기 (코살)” 팀",
-      "우수상(2위)",
-      "아주대학교 SW융합교육원 주관",
-    ],
+    contents: ["“코딩에서 살아남기 (코살)” 팀", "우수상(2위)", "아주대학교 SW융합교육원 주관"],
   },
 ];
 
@@ -296,10 +267,7 @@ export const educations: Activity[] = [
   {
     title: "아주대학교",
     period: "2019.03 ~ 2024.08",
-    contents: [
-      "컴퓨터및소프트웨어공학 학사 과정 졸업",
-      "4.0 / 4.5 (총 141 학점 이수)",
-    ],
+    contents: ["컴퓨터및소프트웨어공학 학사 과정 졸업", "4.0 / 4.5 (총 141 학점 이수)"],
   },
 ];
 

@@ -6,17 +6,11 @@ import { cn } from "@/src/libs/core";
 import ContactsIcon from "./ContactsIcon";
 import LinkExternal from "./LinkExternal";
 
-export default function AuthorContacts({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+export default function AuthorContacts({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div {...props} className={cn("flex space-x-2", className)}>
       {Object.keys(siteConfig.author.contacts).map((sns) => {
-        let contact =
-          siteConfig.author.contacts[
-            sns as keyof typeof siteConfig.author.contacts
-          ];
+        let contact = siteConfig.author.contacts[sns as keyof typeof siteConfig.author.contacts];
 
         if (sns === "email") contact = `mailto:${contact}`;
         else if (sns === "github") contact = `https://github.com/${contact}`;

@@ -1,7 +1,4 @@
-export default function MailIcon({
-  className,
-  ...props
-}: React.ComponentProps<"svg">) {
+export default function MailIcon({ className, ...props }: React.ComponentProps<"svg">) {
   return (
     <svg
       role="img"

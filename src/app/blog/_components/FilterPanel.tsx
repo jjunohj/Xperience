@@ -76,7 +76,7 @@ export default function FilterPanel({
         <div className="flex items-center justify-between">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="hover:text-brand-600 dark:hover:text-brand-400 flex items-center gap-2 text-lg font-light text-neutral-900 transition-colors dark:text-neutral-100"
+            className="flex items-center gap-2 text-lg font-light text-neutral-900 transition-colors hover:text-brand-600 dark:text-neutral-100 dark:hover:text-brand-400"
           >
             {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             <Filter size={20} />
@@ -94,7 +94,7 @@ export default function FilterPanel({
       {!isExpanded && hasActiveFilters && (
         <div className="flex flex-wrap gap-2 rounded-lg bg-neutral-50 p-3 dark:bg-neutral-800">
           {filters.searchTerm && (
-            <span className="bg-brand-100 text-brand-800 dark:bg-brand-900 dark:text-brand-200 inline-flex items-center gap-1 rounded px-2 py-1 text-xs">
+            <span className="inline-flex items-center gap-1 rounded bg-brand-100 px-2 py-1 text-xs text-brand-800 dark:bg-brand-900 dark:text-brand-200">
               <Search size={10} />
               {filters.searchTerm}
             </span>

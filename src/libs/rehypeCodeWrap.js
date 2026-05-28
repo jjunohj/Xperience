@@ -10,9 +10,7 @@ export default function rehypeCodeWrap() {
       if (!properties.className || !properties.className.length) return;
 
       // parse code title
-      const [lang, filename] = properties.className[0]
-        .split(":")
-        .map((e) => e.trim());
+      const [lang, filename] = properties.className[0].split(":").map((e) => e.trim());
       if (filename) {
         properties.className = lang;
         node.properties.title = filename;

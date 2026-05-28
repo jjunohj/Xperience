@@ -34,10 +34,7 @@ const ALL_TABS: readonly Tab[] = [
 export default function RecentTabsCarousel({ postsSlot, readingsSlot }: RecentTabsCarouselProps) {
   const reduceMotion = useReducedMotion();
   const tabsId = useId();
-  const visibleTabs = useMemo<readonly Tab[]>(
-    () => (readingsSlot ? ALL_TABS : ALL_TABS.slice(0, 1)),
-    [readingsSlot],
-  );
+  const visibleTabs = useMemo<readonly Tab[]>(() => (readingsSlot ? ALL_TABS : ALL_TABS.slice(0, 1)), [readingsSlot]);
 
   const [activeId, setActiveId] = useState<TabId>("posts");
   const tabButtonRefs = useRef<Partial<Record<TabId, HTMLButtonElement | null>>>({});
@@ -160,10 +157,8 @@ export default function RecentTabsCarousel({ postsSlot, readingsSlot }: RecentTa
         <div
           className="relative mx-9 overflow-hidden sm:mx-11"
           style={{
-            maskImage:
-              "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
-            WebkitMaskImage:
-              "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
+            maskImage: "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
           }}
         >
           <motion.div
@@ -172,9 +167,7 @@ export default function RecentTabsCarousel({ postsSlot, readingsSlot }: RecentTa
             initial={false}
             animate={{ x: xOffset }}
             transition={
-              !measured || reduceMotion
-                ? { duration: 0 }
-                : { type: "spring", stiffness: 320, damping: 32, mass: 0.8 }
+              !measured || reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 320, damping: 32, mass: 0.8 }
             }
           >
             {visibleTabs.map((tab) => {
@@ -193,7 +186,7 @@ export default function RecentTabsCarousel({ postsSlot, readingsSlot }: RecentTa
                   tabIndex={isActive ? 0 : -1}
                   onClick={() => goTo(tab.id)}
                   className={cn(
-                    "shrink-0 outline-none transition-all duration-300 text-base sm:text-2xl sm:tracking-tight",
+                    "shrink-0 text-base outline-none transition-all duration-300 sm:text-2xl sm:tracking-tight",
                     "focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-4",
                     isActive
                       ? "font-semibold text-neutral-900 opacity-100 dark:text-neutral-100"
@@ -224,11 +217,7 @@ export default function RecentTabsCarousel({ postsSlot, readingsSlot }: RecentTa
           className="flex w-full will-change-transform"
           initial={false}
           animate={{ x: `-${activeIndex * 100}%` }}
-          transition={
-            reduceMotion
-              ? { duration: 0 }
-              : { type: "spring", stiffness: 260, damping: 32, mass: 0.9 }
-          }
+          transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 260, damping: 32, mass: 0.9 }}
         >
           <Panel tabsId={tabsId} id="posts" isActive={activeId === "posts"}>
             {postsSlot}

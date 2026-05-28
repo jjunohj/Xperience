@@ -29,11 +29,7 @@ export default function Toc() {
               className={cn(
                 "block text-xs font-light text-neutral-400 transition-all hover:scale-105",
                 currentId === heading.id ? "text-primary font-semibold" : "",
-                heading.tagName === "H3"
-                  ? "ml-2"
-                  : heading.tagName === "H4"
-                    ? "ml-4"
-                    : "",
+                heading.tagName === "H3" ? "ml-2" : heading.tagName === "H4" ? "ml-4" : "",
               )}
             >
               {heading.textContent}

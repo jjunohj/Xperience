@@ -9,20 +9,9 @@ export interface IconTextProps {
   className?: string;
 }
 
-export default function IconText({
-  Icon,
-  iconSize = 14,
-  text,
-  className,
-}: IconTextProps) {
+export default function IconText({ Icon, iconSize = 14, text, className }: IconTextProps) {
   return (
-    <div
-      className={cn(
-        "flex items-center ",
-        className ?? "gap-1 text-xs",
-        `h-[${iconSize}px]`,
-      )}
-    >
+    <div className={cn("flex items-center ", className ?? "gap-1 text-xs", `h-[${iconSize}px]`)}>
       <Icon width={iconSize} height={iconSize} />
       <span className={cn("text-center", `h-[${iconSize}px]`)}>{text}</span>
     </div>

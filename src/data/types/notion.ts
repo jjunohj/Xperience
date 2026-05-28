@@ -102,6 +102,8 @@ export interface BookDetail extends BookMetadata {
   content: string;
   readingTime: number;
   wordCount: number;
+  prevBook?: PageReference;
+  nextBook?: PageReference;
 }
 
 // 관계 포스트 처리 결과

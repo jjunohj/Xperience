@@ -64,15 +64,20 @@ export default function MarqueeText({ text, className, speed = 30, startDelay = 
 
   // 저자는 우측 자연 너비(shrink-0)를 유지하고, 제목은 남은 폭만 차지(min-w-0)한다.
   // flex-grow는 주지 않아 짧은 제목은 저자 바로 옆에 붙는다.
+  // 정적/마퀴 두 상태 모두 overflow-hidden·whitespace-nowrap을 유지해 측정 조건을
+  // 일치시키고, 정적일 때만 text-ellipsis로 말줄임을 보인다.
   return (
-    <h3 ref={containerRef} className={cn("min-w-0", isMarquee ? "overflow-hidden" : "truncate", className)}>
+    <h3
+      ref={containerRef}
+      className={cn("min-w-0 overflow-hidden whitespace-nowrap", !isMarquee && "text-ellipsis", className)}
+    >
       {isMarquee ? (
         <MarqueeInner
           text={text}
           distance={distance}
           speed={Math.max(speed, 1)}
-          startDelay={startDelay}
-          endDelay={endDelay}
+          startDelay={Math.max(0, startDelay)}
+          endDelay={Math.max(0, endDelay)}
         />
       ) : (
         text

@@ -46,12 +46,12 @@ export default function Profile() {
       </div>
       <div className="motion-safe:animate-profileReveal motion-safe:[animation-delay:140ms] motion-reduce:animate-none">
         <Image
-          src="/images/profile.png"
+          src="/images/linkedinProfile.jpeg"
           alt="Profile"
           width={360}
-          height={360}
+          height={480}
           priority
-          className="h-[160px] w-[160px] rounded-full object-cover shadow-2xl shadow-transparent sm:h-[280px] sm:w-[280px] lg:h-[320px] lg:w-[320px] "
+          className="h-[240px] w-[160px] object-cover shadow-2xl shadow-transparent sm:h-[320px] sm:w-[280px] lg:h-[480px] lg:w-[320px] "
         />
       </div>
     </section>

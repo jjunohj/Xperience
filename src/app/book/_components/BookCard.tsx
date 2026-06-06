@@ -5,6 +5,7 @@ import Link from "next/link";
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
 import { BookMetadata } from "@/src/data/types/notion";
+import MarqueeText from "./MarqueeText";
 
 interface BookCardProps {
   book: BookMetadata;
@@ -100,9 +101,10 @@ export default function BookCard({ book }: BookCardProps) {
         )}
 
         <div className="flex items-end gap-2">
-          <h3 className="line-clamp-1 text-xl font-bold text-neutral-900 transition-colors dark:text-neutral-100">
-            {book.title || "제목 없음"}
-          </h3>
+          <MarqueeText
+            text={book.title || "제목 없음"}
+            className="text-xl font-bold text-neutral-900 transition-colors dark:text-neutral-100"
+          />
           <p className="shrink-0 text-sm text-neutral-600 dark:text-neutral-300">{book.author || "저자 미기재"}</p>
         </div>
 

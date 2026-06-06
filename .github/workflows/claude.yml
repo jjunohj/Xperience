@@ -7,58 +7,42 @@ on:
     types: [created]
   issues:
     types: [opened, assigned]
-  pull_request_review:
-    types: [submitted]
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+
+# 같은 PR/이슈 + 같은 이벤트 종류에서 새 이벤트가 오면 진행 중이던 실행은 취소 (러너 시간 절약).
+# event_name을 그룹에 포함해야 함: track_progress가 다는 진행 코멘트(issue_comment)가
+# 진행 중이던 PR 리뷰(pull_request)를 자기 취소(self-cancel)하는 것을 방지한다.
+concurrency:
+  group: claude-${{ github.event_name }}-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   claude:
-    # Temporary switch: set to true to re-enable this workflow.
-    if: ${{ false }}
+    # 댓글/이슈 이벤트는 @claude 멘션이 있을 때만,
+    # PR 이벤트는 초안(draft)이 아닐 때만 실행
+    if: |
+      (github.event_name == 'pull_request' && github.event.pull_request.draft == false) ||
+      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude'))) ||
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude'))
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pull-requests: read
-      issues: read
+      pull-requests: write
+      issues: write
       id-token: write
-      actions: read # Required for Claude to read CI results on PRs
+      actions: read # github_ci MCP(리뷰 시 CI 상태 조회)에 필요
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
-          fetch-depth: 1
+          fetch-depth: 0
 
-      - name: Run Claude Code
-        id: claude
-        uses: anthropics/claude-code-action@beta
+      - uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-
-          # This is an optional setting that allows Claude to read CI results on PRs
-          additional_permissions: |
-            actions: read
-
-          # Optional: Specify model (defaults to Claude Sonnet 4, uncomment for Claude Opus 4.1)
-          # model: "claude-opus-4-1-20250805"
-
-          # Optional: Customize the trigger phrase (default: @claude)
-          # trigger_phrase: "/claude"
-
-          # Optional: Trigger when specific user is assigned to an issue
-          # assignee_trigger: "claude-bot"
-
-          # Optional: Allow Claude to run specific commands
-          # allowed_tools: "Bash(npm install),Bash(npm run build),Bash(npm run test:*),Bash(npm run lint:*)"
-
-          # Optional: Add custom instructions for Claude to customize its behavior for your project
-          custom_instructions: |
-            한국어로 응답해주세요. 다음 가이드라인을 따라주세요:
-            - 코딩 표준을 준수하세요
-            - 새로운 코드에는 테스트를 포함하세요
-            - 새로운 파일은 TypeScript를 사용하세요
-            - Next.js 15 App Router 패턴을 따라주세요
-            - 문제점을 발견하면 구체적인 개선 코드를 제시해주세요
-            - 변경 전/후 코드 비교를 포함해주세요
-
-          # Optional: Custom environment variables for Claude
-          # claude_env: |
-          #   NODE_ENV: test
+          # PR 이벤트일 때만 진행상황 추적 코멘트 + 인라인 리뷰 모드 활성화
+          track_progress: ${{ github.event_name == 'pull_request' }}
+          # PR이면 자동 코드 리뷰, 이슈/댓글이면 @claude 멘션에 대화형으로 반응
+          prompt: >-
+            ${{ github.event_name == 'pull_request' && '이 PR의 변경사항(diff)을 코드 리뷰해줘. 우선순위는 (1) 버그·로직 오류·엣지케이스 (2) 보안 취약점 (3) 성능 회귀 (4) 레포 컨벤션 위반 — AGENTS.md / DESIGN.md / 디자인 토큰(--pf-*) / 커밋·네이밍 규칙. 확신이 높은 핵심 이슈만 골라 해당 코드 라인에 인라인 코멘트로 남기고, 각 코멘트는 「문제 → 이유 → 수정 제안」 순서로 간결하게 작성해줘. 단순 취향 차이나 사소한 칭찬은 생략하고, 마지막에 한국어로 3~5줄 요약과 머지 판단(LGTM / 변경요청)을 정리해줘. 모든 출력은 한국어로.' || '' }}

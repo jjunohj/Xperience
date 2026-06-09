@@ -1,0 +1,59 @@
+import { Globe } from "lucide-react";
+import type { OgData } from "~/data/types/notion";
+
+interface LinkCardProps {
+  url: string;
+  data?: OgData;
+}
+
+function hostname(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+}
+
+export default function LinkCard({ url, data }: LinkCardProps) {
+  const title = data?.title || hostname(url);
+  const description = data?.description;
+  const image = data?.image;
+  const favicon = data?.favicon;
+  const site = data?.siteName || hostname(url);
+
+  return (
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="my-6 flex overflow-hidden rounded-lg border border-neutral-200 no-underline transition-colors hover:border-brand-400 hover:shadow-md dark:border-neutral-700 dark:hover:border-brand-500"
+    >
+      <div className="flex min-w-0 flex-1 flex-col justify-between gap-2 p-4">
+        <div className="min-w-0">
+          <p className="line-clamp-2 font-medium text-neutral-900 dark:text-neutral-100">{title}</p>
+          {description && (
+            <p className="mt-1 line-clamp-2 text-sm text-neutral-600 dark:text-neutral-400">{description}</p>
+          )}
+        </div>
+        <div className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400">
+          {favicon ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={favicon} alt="" width={16} height={16} className="h-4 w-4 rounded-sm" loading="lazy" />
+          ) : (
+            <Globe className="h-4 w-4" aria-hidden="true" />
+          )}
+          <span className="truncate">{site}</span>
+        </div>
+      </div>
+      {image && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={image}
+          alt=""
+          loading="lazy"
+          className="hidden h-auto w-32 shrink-0 self-stretch object-cover sm:block md:w-44"
+        />
+      )}
+    </a>
+  );
+}

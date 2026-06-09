@@ -91,6 +91,14 @@ function fallbackOg(url: string): OgData {
 }
 
 async function fetchHtml(url: string): Promise<string | null> {
+  // http/https만 허용 (file:, data: 등 차단)
+  try {
+    const protocol = new URL(url).protocol;
+    if (protocol !== "http:" && protocol !== "https:") return null;
+  } catch {
+    return null;
+  }
+
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
   try {

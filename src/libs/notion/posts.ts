@@ -1,10 +1,12 @@
 import { APIResponseError, isFullPage } from "@notionhq/client";
 import { cache } from "react";
 
-import type { PageMetadata, PageReference, PostDetail, RelatedPostsResult } from "@/src/data/types/notion";
+import type { OgData, PageMetadata, PageReference, PostDetail, RelatedPostsResult } from "@/src/data/types/notion";
+import { NOTION_BOOKMARK_MARKER } from "@/src/data/constants/notion";
 import { pageIdToSlug, slugToPageId } from "../../utils/notion-slug";
 import { calculateReadingTime, calculateWordCount } from "../../utils/post";
 import { getFromDevCache, setToDevCache } from "../cache";
+import { getOgData } from "../og/og";
 
 import { devCache, notion } from "./client";
 import { extractNotionRawData } from "./extractors";
@@ -13,6 +15,20 @@ import { queryAllPages } from "./queries";
 import { getPageContentAsMarkdown } from "./transformers";
 
 export type SitemapPageMetadata = Pick<PageMetadata, "slug" | "date">;
+
+// 변환된 마크다운에서 북마크 마커 URL을 수집해 OG를 병렬 조회한다.
+const BOOKMARK_LINK_PATTERN = new RegExp(`\\[${NOTION_BOOKMARK_MARKER}\\]\\(([^)]+)\\)`, "g");
+
+async function resolveLinkCards(markdown: string): Promise<Record<string, OgData>> {
+  const urls = new Set<string>();
+  for (const match of markdown.matchAll(BOOKMARK_LINK_PATTERN)) {
+    if (match[1]) urls.add(match[1]);
+  }
+  if (urls.size === 0) return {};
+
+  const entries = await Promise.all(Array.from(urls).map(async (url) => [url, await getOgData(url)] as const));
+  return Object.fromEntries(entries);
+}
 
 /**
  * 관계 페이지 ID를 받아 참조 정보를 반환하는 함수
@@ -162,6 +178,7 @@ export const getPostDetail = cache(async function (slug: string): Promise<PostDe
     const { prevPost, nextPost } = await getRelatedPosts(basicMetadata.prevPageId, basicMetadata.nextPageId);
 
     const content = await getPageContentAsMarkdown(pageId);
+    const linkCards = await resolveLinkCards(content);
 
     const fullPost: PostDetail = {
       id: basicMetadata.id,
@@ -177,6 +194,7 @@ export const getPostDetail = cache(async function (slug: string): Promise<PostDe
       content,
       readingTime: calculateReadingTime(content),
       wordCount: calculateWordCount(content),
+      linkCards,
       prevPost,
       nextPost,
     };

@@ -1,11 +1,14 @@
 "use client";
 
+import { Children, isValidElement, type ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
+import LinkCard from "~/components/mdx/LinkCard";
+import { NOTION_BOOKMARK_MARKER } from "@/src/data/constants/notion";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
@@ -66,6 +69,17 @@ function isExternalHref(href: string): boolean {
   } catch {
     return false;
   }
+}
+
+// 링크 children 텍스트가 북마크 센티넬인지 검사
+function isBookmarkMarker(children: ReactNode): boolean {
+  const text = Array.isArray(children) ? children.join("") : String(children ?? "");
+  return text === NOTION_BOOKMARK_MARKER;
+}
+
+// react-markdown이 만든 a 요소(매핑 컴포넌트)의 props.children이 마커인지 검사
+function isBookmarkParagraphChild(child: ReactNode): boolean {
+  return isValidElement<{ children?: ReactNode }>(child) && isBookmarkMarker(child.props.children);
 }
 
 export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
@@ -374,6 +388,11 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
                     );
                   },
                   a({ href, children, ...props }) {
+                    // 북마크 마커 -> 링크 카드
+                    if (href && isBookmarkMarker(children)) {
+                      return <LinkCard url={href} data={post.linkCards?.[href]} />;
+                    }
+
                     const normalizedHref = normalizePostHref(href);
                     const isExternal = isExternalHref(normalizedHref);
 
@@ -393,6 +412,12 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
                     return <NotionBlockquote {...props} />;
                   },
                   p({ children, ...props }: any) {
+                    // 북마크 카드만 든 문단: <p> 래핑 없이 그대로 (카드는 블록 레벨)
+                    const childArray = Children.toArray(children);
+                    if (childArray.length === 1 && isBookmarkParagraphChild(childArray[0])) {
+                      return <>{children}</>;
+                    }
+
                     // 이미지가 포함된 p 태그를 div로 변환
                     if (typeof children !== "string" && children?.props?.src) {
                       return <div {...props}>{children}</div>;

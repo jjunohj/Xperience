@@ -1,5 +1,6 @@
 import type {
   BlockObjectResponse,
+  BookmarkBlockObjectResponse,
   CalloutBlockObjectResponse,
   CodeBlockObjectResponse,
   EmbedBlockObjectResponse,
@@ -10,7 +11,7 @@ import type {
 } from "@notionhq/client/build/src/api-endpoints";
 import type { CustomTransformer } from "notion-to-md/build/types";
 
-import { NOTION_CALLOUT_MARKER } from "@/src/data/constants/notion";
+import { NOTION_BOOKMARK_MARKER, NOTION_CALLOUT_MARKER } from "@/src/data/constants/notion";
 import { getFromDevCache, setToDevCache } from "../cache";
 import { devCache, n2m, notion } from "./client";
 
@@ -200,6 +201,17 @@ n2m.setCustomTransformer("embed", (async (block: BlockObjectResponse) => {
     return `[🔗 ${caption}](${url})\n*${caption}*\n`;
   }
   return `[🔗 Embed](${url})\n`;
+}) as CustomTransformer);
+
+// 북마크 블록 변환 -> 센티넬 마커. OG 조회/렌더는 posts.ts + LinkCard가 담당.
+n2m.setCustomTransformer("bookmark", (async (block: BlockObjectResponse) => {
+  const bookmarkBlock = block as BookmarkBlockObjectResponse;
+  const url = bookmarkBlock.bookmark.url;
+
+  if (!url) return "";
+
+  // 단독 문단으로 떨어지도록 앞뒤 줄바꿈 보장
+  return `[${NOTION_BOOKMARK_MARKER}](${url})\n`;
 }) as CustomTransformer);
 
 /**

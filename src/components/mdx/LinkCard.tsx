@@ -28,14 +28,12 @@ export default function LinkCard({ url, data }: LinkCardProps) {
       rel="noopener noreferrer"
       className="not-prose my-6 flex overflow-hidden rounded-lg border border-neutral-200 bg-neutral-50 no-underline transition-colors hover:border-brand-400 hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800 dark:hover:border-brand-500"
     >
-      <div className="flex min-w-0 flex-1 flex-col justify-between gap-2 p-4">
-        <div className="min-w-0">
-          <p className="line-clamp-2 font-medium text-neutral-900 dark:text-neutral-100">{title}</p>
-          {description && (
-            <p className="mt-1 line-clamp-2 text-sm text-neutral-600 dark:text-neutral-400">{description}</p>
-          )}
-        </div>
-        <div className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400">
+      {/* 텍스트 영역 (세로 중앙 정렬) */}
+      <div className="flex min-w-0 flex-1 flex-col justify-center gap-1 p-4">
+        <p className="line-clamp-2 font-medium text-neutral-900 dark:text-neutral-100">{title}</p>
+        {description && <p className="line-clamp-2 text-sm text-neutral-600 dark:text-neutral-400">{description}</p>}
+        {/* [favicon] 사이트명 — 설명 바로 아래, 항상 붙어서 */}
+        <div className="mt-1 flex min-w-0 items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400">
           {favicon && !faviconError ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -53,13 +51,15 @@ export default function LinkCard({ url, data }: LinkCardProps) {
           <span className="truncate">{site}</span>
         </div>
       </div>
+
+      {/* 썸네일 — 최소 반응형에서도 유지, 폭만 축소 */}
       {image && !imageError && (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={image}
           alt=""
           loading="lazy"
-          className="h-auto w-24 shrink-0 self-stretch object-cover sm:w-32 md:w-44"
+          className="w-24 shrink-0 self-stretch object-cover sm:w-32 md:w-44"
           onError={() => setImageError(true)}
         />
       )}

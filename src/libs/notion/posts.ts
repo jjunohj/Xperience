@@ -17,7 +17,8 @@ import { getPageContentAsMarkdown } from "./transformers";
 export type SitemapPageMetadata = Pick<PageMetadata, "slug" | "date">;
 
 // 변환된 마크다운에서 북마크 마커 URL을 수집해 OG를 병렬 조회한다.
-const BOOKMARK_LINK_PATTERN = new RegExp(`\\[${NOTION_BOOKMARK_MARKER}\\]\\(([^)]+)\\)`, "g");
+// 마커는 항상 한 줄 단독(`[marker](url)\n`)이라 줄 끝 닫는 괄호까지 욕심껏 매칭 -> URL 내 괄호 보존
+const BOOKMARK_LINK_PATTERN = new RegExp(`\\[${NOTION_BOOKMARK_MARKER}\\]\\((.+)\\)\\s*$`, "gm");
 
 async function resolveLinkCards(markdown: string): Promise<Record<string, OgData>> {
   const urls = new Set<string>();
@@ -26,7 +27,16 @@ async function resolveLinkCards(markdown: string): Promise<Record<string, OgData
   }
   if (urls.size === 0) return {};
 
-  const entries = await Promise.all(Array.from(urls).map(async (url) => [url, await getOgData(url)] as const));
+  // getOgData는 보통 throw하지 않지만, 단일 URL 실패가 포스트 전체 렌더를 막지 않도록 방어
+  const entries = await Promise.all(
+    Array.from(urls).map(async (url) => {
+      try {
+        return [url, await getOgData(url)] as const;
+      } catch {
+        return [url, { url, title: url }] as const;
+      }
+    }),
+  );
   return Object.fromEntries(entries);
 }
 

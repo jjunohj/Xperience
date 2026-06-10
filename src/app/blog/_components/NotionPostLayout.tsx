@@ -431,9 +431,12 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
                   },
                   p({ children, ...props }: any) {
                     // 북마크 카드만 든 문단: <p> 래핑 없이 그대로 (카드는 블록 레벨)
-                    const childArray = Children.toArray(children);
+                    // 공백/줄바꿈 문자열 자식은 제외하고 카드 단독 여부 판별 (hydration 안전)
+                    const childArray = Children.toArray(children).filter(
+                      (child) => !(typeof child === "string" && child.trim() === ""),
+                    );
                     if (childArray.length === 1 && isBookmarkParagraphChild(childArray[0])) {
-                      return <>{children}</>;
+                      return <>{childArray[0]}</>;
                     }
 
                     // 이미지가 포함된 p 태그를 div로 변환

@@ -26,7 +26,7 @@ export default function LinkCard({ url, data }: LinkCardProps) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="not-prose my-6 flex max-w-lg overflow-hidden rounded-lg border border-neutral-200 bg-neutral-50 no-underline transition-colors hover:border-brand-400 hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800 dark:hover:border-brand-500"
+      className="not-prose mx-auto my-6 flex max-w-lg overflow-hidden rounded-lg border border-neutral-200 bg-neutral-50 no-underline transition-colors hover:border-brand-400 hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800 dark:hover:border-brand-500"
     >
       {/* 텍스트 영역 (세로 중앙 정렬) */}
       <div className="flex min-w-0 flex-1 flex-col justify-center gap-1 p-4">

@@ -26,7 +26,7 @@ export default function LinkCard({ url, data }: LinkCardProps) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="my-6 flex overflow-hidden rounded-lg border border-neutral-200 bg-neutral-50 no-underline transition-colors hover:border-brand-400 hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800 dark:hover:border-brand-500"
+      className="not-prose my-6 flex overflow-hidden rounded-lg border border-neutral-200 bg-neutral-50 no-underline transition-colors hover:border-brand-400 hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800 dark:hover:border-brand-500"
     >
       <div className="flex min-w-0 flex-1 flex-col justify-between gap-2 p-4">
         <div className="min-w-0">
@@ -43,12 +43,12 @@ export default function LinkCard({ url, data }: LinkCardProps) {
               alt=""
               width={16}
               height={16}
-              className="h-4 w-4 rounded-sm"
+              className="h-4 w-4 shrink-0 rounded-sm"
               loading="lazy"
               onError={() => setFaviconError(true)}
             />
           ) : (
-            <Globe className="h-4 w-4" aria-hidden="true" />
+            <Globe className="h-4 w-4 shrink-0" aria-hidden="true" />
           )}
           <span className="truncate">{site}</span>
         </div>
@@ -59,7 +59,7 @@ export default function LinkCard({ url, data }: LinkCardProps) {
           src={image}
           alt=""
           loading="lazy"
-          className="hidden h-auto w-32 shrink-0 self-stretch object-cover sm:block md:w-44"
+          className="h-auto w-24 shrink-0 self-stretch object-cover sm:w-32 md:w-44"
           onError={() => setImageError(true)}
         />
       )}

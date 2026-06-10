@@ -1,5 +1,5 @@
 import { isValidElement, type ReactNode } from "react";
-import { NOTION_BOOKMARK_MARKER } from "@/src/data/constants/notion";
+import { NOTION_BOOKMARK_MARKER } from "~/data/constants/notion";
 
 /**
  * 북마크 링크 카드 렌더링용 공용 헬퍼.

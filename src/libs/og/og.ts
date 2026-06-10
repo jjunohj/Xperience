@@ -10,8 +10,9 @@ const MAX_HTML_BYTES = 200_000;
 const MAX_REDIRECTS = 5;
 const USER_AGENT = "Mozilla/5.0 (compatible; XperiencesBot/1.0; +https://blog.xuuno.me)";
 // 사설/루프백/링크로컬/메타데이터(169.254.169.254 등) 호스트 차단 (SSRF 완화)
+// IPv4 사설/루프백 + IPv6 루프백(::1)/링크로컬(fe80:)/ULA(fc00::/7) 포함. 콜론 요구로 도메인 오탐 방지.
 const BLOCKED_HOST_PATTERN =
-  /^(localhost|0\.0\.0\.0|\[?::1\]?|127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|169\.254\.)/i;
+  /^(localhost|0\.0\.0\.0|\[?::1\]?|\[?fe80:|\[?f[cd][0-9a-f]{2}:|127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|169\.254\.)/i;
 
 // 파서 로직이 바뀌면 이 버전을 올려 기존 캐시를 무효화한다.
 const OG_CACHE_VERSION = "v2";
@@ -230,7 +231,7 @@ export async function resolveLinkCards(markdown: string): Promise<Record<string,
       try {
         return [url, await getOgData(url)] as const;
       } catch {
-        return [url, { url, title: url }] as const;
+        return [url, fallbackOg(url)] as const;
       }
     }),
   );

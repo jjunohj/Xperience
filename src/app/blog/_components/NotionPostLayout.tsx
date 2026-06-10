@@ -1,11 +1,14 @@
 "use client";
 
+import { Children } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
+import LinkCard from "~/components/mdx/LinkCard";
+import { decodeHrefSafe, isBookmarkMarker, isBookmarkParagraphChild } from "~/components/mdx/bookmarkMarker";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
@@ -374,6 +377,12 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
                     );
                   },
                   a({ href, children, ...props }) {
+                    // 북마크 마커 -> 링크 카드
+                    if (href && isBookmarkMarker(children)) {
+                      const og = post.linkCards?.[href] ?? post.linkCards?.[decodeHrefSafe(href)];
+                      return <LinkCard url={href} data={og} />;
+                    }
+
                     const normalizedHref = normalizePostHref(href);
                     const isExternal = isExternalHref(normalizedHref);
 
@@ -393,6 +402,15 @@ export default function NotionPostLayout({ post }: NotionPostLayoutProps) {
                     return <NotionBlockquote {...props} />;
                   },
                   p({ children, ...props }: any) {
+                    // 북마크 카드만 든 문단: <p> 래핑 없이 그대로 (카드는 블록 레벨)
+                    // 공백/줄바꿈 문자열 자식은 제외하고 카드 단독 여부 판별 (hydration 안전)
+                    const childArray = Children.toArray(children).filter(
+                      (child) => !(typeof child === "string" && child.trim() === ""),
+                    );
+                    if (childArray.length === 1 && isBookmarkParagraphChild(childArray[0])) {
+                      return <>{childArray[0]}</>;
+                    }
+
                     // 이미지가 포함된 p 태그를 div로 변환
                     if (typeof children !== "string" && children?.props?.src) {
                       return <div {...props}>{children}</div>;

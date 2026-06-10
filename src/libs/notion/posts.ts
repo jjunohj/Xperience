@@ -5,6 +5,7 @@ import type { PageMetadata, PageReference, PostDetail, RelatedPostsResult } from
 import { pageIdToSlug, slugToPageId } from "../../utils/notion-slug";
 import { calculateReadingTime, calculateWordCount } from "../../utils/post";
 import { getFromDevCache, setToDevCache } from "../cache";
+import { resolveLinkCards } from "../og/og";
 
 import { devCache, notion } from "./client";
 import { extractNotionRawData } from "./extractors";
@@ -162,6 +163,7 @@ export const getPostDetail = cache(async function (slug: string): Promise<PostDe
     const { prevPost, nextPost } = await getRelatedPosts(basicMetadata.prevPageId, basicMetadata.nextPageId);
 
     const content = await getPageContentAsMarkdown(pageId);
+    const linkCards = await resolveLinkCards(content);
 
     const fullPost: PostDetail = {
       id: basicMetadata.id,
@@ -177,6 +179,7 @@ export const getPostDetail = cache(async function (slug: string): Promise<PostDe
       content,
       readingTime: calculateReadingTime(content),
       wordCount: calculateWordCount(content),
+      linkCards,
       prevPost,
       nextPost,
     };

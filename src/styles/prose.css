@@ -98,7 +98,7 @@
   @apply text-mute;
 }
 
-.prose p {
+.prose p:not(.not-prose *) {
   font-size: 1rem; /* 16px */
   line-height: 1.6; /* 25.6px */
   margin-top: 1.25rem;
@@ -106,7 +106,7 @@
 }
 
 @media (min-width: 768px) {
-  .prose p {
+  .prose p:not(.not-prose *) {
     font-size: 1.0625rem; /* 17px */
     line-height: 1.65; /* 28px */
   }
@@ -215,7 +215,7 @@
   border-top-width: 1px;
 }
 
-.prose img {
+.prose img:not(.not-prose *) {
   @apply mx-auto my-0;
 
   max-width: 100%;
@@ -224,7 +224,7 @@
   object-fit: contain;
 }
 
-.prose img + span {
+.prose img:not(.not-prose *) + span {
   display: block;
   margin-top: 0.5rem;
 }

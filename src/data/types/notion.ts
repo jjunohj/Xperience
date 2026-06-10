@@ -72,11 +72,23 @@ export interface PageMetadata extends PageBasicInfo {
   nextPost?: PageReference;
 }
 
+// 링크 카드용 Open Graph 데이터
+export interface OgData {
+  url: string;
+  title: string;
+  description?: string;
+  image?: string;
+  favicon?: string;
+  siteName?: string;
+}
+
 // 모든 정보가 포함된 완전한 포스트 데이터 (콘텐츠 포함)
 export interface PostDetail extends PageMetadata {
   content: string;
   readingTime: number;
   wordCount: number;
+  // 북마크 URL -> OG 데이터. 서버 변환 시 채워짐.
+  linkCards?: Record<string, OgData>;
 }
 
 // 책 페이지 기본 메타데이터
@@ -102,6 +114,8 @@ export interface BookDetail extends BookMetadata {
   content: string;
   readingTime: number;
   wordCount: number;
+  // 북마크 URL -> OG 데이터. 서버 변환 시 채워짐.
+  linkCards?: Record<string, OgData>;
   prevBook?: PageReference;
   nextBook?: PageReference;
 }

@@ -5,6 +5,7 @@ import type { BookDetail, BookMetadata, PageReference } from "@/src/data/types/n
 import { slugToPageId } from "../../utils/notion-slug";
 import { calculateReadingTime, calculateWordCount } from "../../utils/post";
 import { getFromDevCache, setToDevCache } from "../cache";
+import { resolveLinkCards } from "../og/og";
 
 import { devCache, notion } from "./client";
 import { extractNotionBookData } from "./extractors";
@@ -132,12 +133,14 @@ export const getBookDetail = cache(async function (slug: string): Promise<BookDe
     }
 
     const [content, adjacent] = await Promise.all([getPageContentAsMarkdown(pageId), getAdjacentBooks(decodedSlug)]);
+    const linkCards = await resolveLinkCards(content);
 
     const bookDetail: BookDetail = {
       ...metadata,
       content,
       readingTime: calculateReadingTime(content),
       wordCount: calculateWordCount(content),
+      linkCards,
       ...adjacent,
     };
 

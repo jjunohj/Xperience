@@ -11,8 +11,9 @@ interface LinkCardProps {
 }
 
 export default function LinkCard({ url, data }: LinkCardProps) {
-  // favicon URL이 404 등으로 깨지면 Globe 아이콘으로 폴백
+  // favicon/썸네일 URL이 404 등으로 깨지면 각각 Globe 폴백 / 숨김 처리
   const [faviconError, setFaviconError] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   const title = data?.title || getHostname(url);
   const description = data?.description;
@@ -52,13 +53,14 @@ export default function LinkCard({ url, data }: LinkCardProps) {
           <span className="truncate">{site}</span>
         </div>
       </div>
-      {image && (
+      {image && !imageError && (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={image}
           alt=""
           loading="lazy"
           className="hidden h-auto w-32 shrink-0 self-stretch object-cover sm:block md:w-44"
+          onError={() => setImageError(true)}
         />
       )}
     </a>

@@ -85,8 +85,10 @@ function extractFavicon(html: string, baseUrl: string): string | undefined {
 export function parseOg(html: string, url: string): OgData {
   const title = extractMeta(html, "og:title", "property") ?? extractTitleTag(html) ?? getHostname(url);
   const description = extractMeta(html, "og:description", "property") ?? extractMeta(html, "description", "name");
+  // og:image는 http(s)만 허용 (data: URI가 Redis에 캐싱/렌더되는 것 방지)
   const imageRaw = extractMeta(html, "og:image", "property");
-  const image = imageRaw ? absolutize(imageRaw, url) : undefined;
+  const imageAbs = imageRaw ? absolutize(imageRaw, url) : undefined;
+  const image = imageAbs && /^https?:\/\//i.test(imageAbs) ? imageAbs : undefined;
   const siteName = extractMeta(html, "og:site_name", "property") ?? getHostname(url);
   const favicon = extractFavicon(html, url);
 

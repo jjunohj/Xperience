@@ -114,6 +114,8 @@ export interface BookDetail extends BookMetadata {
   content: string;
   readingTime: number;
   wordCount: number;
+  // 북마크 URL -> OG 데이터. 서버 변환 시 채워짐.
+  linkCards?: Record<string, OgData>;
   prevBook?: PageReference;
   nextBook?: PageReference;
 }

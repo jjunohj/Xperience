@@ -13,8 +13,11 @@ const USER_AGENT = "Mozilla/5.0 (compatible; XperiencesBot/1.0; +https://blog.xu
 const BLOCKED_HOST_PATTERN =
   /^(localhost|0\.0\.0\.0|\[?::1\]?|127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|169\.254\.)/i;
 
+// 파서 로직이 바뀌면 이 버전을 올려 기존 캐시를 무효화한다.
+const OG_CACHE_VERSION = "v2";
+
 function cacheKey(url: string): string {
-  return `og:${encodeURIComponent(url)}`;
+  return `og:${OG_CACHE_VERSION}:${encodeURIComponent(url)}`;
 }
 
 // http/https + 비차단 호스트만 허용 (리다이렉트 각 홉마다 호출해 체인 SSRF 차단)
@@ -37,16 +40,27 @@ function absolutize(maybeRelative: string, baseUrl: string): string {
   }
 }
 
+function fromCodePointSafe(cp: number): string {
+  try {
+    return Number.isFinite(cp) ? String.fromCodePoint(cp) : "";
+  } catch {
+    return "";
+  }
+}
+
 function decodeEntities(s: string): string {
-  return s
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&apos;/g, "'")
-    .replace(/&#0?39;/g, "'")
-    .replace(/&#x27;/gi, "'")
-    .replace(/&nbsp;/g, " ");
+  return (
+    s
+      // 숫자 문자 참조 (16진수 &#xHHHH; / 10진수 &#NNNN;) — 한글 등 모든 유니코드 처리
+      .replace(/&#x([0-9a-f]+);/gi, (_, hex: string) => fromCodePointSafe(parseInt(hex, 16)))
+      .replace(/&#(\d+);/g, (_, dec: string) => fromCodePointSafe(parseInt(dec, 10)))
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"')
+      .replace(/&apos;/g, "'")
+      .replace(/&nbsp;/g, " ")
+      .replace(/&amp;/g, "&")
+  ); // amp는 마지막에 (새 엔티티 생성 방지)
 }
 
 // content를 양쪽 속성 순서(property/content, content/property) 모두에서 추출

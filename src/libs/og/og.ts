@@ -1,10 +1,12 @@
 import type { OgData } from "~/data/types/notion";
 import { getRedis } from "~/libs/redis";
+import { getHostname } from "~/utils/url";
 
 const OG_TTL_SECONDS = 60 * 60 * 24 * 14; // 성공: 14일
 const OG_FAIL_TTL_SECONDS = 60 * 60 * 6; // 실패/없음: 6시간 (부정 캐시)
 const FETCH_TIMEOUT_MS = 5000;
 const MAX_HTML_BYTES = 200_000;
+const MAX_REDIRECTS = 5;
 const USER_AGENT = "Mozilla/5.0 (compatible; XperiencesBot/1.0; +https://blog.xuuno.me)";
 // 사설/루프백/링크로컬/메타데이터(169.254.169.254 등) 호스트 차단 (SSRF 완화)
 const BLOCKED_HOST_PATTERN =
@@ -14,11 +16,15 @@ function cacheKey(url: string): string {
   return `og:${encodeURIComponent(url)}`;
 }
 
-function hostname(url: string): string {
+// http/https + 비차단 호스트만 허용 (리다이렉트 각 홉마다 호출해 체인 SSRF 차단)
+function isSafeFetchUrl(url: string): boolean {
   try {
-    return new URL(url).hostname.replace(/^www\./, "");
+    const { protocol, hostname: host } = new URL(url);
+    if (protocol !== "http:" && protocol !== "https:") return false;
+    if (BLOCKED_HOST_PATTERN.test(host)) return false;
+    return true;
   } catch {
-    return url;
+    return false;
   }
 }
 
@@ -77,11 +83,11 @@ function extractFavicon(html: string, baseUrl: string): string | undefined {
  * 어떤 입력에도 title은 항상 존재한다(폴백: <title> -> hostname).
  */
 export function parseOg(html: string, url: string): OgData {
-  const title = extractMeta(html, "og:title", "property") ?? extractTitleTag(html) ?? hostname(url);
+  const title = extractMeta(html, "og:title", "property") ?? extractTitleTag(html) ?? getHostname(url);
   const description = extractMeta(html, "og:description", "property") ?? extractMeta(html, "description", "name");
   const imageRaw = extractMeta(html, "og:image", "property");
   const image = imageRaw ? absolutize(imageRaw, url) : undefined;
-  const siteName = extractMeta(html, "og:site_name", "property") ?? hostname(url);
+  const siteName = extractMeta(html, "og:site_name", "property") ?? getHostname(url);
   const favicon = extractFavicon(html, url);
 
   return { url, title, description, image, favicon, siteName };
@@ -91,56 +97,66 @@ export function parseOg(html: string, url: string): OgData {
 function fallbackOg(url: string): OgData {
   return {
     url,
-    title: hostname(url),
-    siteName: hostname(url),
+    title: getHostname(url),
+    siteName: getHostname(url),
   };
 }
 
 async function fetchHtml(url: string): Promise<string | null> {
-  // http/https만 허용 + 사설/루프백/메타데이터 호스트 차단 (SSRF 완화)
-  try {
-    const { protocol, hostname: host } = new URL(url);
-    if (protocol !== "http:" && protocol !== "https:") return null;
-    if (BLOCKED_HOST_PATTERN.test(host)) return null;
-  } catch {
-    return null;
-  }
-
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
   try {
-    const res = await fetch(url, {
-      signal: controller.signal,
-      headers: { "User-Agent": USER_AGENT, Accept: "text/html,application/xhtml+xml,*/*" },
-      redirect: "follow",
-    });
-    if (!res.ok) return null;
-    const contentType = res.headers.get("content-type") ?? "";
-    if (!contentType.includes("text/html") && !contentType.includes("application/xhtml")) return null;
+    let currentUrl = url;
 
-    // 본문을 스트리밍으로 읽어 MAX_HTML_BYTES에 도달하면 중단(대용량 페이지 메모리/대역폭 보호)
-    const reader = res.body?.getReader();
-    if (!reader) return null;
+    // 리다이렉트를 수동으로 따라가며 홉마다 호스트를 재검증 (리다이렉트 체인 SSRF 차단).
+    // 타임아웃은 체인 전체에 대한 단일 예산(FETCH_TIMEOUT_MS)으로 적용된다.
+    for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
+      if (!isSafeFetchUrl(currentUrl)) return null;
 
-    const chunks: Uint8Array[] = [];
-    let received = 0;
-    while (received < MAX_HTML_BYTES) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      // 마지막 청크가 경계를 넘으면 잘라서 push (received가 MAX_HTML_BYTES를 넘지 않도록)
-      const remaining = MAX_HTML_BYTES - received;
-      chunks.push(value.length <= remaining ? value : value.subarray(0, remaining));
-      received += Math.min(value.length, remaining);
+      const res = await fetch(currentUrl, {
+        signal: controller.signal,
+        headers: { "User-Agent": USER_AGENT, Accept: "text/html,application/xhtml+xml,*/*" },
+        redirect: "manual",
+      });
+
+      // 3xx 리다이렉트: Location을 절대화해 다음 홉에서 재검증
+      if (res.status >= 300 && res.status < 400) {
+        const location = res.headers.get("location");
+        if (!location) return null;
+        currentUrl = new URL(location, currentUrl).toString();
+        continue;
+      }
+
+      if (!res.ok) return null;
+      const contentType = res.headers.get("content-type") ?? "";
+      if (!contentType.includes("text/html") && !contentType.includes("application/xhtml")) return null;
+
+      // 본문을 스트리밍으로 읽어 MAX_HTML_BYTES에 도달하면 중단(대용량 페이지 메모리/대역폭 보호)
+      const reader = res.body?.getReader();
+      if (!reader) return null;
+
+      const chunks: Uint8Array[] = [];
+      let received = 0;
+      while (received < MAX_HTML_BYTES) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        // 마지막 청크가 경계를 넘으면 잘라서 push (received가 MAX_HTML_BYTES를 넘지 않도록)
+        const remaining = MAX_HTML_BYTES - received;
+        chunks.push(value.length <= remaining ? value : value.subarray(0, remaining));
+        received += Math.min(value.length, remaining);
+      }
+      await reader.cancel().catch(() => {}); // 남은 본문 다운로드 중단
+
+      const merged = new Uint8Array(received);
+      let offset = 0;
+      for (const chunk of chunks) {
+        merged.set(chunk, offset);
+        offset += chunk.length;
+      }
+      return new TextDecoder("utf-8").decode(merged);
     }
-    await reader.cancel().catch(() => {}); // 남은 본문 다운로드 중단
 
-    const merged = new Uint8Array(received);
-    let offset = 0;
-    for (const chunk of chunks) {
-      merged.set(chunk, offset);
-      offset += chunk.length;
-    }
-    return new TextDecoder("utf-8").decode(merged.subarray(0, MAX_HTML_BYTES));
+    return null; // 리다이렉트 한도 초과
   } catch {
     return null;
   } finally {

@@ -1,25 +1,24 @@
+"use client";
+
 import { Globe } from "lucide-react";
+import { useState } from "react";
 import type { OgData } from "~/data/types/notion";
+import { getHostname } from "~/utils/url";
 
 interface LinkCardProps {
   url: string;
   data?: OgData;
 }
 
-function hostname(url: string): string {
-  try {
-    return new URL(url).hostname.replace(/^www\./, "");
-  } catch {
-    return url;
-  }
-}
-
 export default function LinkCard({ url, data }: LinkCardProps) {
-  const title = data?.title || hostname(url);
+  // favicon URL이 404 등으로 깨지면 Globe 아이콘으로 폴백
+  const [faviconError, setFaviconError] = useState(false);
+
+  const title = data?.title || getHostname(url);
   const description = data?.description;
   const image = data?.image;
   const favicon = data?.favicon;
-  const site = data?.siteName || hostname(url);
+  const site = data?.siteName || getHostname(url);
 
   return (
     <a
@@ -36,9 +35,17 @@ export default function LinkCard({ url, data }: LinkCardProps) {
           )}
         </div>
         <div className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400">
-          {favicon ? (
+          {favicon && !faviconError ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={favicon} alt="" width={16} height={16} className="h-4 w-4 rounded-sm" loading="lazy" />
+            <img
+              src={favicon}
+              alt=""
+              width={16}
+              height={16}
+              className="h-4 w-4 rounded-sm"
+              loading="lazy"
+              onError={() => setFaviconError(true)}
+            />
           ) : (
             <Globe className="h-4 w-4" aria-hidden="true" />
           )}

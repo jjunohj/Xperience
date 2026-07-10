@@ -136,12 +136,10 @@
   margin-bottom: 0.5rem;
 }
 
-/* 인용구 스타일 */
+/* 인용구 스타일 — 좌측 바가 텍스트 높이에 맞도록 상하 padding 없음 */
 .prose blockquote {
   @apply border-l-4 border-brand-400;
   padding-left: 1.25rem;
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
   margin-top: 2rem;
   margin-bottom: 2rem;
   font-style: normal;
@@ -152,6 +150,15 @@
 .prose blockquote p {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+}
+
+/* 첫/끝 문단의 바깥쪽 마진 제거 (문단 사이 간격은 유지) */
+.prose blockquote > p:first-child {
+  margin-top: 0;
+}
+
+.prose blockquote > p:last-child {
+  margin-bottom: 0;
 }
 
 .prose .notion-callout {

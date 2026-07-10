@@ -40,6 +40,10 @@ export const metadata: Metadata = {
   authors: [{ name: "jjunohj", url: "https://github.com/jjunohj" }],
   creator: "jjunohj",
   publisher: "Xperiences",
+  // 네이버 서치어드바이저 사이트 소유 확인 (공개 무해 토큰)
+  verification: {
+    other: { "naver-site-verification": "79995699dc20b9f4c810a4088ff8d0934d46e62c" },
+  },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

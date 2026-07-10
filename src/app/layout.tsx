@@ -8,6 +8,7 @@ import VisitorCounter from "../components/VisitorCounter";
 import { Analytics } from "@vercel/analytics/react";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { RSS_PATH, SITE_NAME } from "../data/constants/site";
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1 };
 
@@ -47,6 +48,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <GoogleTagManager gtmId="GTM-KJ94CWP4" />
       <GoogleAnalytics gaId="G-TDVKJ04GVC" />
       <body suppressHydrationWarning>
+        {/* RSS autodiscovery — 페이지별 metadata.alternates(canonical)가 루트 alternates.types를
+            얕은 병합으로 덮어쓰므로, React가 head로 호이스팅하는 link 태그로 전 페이지에 싣는다 */}
+        <link rel="alternate" type="application/rss+xml" title={SITE_NAME} href={RSS_PATH} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

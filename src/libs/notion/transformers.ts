@@ -214,6 +214,24 @@ n2m.setCustomTransformer("bookmark", (async (block: BlockObjectResponse) => {
   return `[${NOTION_BOOKMARK_MARKER}](${url})\n`;
 }) as CustomTransformer);
 
+// h4 헤딩 블록 변환 — heading_4는 Notion 2026-03 추가 블록이라
+// SDK 타입 union과 notion-to-md 기본 switch에 없어 커스텀 트랜스포머로 지원
+// (미등록 시 default 분기로 떨어져 헤딩이 일반 문단처럼 출력됨)
+n2m.setCustomTransformer("heading_4", (async (block: BlockObjectResponse) => {
+  const headingBlock = block as unknown as { heading_4?: { rich_text?: RichTextItemResponse[] } };
+  // SDK 타입 검증이 없는 단언 캐스트라 이웃 트랜스포머와 달리 방어적으로 접근
+  // 공백만 있는 헤딩이 빈 <h4>로 남지 않도록 trim
+  const text = richTextToMarkdown(headingBlock.heading_4?.rich_text ?? []).trim();
+  // 커스텀 트랜스포머를 등록하면 n2m의 children 재귀가 꺼지므로(blocksToMarkdown의
+  // 재귀 가드) 토글 h4의 하위 블록은 callout과 같은 방식으로 직접 이어 붙인다
+  const children = block.has_children ? await getChildrenAsMarkdown(block.id) : "";
+
+  // 제목이 비면 헤딩은 생략하되 하위 블록 내용은 보존
+  if (!text) return children;
+
+  return children ? `#### ${text}\n\n${children}` : `#### ${text}`;
+}) as CustomTransformer);
+
 /**
  * 해당하는 페이지를 마크다운으로 변환하여 반환
  * @param pageId Notion 페이지 ID

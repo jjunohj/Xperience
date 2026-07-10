@@ -152,12 +152,12 @@
   margin-bottom: 0.5rem;
 }
 
-/* 첫/끝 문단의 바깥쪽 마진 제거 (문단 사이 간격은 유지) */
-.prose blockquote > p:first-child {
+/* 첫/끝 자식의 바깥쪽 마진 제거 — p 외에 ul/pre 등도 커버 (사이 간격은 유지) */
+.prose blockquote > :first-child {
   margin-top: 0;
 }
 
-.prose blockquote > p:last-child {
+.prose blockquote > :last-child {
   margin-bottom: 0;
 }
 

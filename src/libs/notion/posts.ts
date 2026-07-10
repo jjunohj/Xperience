@@ -13,7 +13,7 @@ import { getPlainText, getProperty, getStatus } from "./properties";
 import { queryAllPages } from "./queries";
 import { getPageContentAsMarkdown } from "./transformers";
 
-export type SitemapPageMetadata = Pick<PageMetadata, "slug" | "date">;
+export type PageSummary = Pick<PageMetadata, "title" | "slug" | "description" | "date">;
 
 /**
  * 관계 페이지 ID를 받아 참조 정보를 반환하는 함수
@@ -55,18 +55,27 @@ async function getRelatedPosts(prevPageId: string, nextPageId: string): Promise<
 }
 
 /**
- * 사이트맵 생성용 경량 페이지 메타데이터 조회
- * - 상세/연관 포스트 조회를 생략해 타임아웃 위험을 줄인다.
+ * 발행(Upload) 글의 경량 요약 조회 — sitemap·RSS 공용
+ * - 상세/연관 포스트 조회를 생략해 타임아웃·재생성 비용을 줄인다.
+ * - 정렬은 쿼리 층위(queryAllPages)의 date 내림차순을 그대로 신뢰한다.
+ * - 쿼리 층위와 별개로 Upload 게이트를 한 번 더 검사한다 (M-10 이중 게이트).
  */
-export async function getSitemapPageMetadata(): Promise<SitemapPageMetadata[]> {
+export async function getPublishedPageSummaries(): Promise<PageSummary[]> {
   try {
     const pages = await queryAllPages();
-    return pages.map((page) => {
-      const { slug, date } = extractNotionRawData(page);
-      return { slug, date };
+    return pages.flatMap((page) => {
+      // 한 페이지의 프로퍼티 이상(빈 rollup 등)이 목록 전체를 비우지 않도록 페이지 단위로 격리
+      try {
+        const { title, slug, description, date, status } = extractNotionRawData(page);
+        return status === "Upload" && slug ? [{ title, slug, description, date }] : [];
+      } catch (error) {
+        console.error(`페이지 요약 추출 실패 (${page.id}):`, error);
+        return [];
+      }
     });
   } catch (error) {
-    console.error("사이트맵용 페이지 메타데이터 조회 실패:", error);
+    // list 계열이지만 소비자(sitemap·RSS)를 깨뜨리지 않도록 빈 목록으로 폴백 (M-14 선택)
+    console.error("발행 글 요약 조회 실패:", error);
     return [];
   }
 }

@@ -55,12 +55,13 @@ export async function POST(request: NextRequest) {
     // 기본적으로 노션 블로그 관련 경로들 재검증
     revalidatePath("/blog");
     revalidatePath("/api/notion/posts");
+    revalidatePath("/rss.xml");
 
     return NextResponse.json(
       {
         revalidated: true,
         now: Date.now(),
-        paths: [path, "/blog", "/api/notion/posts"].filter(Boolean),
+        paths: [path, "/blog", "/api/notion/posts", "/rss.xml"].filter(Boolean),
       },
       { status: 200 },
     );

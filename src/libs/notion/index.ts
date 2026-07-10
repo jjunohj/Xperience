@@ -11,4 +11,4 @@ export {
 
 export { getCategories, getCategoriesWithUploadedPosts } from "./categories";
 
-export { getAllPageMetadata, getPostDetail, getSitemapPageMetadata, type SitemapPageMetadata } from "./posts";
+export { getAllPageMetadata, getPostDetail, getPublishedPageSummaries, type PageSummary } from "./posts";

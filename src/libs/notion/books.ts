@@ -12,19 +12,29 @@ import { extractNotionBookData } from "./extractors";
 import { queryAllBooks, queryBookShelfPages } from "./queries";
 import { getPageContentAsMarkdown } from "./transformers";
 
-export type SitemapBookMetadata = Pick<BookMetadata, "slug" | "date" | "publishedAt">;
+// publishedAt(책 실물 출간일)은 페이지 갱신 시점과 무관하므로 sitemap lastmod에 싣지 않는다
+export type SitemapBookMetadata = Pick<BookMetadata, "slug" | "date">;
 
 /**
  * 사이트맵 생성용 경량 책 메타데이터 조회
+ * - 정렬은 쿼리 층위(queryAllBooks)의 date 내림차순을 그대로 신뢰한다.
+ * - 쿼리 층위와 별개로 Upload 게이트를 한 번 더 검사한다 (M-10 이중 게이트).
  */
 export async function getSitemapBookMetadata(): Promise<SitemapBookMetadata[]> {
   try {
     const pages = await queryAllBooks();
-    return pages.map((page) => {
-      const { slug, date, publishedAt } = extractNotionBookData(page);
-      return { slug, date, publishedAt };
+    return pages.flatMap((page) => {
+      // 한 페이지의 프로퍼티 이상이 목록 전체를 비우지 않도록 페이지 단위로 격리
+      try {
+        const { slug, date, status } = extractNotionBookData(page);
+        return status === "Upload" && slug ? [{ slug, date }] : [];
+      } catch (error) {
+        console.error(`책 요약 추출 실패 (${page.id}):`, error);
+        return [];
+      }
     });
   } catch (error) {
+    // list 계열이지만 소비자(sitemap)를 깨뜨리지 않도록 빈 목록으로 폴백 (M-14 선택)
     console.error("사이트맵용 책 메타데이터 조회 실패:", error);
     return [];
   }

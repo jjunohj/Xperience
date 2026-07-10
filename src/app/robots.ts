@@ -1,14 +1,13 @@
 import { MetadataRoute } from "next";
+import { SITE_URL } from "../data/constants/site";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = "https://blog.xuuno.me";
-
   return {
     rules: {
       userAgent: "*",
       allow: "/",
       disallow: "/api/",
     },
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }

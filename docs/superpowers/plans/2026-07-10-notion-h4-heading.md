@@ -17,6 +17,15 @@
 - 주석은 한국어, 식별자는 영어
 - 센티넬 마커 미사용 — `####`는 표준 마크다운 (마커 철칙 해당 없음)
 
+## File Structure
+
+| 파일                                                            | 변경   | 책임                                            |
+| --------------------------------------------------------------- | ------ | ----------------------------------------------- |
+| `src/libs/notion/transformers.ts`                               | 수정   | heading_4 커스텀 트랜스포머 (마크다운 방출)     |
+| `docs/superpowers/specs/2026-07-10-notion-h4-heading-design.md` | 생성   | 설계 문서                                       |
+| `docs/superpowers/plans/2026-07-10-notion-h4-heading.md`        | 생성   | 구현 계획 (이 문서)                             |
+| 렌더러·스타일·TOC·마커 상수                                     | 무변경 | 표준 마크다운이라 기존 파이프라인이 그대로 동작 |
+
 ---
 
 ### Task 1: spec·plan 문서 커밋
@@ -47,7 +56,7 @@ git commit -m "docs: 노션 h4 헤딩 지원 설계·계획 문서 추가"
 
 **Interfaces:**
 
-- Consumes: 같은 파일의 `richTextToMarkdown(richText: RichTextItemResponse[]): string` 헬퍼, `n2m` 싱글턴 (`./client`)
+- Consumes: 같은 파일의 `richTextToMarkdown(richText: RichTextItemResponse[]): string` · `getChildrenAsMarkdown(blockId: string): Promise<string>` 헬퍼, `n2m` 싱글턴 (`./client`)
 - Produces: `heading_4` 블록 → `#### <인라인 서식 보존 텍스트>` 마크다운. 렌더러는 별도 소비 코드 없음 (react-markdown 기본 동작)
 
 - [ ] **Step 1: 트랜스포머 추가**
@@ -60,14 +69,21 @@ git commit -m "docs: 노션 h4 헤딩 지원 설계·계획 문서 추가"
 // (미등록 시 default 분기로 떨어져 헤딩이 일반 문단처럼 출력됨)
 n2m.setCustomTransformer("heading_4", (async (block: BlockObjectResponse) => {
   const headingBlock = block as unknown as { heading_4: { rich_text: RichTextItemResponse[] } };
-  const text = richTextToMarkdown(headingBlock.heading_4?.rich_text ?? []);
+  // 공백만 있는 헤딩이 빈 <h4>로 남지 않도록 trim
+  const text = richTextToMarkdown(headingBlock.heading_4.rich_text).trim();
+  // 커스텀 트랜스포머를 등록하면 n2m의 children 재귀가 꺼지므로(blocksToMarkdown의
+  // 재귀 가드) 토글 h4의 하위 블록은 callout과 같은 방식으로 직접 이어 붙인다
+  const children = block.has_children ? await getChildrenAsMarkdown(block.id) : "";
 
-  // 빈 헤딩은 블록 자체를 생략 (n2m의 빈 문자열 반환 관행과 동일)
-  if (!text) return "";
+  // 제목이 비면 헤딩은 생략하되 하위 블록 내용은 보존
+  if (!text) return children;
 
-  return `#### ${text}`;
+  return children ? `#### ${text}\n\n${children}` : `#### ${text}`;
 }) as CustomTransformer);
 ```
+
+> 최초 계획은 children 미처리였으나 셀프리뷰에서 회귀(토글 h4 하위 블록 소실)로
+> 판정되어 스펙 결정 4와 함께 갱신됨. 근거는 스펙의 결정 사항 4 참조.
 
 주의: `BlockObjectResponse`, `RichTextItemResponse`, `CustomTransformer`는 이미 import되어 있음 — import 추가 불필요.
 

@@ -26,12 +26,21 @@ rich_text만 추출해 **일반 문단처럼 출력**한다. 그 결과 Notion �
    기본으로 `<h4>`를 렌더한다. 마커 상수·렌더러 오버라이드·`<p>` 언랩 분기가
    모두 불필요하다.
 3. **인라인 서식 보존.** 기존 헬퍼 `richTextToMarkdown`을 재사용해 볼드·링크·
-   인라인 수식 등 annotation을 유지한다.
-4. **렌더러·스타일·TOC는 무변경.** `prose.css`에 `.prose h4` 스타일이 이미 있고,
+   인라인 수식 등 annotation을 유지한다. 공백만 있는 헤딩이 빈 `<h4>`로 남지
+   않도록 텍스트를 trim한다.
+4. **토글 h4의 하위 블록을 보존한다.** n2m은 커스텀 트랜스포머가 등록된 타입의
+   children 재귀를 건너뛴다(`blocksToMarkdown`의 재귀 가드, notion-to-md.js:202).
+   등록 전에는 토글 h4의 하위 블록이 이 재귀로 렌더되고 있었으므로, 트랜스포머가
+   children을 처리하지 않으면 **기존 대비 콘텐츠 소실 회귀**가 된다. callout
+   트랜스포머와 동일하게 `getChildrenAsMarkdown`으로 하위 블록을 이어 붙인다.
+   (셀프리뷰에서 발견 — 최초 설계의 "토글 children 미지원" 결정을 뒤집음.
+   미지원 근거였던 "h1~3과 대칭" 전제가 틀렸다: h1~3은 커스텀 트랜스포머가
+   아니어서 children이 렌더된다.)
+5. **렌더러·스타일·TOC는 무변경.** `prose.css`에 `.prose h4` 스타일이 이미 있고,
    tailwind typography 설정의 scroll-margin이 h4를 포함하며, `NotionToc`는 DOM에서
    `h1~h6`를 수집하므로 자동 반영된다. 트랜스포머는 블로그(`NotionPostLayout`)와
    북(`BookPostLayout`) 양쪽이 공유하므로 한 번의 수정으로 둘 다 해결된다.
-5. **rehypeSanitize 스키마 무변경.** 기본 스키마가 h1~h6을 허용한다.
+6. **rehypeSanitize 스키마 무변경.** 기본 스키마가 h1~h6을 허용한다.
 
 ## 데이터 흐름
 
@@ -55,8 +64,8 @@ Notion heading_4 블록
 
 ## 에러 처리 · 폴백
 
-- `rich_text`가 빈 배열이면 빈 헤딩 텍스트가 되므로 트랜스포머가 빈 문자열을
-  반환해 블록을 생략한다 (n2m의 빈 반환 관행과 동일).
+- `rich_text`가 비었거나 공백뿐이면 헤딩은 생략하되, 토글 하위 블록이 있으면
+  그 내용만 보존해 반환한다 (콘텐츠 소실 방지).
 - SDK 타입 union에 `heading_4`가 없으므로 appsuit-fe 선례처럼 명시적 캐스팅으로
   접근하고, 캐스팅 사유를 주석으로 남긴다.
 
@@ -76,8 +85,6 @@ Notion heading_4 블록
 ## 범위 밖 (YAGNI)
 
 - **heading_5 / heading_6** — Notion에 존재하지 않는 블록. 추가하지 않는다.
-- **토글 h4의 children 렌더링** — 기존 h1~3 토글 헤딩도 children을 렌더하지
-  않는다. 대칭성을 유지하고 확장하지 않는다 (사용자 확인 완료).
 - **notion-to-md v4 업그레이드** — 베타이고 API가 전면 개편됨. 별도 작업.
 - **@notionhq/client 업그레이드** — heading_4 타입이 포함된 SDK가 나와도 이번
   작업에서는 올리지 않는다 (의존성 변경은 에스컬레이션 대상).

@@ -1,23 +1,10 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "../data/constants/site";
 import { getPublishedPageSummaries, getSitemapBookMetadata } from "../libs/notion";
+import { withTimeout } from "../utils/with-timeout";
 
 export const revalidate = 3600;
 const SITEMAP_FETCH_TIMEOUT_MS = 8000;
-
-function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
-  let timeoutId: ReturnType<typeof setTimeout> | undefined;
-
-  const timeoutPromise = new Promise<T>((_, reject) => {
-    timeoutId = setTimeout(() => {
-      reject(new Error(`Sitemap generation timed out after ${timeoutMs}ms`));
-    }, timeoutMs);
-  });
-
-  return Promise.race([promise, timeoutPromise]).finally(() => {
-    if (timeoutId) clearTimeout(timeoutId);
-  });
-}
 
 // lastModified는 실제 콘텐츠 날짜가 있을 때만 싣는다 (undefined면 <lastmod> 미출력).
 // 재생성마다 new Date()를 넣으면 lastmod 신호 전체가 노이즈로 학습된다.

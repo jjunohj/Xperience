@@ -1,10 +1,12 @@
 import { RSS_PATH, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "../../data/constants/site";
-import { getPublishedPageSummaries } from "../../libs/notion";
+import { getPublishedPageSummaries, type PageSummary } from "../../libs/notion";
+import { withTimeout } from "../../utils/with-timeout";
 
 // 캐시: Next ISR 레이어만 사용한다. on-demand /api/revalidate의 기본 갱신 목록에도 포함됨.
 export const revalidate = 3600;
 
 const MAX_FEED_ITEMS = 20;
+const RSS_FETCH_TIMEOUT_MS = 8000;
 
 // XML 1.0에서 불법인 제어 문자는 이스케이프로도 살릴 수 없으므로 제거한다
 // (하나만 섞여도 엄격한 피드 파서가 피드 전체를 거부한다)
@@ -28,9 +30,14 @@ function toPubDate(date: string): string | undefined {
 }
 
 export async function GET() {
-  // 조회 실패 시 getPublishedPageSummaries가 빈 배열을 반환하므로
-  // 피드 소비자에게는 글 없는 채널로 디그레이드된다 (5xx로 깨뜨리지 않음)
-  const posts = (await getPublishedPageSummaries()).slice(0, MAX_FEED_ITEMS);
+  // 조회 에러는 getPublishedPageSummaries가 빈 배열로 폴백하고,
+  // 응답 지연(hang)은 타임아웃으로 끊어 — 어느 쪽이든 5xx 대신 글 없는 채널로 디그레이드
+  let posts: PageSummary[] = [];
+  try {
+    posts = (await withTimeout(getPublishedPageSummaries(), RSS_FETCH_TIMEOUT_MS)).slice(0, MAX_FEED_ITEMS);
+  } catch (error) {
+    console.error("RSS 피드용 글 조회 타임아웃:", error);
+  }
 
   const items = posts
     .map((post) => {

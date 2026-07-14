@@ -46,14 +46,16 @@ export default function NotionBookCard({ book }: NotionBookCardProps) {
           {/* 중앙 표지 영역 (남는 공간 차지) */}
           <div className="relative z-10 flex flex-1 items-center justify-center p-5 sm:p-6">
             {book.cover ? (
-              <div className="relative aspect-[2/3] h-32 overflow-hidden border border-neutral-300 bg-neutral-200 shadow-[0_14px_20px_-12px_rgba(0,0,0,0.6)] transition-transform duration-300 group-hover:scale-[1.02] dark:border-neutral-600 dark:bg-neutral-700 sm:h-48">
+              /* 표지는 원본 비율 유지 — 고정 프레임 + object-cover는 비율이 어긋나면 잘린다 (#68) */
+              <div className="relative h-32 max-w-full sm:h-48">
                 <Image
                   src={book.cover}
                   alt={book.title}
-                  fill
+                  width={0}
+                  height={0}
                   draggable={false}
-                  sizes="128px"
-                  className="object-cover"
+                  sizes="160px"
+                  className="h-full w-auto max-w-full border border-neutral-300 bg-neutral-200 object-contain shadow-[0_14px_20px_-12px_rgba(0,0,0,0.6)] transition-transform duration-300 [aspect-ratio:auto_2/3] group-hover:scale-[1.02] dark:border-neutral-600 dark:bg-neutral-700"
                 />
                 <div className="absolute left-0 top-0 h-full w-[6px] bg-black/[0.18]" />
               </div>

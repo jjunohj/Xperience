@@ -70,13 +70,15 @@ export default function BookCard({ book }: BookCardProps) {
         />
 
         <div className="absolute inset-0 flex items-center justify-center p-6">
-          <div className="relative h-full w-32 overflow-hidden border border-neutral-300 bg-neutral-200 shadow-[0_14px_20px_-12px_rgba(0,0,0,0.6)] dark:border-neutral-600 dark:bg-neutral-700">
+          {/* 표지는 원본 비율 유지 — 고정 프레임 + object-cover는 비율이 어긋나면 상단이 잘린다 (#68) */}
+          <div className="relative h-full max-w-full">
             <Image
               src={book.cover || "/og-image.png"}
               alt={book.title || "도서 커버"}
-              fill
-              className="object-cover transition duration-300 group-hover:scale-[1.01]"
-              sizes="128px"
+              width={0}
+              height={0}
+              className="h-full w-auto max-w-full border border-neutral-300 bg-neutral-200 object-contain shadow-[0_14px_20px_-12px_rgba(0,0,0,0.6)] transition duration-300 [aspect-ratio:auto_2/3] group-hover:scale-[1.01] dark:border-neutral-600 dark:bg-neutral-700"
+              sizes="160px"
             />
             <div className="bg-black/18 absolute left-0 top-0 h-full w-[6px]" />
           </div>

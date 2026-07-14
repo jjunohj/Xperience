@@ -77,8 +77,8 @@ export default function BookCard({ book }: BookCardProps) {
               alt={book.title || "도서 커버"}
               width={0}
               height={0}
-              className="h-full w-auto max-w-full border border-neutral-300 bg-neutral-200 object-contain shadow-[0_14px_20px_-12px_rgba(0,0,0,0.6)] transition duration-300 group-hover:scale-[1.01] dark:border-neutral-600 dark:bg-neutral-700"
-              sizes="128px"
+              className="h-full w-auto max-w-full border border-neutral-300 bg-neutral-200 object-contain shadow-[0_14px_20px_-12px_rgba(0,0,0,0.6)] transition duration-300 [aspect-ratio:auto_2/3] group-hover:scale-[1.01] dark:border-neutral-600 dark:bg-neutral-700"
+              sizes="160px"
             />
             <div className="bg-black/18 absolute left-0 top-0 h-full w-[6px]" />
           </div>

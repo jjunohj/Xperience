@@ -54,8 +54,8 @@ export default function NotionBookCard({ book }: NotionBookCardProps) {
                   width={0}
                   height={0}
                   draggable={false}
-                  sizes="128px"
-                  className="h-full w-auto max-w-full border border-neutral-300 bg-neutral-200 object-contain shadow-[0_14px_20px_-12px_rgba(0,0,0,0.6)] transition-transform duration-300 group-hover:scale-[1.02] dark:border-neutral-600 dark:bg-neutral-700"
+                  sizes="160px"
+                  className="h-full w-auto max-w-full border border-neutral-300 bg-neutral-200 object-contain shadow-[0_14px_20px_-12px_rgba(0,0,0,0.6)] transition-transform duration-300 [aspect-ratio:auto_2/3] group-hover:scale-[1.02] dark:border-neutral-600 dark:bg-neutral-700"
                 />
                 <div className="absolute left-0 top-0 h-full w-[6px] bg-black/[0.18]" />
               </div>
